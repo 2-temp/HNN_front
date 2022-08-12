@@ -15,7 +15,7 @@ function Header(props){
                         <Link to="/">홈</Link>
                         {isLog === true && (
                         <>
-                            <Link to="/user">내 게시물</Link>
+                            <Link to="/mypage">내 게시물</Link>
                             <Link to="/post">글 작성</Link>
                         </>
                         ) }
