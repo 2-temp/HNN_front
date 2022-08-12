@@ -1,8 +1,11 @@
 import RESPONSE from "../RESPONSE";
 import styled from "styled-components";
 import { setCookie, getCookie } from '../cookie'
+import { useNavigate } from "react-router-dom";
 
-function Login() {
+function Login(props) {
+  const navigate = useNavigate();
+  const { setIsLog } = props;
 
   const submitHandler = async (ev) => {
     ev.preventDefault();
@@ -15,12 +18,16 @@ function Login() {
       setCookie('token', token);
       console.log(getCookie('token'))
       alert('로그인에 성공하였습니다.')
+      setIsLog(true)
+
+      navigate("/")
       
     } else {
       let msg = response.msg
       
       setCookie('token', null);
       alert(msg)
+      setIsLog(false)
   
     }
 
