@@ -12,6 +12,7 @@ import Post from "../pages/Post";
 import Detail from "../pages/Detail";
 import NotFound from "../pages/NotFound";
 import MyPage from "../pages/MyPage";
+import Edit from "../pages/Edit";
 
 const Router = () => {
   const [isLog, setIsLog] = useState(false)
@@ -39,7 +40,8 @@ const Router = () => {
         <Routes>
 
           <Route path="/" element={<Main/>}/>
-          <Route path="/post" element={<Post />}/>
+          <Route path="/post/" element={<Post />}/>
+          <Route path="/post/:postId/edit" element={<Edit />}/>
           <Route path="/post/:postId" element={<Detail />}/>
           <Route path="/sign/in" element={<Login setIsLog={setIsLog} />} />
           <Route path="/sign/up" element={<SignUp />}/>
