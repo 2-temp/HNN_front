@@ -48,11 +48,14 @@ const data={
     POSTS: [
         {  
             postId: 0,
-            title: "게시글 제목0",
-            imageUrl: "post_img.jpg",
+            info: {
+                songTitle: "곡 제목",
+                singer: "가수명"
+            },
             content: "게시글 내용0",
+            imageUrl: "post_img.jpg",
             createdAt: "2022-99-99, 99:99",
-            like: 9999,
+            likeNum: 9999,
             countComments: 9999,
             
             email: "test@email.com",
@@ -62,11 +65,14 @@ const data={
         },
         {  
             postId: 1,
-            title: "게시글 제목1",
-            imageUrl: "post_img.jpg",
+            info: {
+                songTitle: "곡 제목",
+                singer: "가수명"
+            },
             content: "게시글 내용1",
+            imageUrl: "post_img.jpg",
             createdAt: "2022-99-99, 99:99",
-            like: 9999,
+            likeNum: 9999,
             countComments: 9999,
             
             email: "test@email.com",
@@ -76,11 +82,14 @@ const data={
         },
         {  
             postId: 2,
-            title: "게시글 제목2",
-            imageUrl: "post_img.jpg",
+            info: {
+                songTitle: "곡 제목",
+                singer: "가수명"
+            },
             content: "게시글 내용2",
+            imageUrl: "post_img.jpg",
             createdAt: "2022-99-99, 99:99",
-            like: 9999,
+            likeNum: 9999,
             countComments: 9999,
             
             email: "test@email.com",
@@ -90,11 +99,14 @@ const data={
         },
         {  
             postId: 3,
-            title: "게시글 제목3",
-            imageUrl: "post_img.jpg",
+            info: {
+                songTitle: "곡 제목",
+                singer: "가수명"
+            },
             content: "게시글 내용3",
+            imageUrl: "post_img.jpg",
             createdAt: "2022-99-99, 99:99",
-            like: 9999,
+            likeNum: 9999,
             countComments: 9999,
             
             email: "test@email.com",
@@ -106,39 +118,54 @@ const data={
     COMMENTS: [
         {
             commentId: 0,
-            content: "댓글입니다0"
+            nickname: "닉네임0",
+            content: "댓글입니다0",
+            MBTI: "MBTI",
+            createdAt: "2022-99-99, 99:99",
+            profilePicture: "프로필사진URL",
         },
         {
             commentId: 1,
-            content: "댓글입니다0"
+            nickname: "닉네임1",
+            content: "댓글입니다1",
+            MBTI: "MBTI",
+            createdAt: "2022-99-99, 99:99",
+            profilePicture: "프로필사진URL",
         },
         {
             commentId: 2,
-            content: "댓글입니다0"
+            nickname: "닉네임2",
+            content: "댓글입니다0",
+            MBTI: "MBTI",
+            createdAt: "2022-99-99, 99:99",
+            profilePicture: "프로필사진URL",
         },
-        {
-            commentId: 3,
-            content: "댓글입니다0"
-        },
-        {
-            commentId: 4,
-            content: "댓글입니다0"
-        }
     ],
-    DETAIL: {  
-        postId: 0,
-        title: "게시글 제목0",
-        imageUrl: "post_img.jpg",
-        content: "게시글 내용0",
-        createdAt: "2022-99-99, 99:99",
-        like: 9999,
-        countComments: 9999,
-        
-        email: "test@email.com",
-        nickname: "닉네임0",
-        MBTI: "MBTI",
-        profilePicture: "프로필사진URL",
-    },
+    DETAIL: {
+        poster: {  
+            userId: 0,
+            nickname: "닉네임3",
+            info: {
+                songTitle: "곡 제목",
+                singer: "가수명"
+            },
+            MBTI: "MBTI",
+            profilePicture: "프로필사진URL",
+            createdAt: "2022-99-99, 99:99",
+            likeNum: 9999,
+            content: "게시물 내용"           
+        },
+        commenter: [
+            {
+                commentId: 0,
+                nickname: "닉네임0",
+                content: "코멘트 내용",
+                profilePicture: "프로필사진URL",
+                MBTI: "MBTI",
+                createdAt: "2022-99-99, 99:99",
+            }
+        ]
+    }
 }
 
 export default data
