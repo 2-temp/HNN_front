@@ -10,18 +10,18 @@ function MyPage(){
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   let data = RESPONSE.POSTS;
+  let userData = RESPONSE.USER_PROFILE;
   
   useEffect(() => {
     // let data = axios.get('/posts')
     let data = RESPONSE.POSTS;
     setPosts(data)
-    let userData = RESPONSE.POSTS;
   })
 
   return(
     <MyPagePost>
       <h3>
-        {}유저이름님의 마이페이지
+        {userData.nickname}님의 마이페이지
       </h3>
       <div className="button_box"
       onClick={()=>{

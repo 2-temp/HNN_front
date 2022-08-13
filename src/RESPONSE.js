@@ -10,7 +10,7 @@ const data={
     LOGOUT: {
         success: true
     },
-    SIGNIN: {
+    SIGNUP: {
         msg : "회원가입을 축하드립니다!",
         success: true
     },
@@ -22,29 +22,13 @@ const data={
         msg : "사용할 수 있는 이메일입니다.",
         success: true
     },
-    USER_PROFILE: [
-        {
-            userId: 0,
-            email: "test@email.com",
-            nickname: "닉네임0",
-            MBTI: "MBTI",
-            profilePicture: "프로필사진URL",
-        },
-        {
-            userId: 1,
-            email: "test@email.com",
-            nickname: "닉네임1",
-            MBTI: "MBTI",
-            profilePicture: "프로필사진URL",
-        },
-        {
-            userId: 2,
-            email: "test@email.com",
-            nickname: "닉네임2",
-            MBTI: "MBTI",
-            profilePicture: "프로필사진URL",
-        },
-    ],
+    USER_PROFILE: {
+        userId: 0,
+        email: "test@email.com",
+        nickname: "닉네임0",
+        MBTI: "MBTI",
+        profilePicture: "프로필사진URL",
+    },
     POSTS: [
         {  
             postId: 0,

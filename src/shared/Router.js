@@ -35,7 +35,7 @@ const Router = () => {
 
   return (
     <>
-      <Header isLog={isLog} />
+      <Header isLog={isLog} setIsLog={setIsLog} />
       <Layout>
         <Routes>
 

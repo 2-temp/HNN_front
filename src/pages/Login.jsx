@@ -1,7 +1,8 @@
-import RESPONSE from "../RESPONSE";
-import styled from "styled-components";
-import { setCookie, getCookie } from '../cookie'
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+
+import { setCookie, getCookie } from '../cookie'
+import RESPONSE from "../RESPONSE";
 
 function Login(props) {
   const navigate = useNavigate();
@@ -9,7 +10,11 @@ function Login(props) {
 
   const submitHandler = async (ev) => {
     ev.preventDefault();
-    // const response = await axios.get('https://try-eat.herokuapp.com/posts');
+    // await axios.post(`/sign/in`, null, {
+    //     headers: { 
+    //         'Content-Type': 'application/json' 
+    //     }
+    // })
     const response = RESPONSE.LOGIN;
 
     if (response.success) {
@@ -37,10 +42,11 @@ function Login(props) {
     <Contents>
       <br />
       <form onSubmit={(ev) => submitHandler(ev)}>
-        Login
+        <h3>로그인</h3>
+
         <input type="text" placeholder="아이디" />
         <input type="text" placeholder="비밀번호" />
-        <button>로그인</button>
+        <button>로그인하기</button>
       </form>
     </Contents>
   );
