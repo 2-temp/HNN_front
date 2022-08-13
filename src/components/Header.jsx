@@ -1,20 +1,15 @@
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux'
 import axios from "axios";
-import { Link } from "react-router-dom";
+
 import styled from "styled-components";
-import { deleteCookie } from '../cookie'
+import { signOutUser } from '../redux/modules/user'
 
 function Header(props){
-    const { isLog, setIsLog } = props;
-    
-    const handleLogout = () => {
-        // await axios.post(`/sign/out`, null, {
-        //     headers: { 
-        //         'Content-Type': 'application/json' 
-        //     }
-        // })
-        deleteCookie('token');
-        setIsLog(false);
-    }
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const {userLoggin} = props;
 
     return (
         <Contents>
@@ -25,18 +20,18 @@ function Header(props){
                     </Link>
                     <div className="right">
                         <Link to="/">홈</Link>
-                        {isLog === true && (
+                        {userLoggin && (
                         <>
                             <Link to="/mypage">내 게시물</Link>
                             <Link to="/post">글 작성</Link>
                             <div className="btn" onClick={()=>{
-                                handleLogout()
+                                dispatch(signOutUser())
                             }}>
                                 로그아웃
                             </div>
                         </>
                         ) }
-                        {isLog === false && (
+                        {!userLoggin && (
                         <>
                             <Link to={"/sign/in"}>로그인</Link>
                             <Link to={"/sign/up"}>회원가입</Link>
