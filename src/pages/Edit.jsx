@@ -14,55 +14,95 @@ function Edit() {
   const { postId } = useParams();
   const editList = data.POSTS[postId]
 
+  const editSong = data.POSTS[postId].info
+
+  //타이틀, 내용, 이미지 변경 저장 할 곳 선언
   const [editInputs, seTeditInputs] = useState({
     title: editList.title,
     content: editList.content,
     imageUrl: editList.imageUrl,
-    songTitle: editList.songTitle,
-    singer: editList.singer,
   });
 
+  //가수, 노래 명 변경 저장 할 곳 선언
+  const [singers, setSingers] = useState({
+    singer: editSong.singer,
+    songTitle: editSong.songTitle,
+  })
+
+  const { title, content, imageUrl } = editInputs;
+  const { songTitle, singer } = singers;
 
 
+  //edit 핸들러 설정
+  const oneEditHandler = async (editInputs, singers) => {
 
-  const { title, content, imageUrl, songTitle, singer } = editInputs;
-  
-
-  const oneditHandler = async (inputs) => {
-
-    const new_data = { data, inputs }
-
+    if(title === '' || content === '' || imageUrl ==='' || songTitle === '' || singer === '') {
+      alert('빈칸이 있습니다 !')
+      return;
+    }
+    
+    const new_data = { data, editInputs, singers }
     console.log(new_data)
 
-    const response = RESPONSE.EDIT
+
+
+    // const response =  await axios.PATCH("/PATCH", editInputs, singers, {
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //     }
+    // });
+
+
+    const response = RESPONSE.EDIT_CHECK
     console.log(response)
     if (response.success) {
       alert(response.msg)
-      navigate('/')
+      navigate(`/post/${postId}`)
     } else {
       alert(response.msg)
-      navigate('/sign/in')
+      navigate(`/post/${postId}`)
     }
   }
-
-  console.log(title, content, imageUrl)
 
   return (
     <BigBox>
       <Box>
         <h4>제목</h4>
-        {editList.title}
-        <input value={title} name='title' placeholder="제목"></input>
-        <input value={imageUrl} name='imageUrl' placeholder="이미지 Url"></input>
-        <input value={content} name='content' placeholder="게시물 내용"></input>
-        <input value={songTitle} name='songTitle' placeholder="노래 이름"></input>
-        <input value={singer} name='singer' placeholder="가수"></input>
-        <button onClick={() => { oneditHandler(editInputs) }}>수정하기</button>
+        <input onChange={(ev) => {
+          seTeditInputs({
+            ...editInputs,
+            title: ev.target.value,
+          });
+        }} value={title} name='title' placeholder="제목"></input>
+        <input onChange={(ev) => {
+          seTeditInputs({
+            ...editInputs,
+            imageUrl: ev.target.value,
+          });
+        }} value={imageUrl} name='imageUrl' placeholder="이미지 Url"></input>
+        <input onChange={(ev) => {
+          seTeditInputs({
+            ...editInputs,
+            content: ev.target.value,
+          });
+        }} value={content} name='content' placeholder="게시물 내용"></input>
+        <input onChange={(ev) => {
+          setSingers({
+            ...singers,
+            songTitle: ev.target.value,
+          });
+        }} value={songTitle} name='songTitle' placeholder="노래 이름"></input>
+        <input onChange={(ev) => {
+          setSingers({
+            ...singers,
+            singer: ev.target.value,
+          });
+        }} value={singer} name='singer' placeholder="가수"></input>
+        <button onClick={() => { oneEditHandler(editInputs, singers) }}>수정하기</button>
       </Box>
     </BigBox>
   )
 }
-
 export default Edit;
 
 

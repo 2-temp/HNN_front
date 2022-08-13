@@ -33,6 +33,18 @@ const data={
         MBTI: "MBTI",
         profilePicture: "프로필사진URL",
     },
+    POST_CHECK:{
+        msg : "게시물이 작성되었습니다",
+        success: true,
+        // msg : "로그인이 필요한 기능입니다",
+        // success: false,
+    },
+    EDIT_CHECK:{
+        // msg : "게시물이 수정되었습니다",
+        // success: true,
+         msg : "게시물 수정이 실패했습니다",
+         success: false,
+    },
     POSTS: [
         {  
             postId: 0,
