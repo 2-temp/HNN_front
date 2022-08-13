@@ -9,7 +9,8 @@ import RESPONSE from '../RESPONSE'
 function MyPage(){
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
-  let data = RESPONSE.POSTS;
+
+  // 쿠키에 있는 유저 정보
   let userData = RESPONSE.USER_PROFILE;
   
   useEffect(() => {
@@ -17,25 +18,29 @@ function MyPage(){
     let data = RESPONSE.POSTS;
     setPosts(data)
   })
-
+  
   return(
-    <MyPagePost>
+    <MyPagePost profilePicture={userData.profilePicture}>
       <div className="profile_box">
         <div className="profile_picture">
           img: {userData.profilePicture}
         </div>
         <div>
-          <h3>
-            {userData.nickname}님의 마이페이지
+          <h3 className="section_title">
+            <strong>
+              {userData.nickname}
+            </strong>
+            님
           </h3>
           <div className="button_box"
           onClick={()=>{
             navigate("/profile");
           }}>
-            유저 정보 수정하기
+            정보 수정하기
           </div>
         </div>
       </div>
+      <h4>내가 작성한 글</h4>
       <div className="posts_box">
         { posts.map((list, i) => {
           return <Article list={list} key={i} />
@@ -52,17 +57,50 @@ export default MyPage;
 
 const MyPagePost = styled.div`
   .posts_box {
-    min-height: calc(100vh - 300px);
+    min-height: calc(100vh - 330px);
   }
 
   .button_box {
     padding: 5px 10px;
-    margin-bottom: 10px;
 
     display: inline-block;
     text-align: center;
     font-size: 12px;
+    
     border: 1px solid #222;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+        background-color: #eee;
+    }
+  }
+
+  .profile_box {
+    margin: 10px 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .profile_picture {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+
+    background-color: #eee;
+    background-image: url(${(props)=> props.profilePicture});
+  }
+  
+  .section_title {
+    color: #555;
+    font-weight: 500;
+  }
+
+  strong {
+    color: #222;
   }
 
   .profile_box {

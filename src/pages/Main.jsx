@@ -24,7 +24,7 @@ function Main() {
 
   return (
     <MainPost>
-      <h3>전체 글 목록</h3>
+      <h4>전체 글 목록</h4>
       <div className="posts_box">
         { posts.map((list, i) => {
           return <Article list={list} key={i} />
@@ -42,7 +42,7 @@ export default Main;
 
 const MainPost = styled.div`
   .posts_box {
-    min-height: calc(100vh - 130px);
+    min-height: calc(100vh - 200px);
   }
 
   .pagination {
