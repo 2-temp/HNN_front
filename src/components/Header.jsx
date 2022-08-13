@@ -29,7 +29,7 @@ function Header(props){
                         <>
                             <Link to="/mypage">내 게시물</Link>
                             <Link to="/post">글 작성</Link>
-                            <div onClick={()=>{
+                            <div className="btn" onClick={()=>{
                                 handleLogout()
                             }}>
                                 로그아웃
@@ -69,6 +69,10 @@ line-height: 60px;
 .right {
     display: flex;
     gap: 40px;
+}
+
+.btn {
+    cursor: pointer;
 }
 
 `
