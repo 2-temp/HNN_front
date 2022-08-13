@@ -13,14 +13,17 @@ function Article(props) {
     >
       <span className="mbti">{list.MBTI}</span>
       <span className="nickname">{list.nickname}</span>
-      <span className="title">{list.title}</span>
-      <span className="content">{list.content}</span>
+      <span className="title">
+        {list.info.songTitle}
+        -
+        {list.info.singer}
+      </span>
+      <span className="content">
+        {list.content.length>17?list.content.slice(0, 17)+"...":list.content}
+      </span>
       <ul className="right">
         <li>
-          댓글 수 <b>0</b>
-        </li>
-        <li>
-          좋아요 수 <b>0</b>
+          좋아요 <b>{list.likeNum}</b>
         </li>
       </ul>
     </MyArticle>
