@@ -11,8 +11,10 @@ function SignUp(){
   const nickname = useRef("");
   const password = useRef("");
   const confirmPw = useRef("");
+
   const [instWrong, setInstWrong] = useState(false);
   const [emailChecked, setEmailChecked] = useState(false);
+  const [nicknameChecked, setNicknameChecked] = useState(false);
 
   const [MBTI1, setMBTI1] = useState();
   const [MBTI2, setMBTI2] = useState();
@@ -47,11 +49,20 @@ function SignUp(){
   // 닉네임 확인
   const nicknameCheckButtonClickHandler = async () => {
     
-    // const response = await axios.post(`/sign/checkEmail`, null, {
+    // const response = await axios.post(`/sign/checkNickname`, null, {
     //   headers: { 
     //     'Content-Type': 'application/json' 
     //   }
     // })
+    const response = RESPONSE.NICKNAME_CHECK;
+    console.log({nickname: nickname.current.value});
+    
+    if(response.success){
+      alert(response.msg);
+      setNicknameChecked(true);
+    } else {
+      alert(response.msg);
+    }
   }
   
   // 회원가입
@@ -149,12 +160,13 @@ function SignUp(){
             required
             minLength={2}
             maxLength={20}
+            className={nicknameChecked?"enable":""}
           />
           
           <button 
             type="button"
             onClick={(ev) => nicknameCheckButtonClickHandler(ev)}
-            className={emailChecked?"enable":""}
+            className={nicknameChecked?"enable":""}
             >
               닉네임 확인
           </button>
@@ -197,7 +209,7 @@ function SignUp(){
           </div>
         </div>
         <button 
-        className={emailChecked?"sumbit_button all_checked":"sumbit_button"}
+        className={(nicknameChecked && emailChecked)?"sumbit_button all_checked":"sumbit_button"}
         >
           회원가입하기
         </button>
