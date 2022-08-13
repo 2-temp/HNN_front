@@ -22,29 +22,14 @@ const data={
         msg : "사용할 수 있는 이메일입니다.",
         success: true
     },
-    USER_PROFILE: [
-        {
-            userId: 0,
-            email: "test@email.com",
-            nickname: "닉네임0",
-            MBTI: "MBTI",
-            profilePicture: "프로필사진URL",
-        },
-        {
-            userId: 1,
-            email: "test@email.com",
-            nickname: "닉네임1",
-            MBTI: "MBTI",
-            profilePicture: "프로필사진URL",
-        },
-        {
-            userId: 2,
-            email: "test@email.com",
-            nickname: "닉네임2",
-            MBTI: "MBTI",
-            profilePicture: "프로필사진URL",
-        },
-    ],
+    USER_PROFILE:{
+        userId: 0,
+        email: "test@email.com",
+        nickname: "닉네임0",
+        MBTI: "MBTI",
+        profilePicture: "프로필사진URL",
+    }
+    ,
     POSTS: [
         {  
             postId: 0,
@@ -69,7 +54,7 @@ const data={
                 songTitle: "곡 제목",
                 singer: "가수명"
             },
-            content: "게시글 내용1",
+            content: "게시글 내용1게시글 내용1게시글 내용1게시글 내용1게시글 내용1게시글 내용1게시글 내용1",
             imageUrl: "post_img.jpg",
             createdAt: "2022-99-99, 99:99",
             likeNum: 9999,
