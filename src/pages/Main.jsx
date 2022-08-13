@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Article from "../components/Main/Article";
 import Pagination from "../components/Main/Pagination";
 import RESPONSE from '../RESPONSE'
+import Detail from "./Detail";
 
 function Main() {
   const [posts, setPosts] = useState([]);
@@ -27,8 +28,9 @@ function Main() {
       <h4>전체 글 목록</h4>
       <div className="posts_box">
         { posts.map((list, i) => {
-          return <Article list={list} key={i} />
-        }) }
+          return <Article list={list} key={i} /> 
+        })
+        }
       </div>
 
       <Pagination />

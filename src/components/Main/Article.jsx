@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 
 function Article(props) {
   const navigate = useNavigate();
-  const { list } = props;
-  
+  const { list, i } = props;
+
   return (
     <MyArticle
       onClick={() => {
-        navigate("/post/:postid");
+        navigate(`/post/${list.postId}`);
       }}
     >
       <span className="mbti">{list.MBTI}</span>
