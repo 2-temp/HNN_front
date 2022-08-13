@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 
 function Article(props) {
   const navigate = useNavigate();
-  const { list } = props;
-  
+  const { list, i } = props;
+
   return (
     <MyArticle
       onClick={() => {
-        navigate("/post/:postid");
+        navigate(`/post/${list.postId}`);
       }}
     >
       <span className="mbti">{list.MBTI}</span>
@@ -87,8 +87,17 @@ const MyArticle = styled.div`
     color: #e16720;
   }
 
-  @media (max-width: 500px) {
-    gap: 20px;
+  @media (max-width: 950px) {
+    gap: 10px;
+    
+    .title,
+    .content {
+      flex: 1 1 100%;
+    }
+  }
+
+  @media (max-width: 600px) {
+    gap: 16px;
 
     .title,
     .content {

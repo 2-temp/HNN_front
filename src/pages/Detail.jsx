@@ -1,10 +1,9 @@
-
 function Detail(){
-  return(
-      <>
-      Detail
-      </>
-  )
-}
-
-export default Detail;
+    return(
+        <>
+        detail
+        </>
+    )
+  }
+  
+  export default Detail;
