@@ -22,6 +22,12 @@ const data={
         // msg : "이미 존재하는 이메일입니다.",
         // success: false
     },
+    NICKNAME_CHECK: {
+        msg: "사용할 수 있는 닉네임입니다.",
+        success: true,
+        // msg: "이미 존재하는 닉네임입니다.",
+        // success: false
+    },
     PASSWORD_CHECK: {
         msg : "사용할 수 있는 이메일입니다.",
         success: true
