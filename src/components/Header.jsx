@@ -1,8 +1,20 @@
+import axios from "axios";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { deleteCookie } from '../cookie'
 
 function Header(props){
-    const { isLog } = props;
+    const { isLog, setIsLog } = props;
+    
+    const handleLogout = () => {
+        // await axios.post(`/sign/out`, null, {
+        //     headers: { 
+        //         'Content-Type': 'application/json' 
+        //     }
+        // })
+        deleteCookie('token');
+        setIsLog(false);
+    }
 
     return (
         <Contents>
@@ -17,6 +29,11 @@ function Header(props){
                         <>
                             <Link to="/mypage">내 게시물</Link>
                             <Link to="/post">글 작성</Link>
+                            <div className="btn" onClick={()=>{
+                                handleLogout()
+                            }}>
+                                로그아웃
+                            </div>
                         </>
                         ) }
                         {isLog === false && (
@@ -52,6 +69,10 @@ line-height: 60px;
 .right {
     display: flex;
     gap: 40px;
+}
+
+.btn {
+    cursor: pointer;
 }
 
 `

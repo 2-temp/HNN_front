@@ -10,14 +10,16 @@ function Main() {
   const [posts, setPosts] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
-  let data = RESPONSE.POSTS;
+  // let data = RESPONSE.POSTS;
+  // setPosts(data)
 
   // "https://jsonplaceholder.typicode.com/posts"
   
+  
   useEffect(() => {
-    // let data = axios.get('/posts')
     let data = RESPONSE.POSTS;
-    setPosts(data)
+    // let data = axios.get('/posts')
+    setPosts(data);
   })
 
   return (

@@ -17,9 +17,8 @@ function MyPage(){
     // let data = axios.get('/posts')
     let data = RESPONSE.POSTS;
     setPosts(data)
-
   })
-
+  
   return(
     <MyPagePost profilePicture={userData.profilePicture}>
       <div className="profile_box">
@@ -64,9 +63,10 @@ const MyPagePost = styled.div`
   .button_box {
     padding: 5px 10px;
 
+    display: inline-block;
     text-align: center;
     font-size: 12px;
-
+    
     border: 1px solid #222;
     cursor: pointer;
     transition: all 0.2s;
@@ -101,6 +101,20 @@ const MyPagePost = styled.div`
 
   strong {
     color: #222;
+  }
+
+  .profile_box {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .profile_picture {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+
+    background-color: #eee;
   }
 
   .pagination {
