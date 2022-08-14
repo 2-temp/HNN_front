@@ -40,17 +40,17 @@ const data={
         // success: false,
     },
     EDIT_CHECK:{
-        // msg : "게시물이 수정되었습니다",
-        // success: true,
-         msg : "게시물 수정이 실패했습니다",
-         success: false,
+        msg : "게시물이 수정되었습니다",
+        success: true,
+        //  msg : "게시물 수정이 실패했습니다",
+        //  success: false,
     },
     POSTS: [
         {  
             postId: 0,
             info: {
-                songTitle: "곡 제목",
-                singer: "가수명"
+                songTitle: "곡 제목0",
+                singer: "가수명0"
             },
             content: "게시글 내용0",
             imageUrl: "post_img.jpg",
@@ -66,8 +66,8 @@ const data={
         {  
             postId: 1,
             info: {
-                songTitle: "곡 제목",
-                singer: "가수명"
+                songTitle: "곡 제목1",
+                singer: "가수명1"
             },
             content: "게시글 내용1게시글 내용1게시글 내용1게시글 내용1게시글 내용1게시글 내용1게시글 내용1",
             imageUrl: "post_img.jpg",
@@ -83,8 +83,8 @@ const data={
         {  
             postId: 2,
             info: {
-                songTitle: "곡 제목",
-                singer: "가수명"
+                songTitle: "곡 제목2",
+                singer: "가수명2"
             },
             content: "게시글 내용2",
             imageUrl: "post_img.jpg",
@@ -100,8 +100,8 @@ const data={
         {  
             postId: 3,
             info: {
-                songTitle: "곡 제목",
-                singer: "가수명"
+                songTitle: "곡 제목3",
+                singer: "가수명3"
             },
             content: "게시글 내용3",
             imageUrl: "post_img.jpg",
