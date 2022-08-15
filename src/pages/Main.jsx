@@ -4,8 +4,8 @@ import styled from "styled-components";
 
 import Article from "../components/Main/Article";
 import Pagination from "../components/Main/Pagination";
+import PageSet from "../components/Main/PageSet";
 import RESPONSE from '../RESPONSE'
-import Detail from "./Detail";
 
 function Main() {
   const [posts, setPosts] = useState([]);
@@ -37,20 +37,10 @@ function Main() {
     <MainPost>
       <h4>전체 글 목록</h4>
 
-      <ul className="set_page_limit">
-        <li 
-          onClick={()=>setLimit(3)}
-          className={limit==3?"active":""}
-        >
-            3개 보기
-        </li>
-        <li 
-          onClick={()=>setLimit(10)}
-          className={limit==10?"active":""}
-        >
-            10개 보기
-        </li>
-      </ul>
+      <PageSet
+        limit = {limit} 
+        setLimit = {setLimit} 
+      />
       
       <div className="posts_box">
         {!loading && current(posts).map((list, i) => {
@@ -75,40 +65,5 @@ export default Main;
 const MainPost = styled.div`
   .posts_box {
     min-height: calc(100vh - 200px);
-  }
-
-  .set_page_limit {
-    font-size: 10px;
-    display: flex;
-    gap: 10px;
-    margin: 10px 0;
-    
-    li {
-      cursor: pointer;
-    }
-    li.active {
-      color: orange;
-    }
-  }
-
-  .pagination {
-    text-align: center;
-
-    button {
-      all: unset;
-      padding: 5px 5px;
-      margin: 0 10px;
-      cursor: pointer;
-    }
-
-    button.active {
-      color: orange;
-      border-bottom: 2px solid orange;
-    }
-
-    button.unactive {
-      opacity: .3;
-      pointer-events: none;
-    }
   }
 `
