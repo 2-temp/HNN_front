@@ -39,7 +39,7 @@ const Router = () => {
           <Route path="/sign/in" element={<Login userLoggin={userLoggin} />} />
           <Route path="/sign/up" element={<SignUp />}/>
           <Route path="/mypage" element={<MyPage />}/>
-          <Route path="/profile" element={<Profile />}/>
+          <Route path="/mypage/:userId/profile" element={<Profile />}/>
           <Route path="*" element={<NotFound />}/>
 
         </Routes>
