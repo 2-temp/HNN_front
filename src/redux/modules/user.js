@@ -28,6 +28,7 @@ export const userSlice = createSlice({
         },
         signOutUser: (state, action) => {
             deleteCookie('token');
+            state.loggin = false;
         }
     }
 })

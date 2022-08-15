@@ -1,74 +1,79 @@
-// 갈아엎고 새로 만든 상세 페이지
-
 import React, { useEffect, useState } from "react";
-// import { useDispatch } from "react-redux";
-// import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import axios from "axios";
 
-// import axios from "axios";
 import RESPONSE from "../RESPONSE";
-// import Article1 from "../components/Detail/Article1";
-// import Article2 from "../components/Detail/Article2";
-import Article3 from "../components/Detail/Article3";
+import Comment from "../components/Detail/Comment";
 
 const DetailPage = () => {
+  const navigate = useNavigate();
 
-    //   앨범 커버 사진, 곡 제목 및 가수명, 감상평
   const [posts, setPosts] = useState([]);
   const [song, setSong] = useState([]);
+  const [comments, setComments] = useState([]);
+
   useEffect(() => {
     let data = RESPONSE.DETAIL.poster;
+    let comment = RESPONSE.DETAIL.commenter;
+
     setPosts(data);
-
-    let song = RESPONSE.DETAIL.poster.info;
-    setSong(song);
+    setSong(data.info);
+    setComments(comment);
   });
 
-  //   Article3의 댓글 목록
-  const [comments, setComments] = useState([]);
-  useEffect(() => {
-    let data = RESPONSE.DETAIL.commenter;
-    setComments(data);
-  });
+  const deleteButtonClickHandler = () => {
+    // axios.delete('/post/:postId')
+    console.log('delete postId');
+  }
 
   return (
     <Wrap>
-      <div className="section1">
-        <div className="profile">
-          <p>게시물 작성자의 프로필 사진: {posts.profilePicture}</p>
-          <p>게시물 작성자의 MBTI: {posts.MBTI}</p>
-          <p>게시물 작성자의 닉네임: {posts.nickname} </p>
+      <Section1 profilePicture={posts.profilePicture}>
+        <div className="head_info">
+          <div className="profile_box">
+              <div className="profile_picture">
+                <p>{posts.MBTI}</p>
+              </div>
+              <p>{posts.nickname} </p>
+          </div>
+          <div className="right">
+            
+            <button className="button button_like">{posts.likeNum} 좋아요!</button> 
+            <div></div>
+            <button className="button"
+              onClick={()=> navigate(`/mypage/profile/${posts.userId}`)}
+            >게시물 수정</button>
+            {/* 작성해야 함 */}
+            <button className="button"
+              onClick={()=> deleteButtonClickHandler()}
+            >게시물 삭제</button>
+            {/* 작성해야 함 */}
+          </div>
         </div>
+      </Section1>
 
-        <div>
-          <p>게시물이 작성된 시간: {posts.createdAt} </p>
-          <button>좋아요</button>
-          <p>좋아요 수: {posts.likeNum} </p>
-          {/* <p>댓글 수: countComments</p> */}
-          <button>게시물 수정</button>
-          <button>게시물 삭제</button>
-        </div>
-      </div>
+      <div className="detail_body">
 
-      <div className="section2">
-        {" "}
-        {/* 앨범 커버 사진, 곡 제목 및 가수명, 감상평 */}
-        <div className="albumCover">앨범 커버 사진: {posts.imageUrl}</div>
-        <p>
-          곡 제목 및 가수명: <span>{song.songTitle}</span>, <span>{song.singer}</span>
-        </p>
-        <p>감상평: {posts.content}</p>
-      </div>
+        <Section2 albumCover={posts.imageUrl}>
+          <p className="created_at">{posts.createdAt}</p>
+          <div className="album_cover">  
+            <p className="album_cover_title">
+              <span>{song.songTitle}</span> - <span>{song.singer}</span>
+            </p>
+            <p>{posts.content}</p>
+          </div>
+        </Section2>
 
-      <div className="section3">
-        {" "}
-        {/* 댓글 작성자의 프로필 사진, MBTI, 닉네임, 댓글 내용, 댓글 작성 시각 */}
-        <h3>댓글 목록</h3>
-        <div className="comments_box">
-          {comments.map((list, i) => {
-            return <Article3 list={list} key={i} />;
-          })}
-        </div>
+        <Section3>
+          <h3 className="comments_title">댓글 목록</h3>
+          <div className="comments_box">
+            {comments.map((list, i) => {
+              return <Comment list={list} key={i} />;
+            })}
+          </div>
+        </Section3>
+
       </div>
     </Wrap>
   );
@@ -77,193 +82,131 @@ const DetailPage = () => {
 export default DetailPage;
 
 const Wrap = styled.div`
-  .section1 {
-    width: auto;
-    height: auto;
-    border: 1px solid black;
+  min-height: calc(100vh - 70px);
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
+  button {
+    all: unset;
+    padding: 5px 10px;
+    margin-left: 5px;
+    margin-bottom: 8px;
+    margin-top: 2px;
+    
+    border: 1px solid #aaa;
+    border-radius: 20px;
 
-  .section2 {
-    width: auto;
-    height: auto;
-    border: 1px solid black;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    padding: 10px;
-  }
-
-  .song_box {
-    min-height: calc(100vh - 200px);
-  }
-
-  .section3 {
-    width: auto;
-    height: auto;
-    border: 1px solid black;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .comments_box {
-    min-height: calc(100vh - 200px);
-
-    .content {
-      flex: 1 1 100%;
-      order: 99;
+    &:hover {
+      background-color: #222;
+      color: #fff;
+    border: 1px solid #222;
     }
   }
+
+  .created_at {
+    font-size: 12px;
+    text-align: right;
+    padding-right: 10px;
+  }
+
+  .detail_body {
+    display: flex;
+    align-items: flex-start;
+  }
 `;
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// import React, {Fragment, useState, useEffect} from "react";
-// import {useNavigate, useParams} from "react-router-dom";
-// import {useDispatch, useSelector} from "react-redux";
-// import styled from "styled-components";
-// import placeholder from "../../src_assets/placeholder.png";
-// import {FaRegCommentAlt} from "react-icons/fa";
-
-// // 데이터 관련
-// import {getPost} from "../../redux/modules/detail";
-// import RESPONSE from '../RESPONSE'
-// import axios from "axios";
-
-// const DetailInfo = () => {
-//      useEffect(() => {
-//     let data = RESPONSE.POSTS;
-//     setPosts(data);
-//   })
-
-//   const navigate = useNavigate()
-//   const {id} = useParams()
-//   const dispatch = useDispatch()
-//   const [commentLength, setCommentLength] = useState(0)
-//   const [nickName, setNickName] = useState("")
-//   const postData = useSelector((state => state.detail))
-//   const comment = useSelector((state) => state.comment)
-//   useEffect(() => {
-//     dispatch(getPost(id))
-//   }, [])
-
-//   useEffect(() => {
-//     comment.length && setCommentLength(comment.length)
-//   }, [comment.length])
 
 
-//   const getNickName = () => {
+const Section1 = styled.div`
+  margin-top: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-//     let user = localStorage.getItem("user")
-//     if(user===undefined || user===null) {
-//       alert("로그인이 필요합니다")
-//       navigate("/login")
-//     }else {
-//       user = user.replace(/\"/gi, "")
-//     }
-//     axios.get(`https://try-eat.herokuapp.com/users?email=${user}`)
-//       .then((res)=> {
-//         return setNickName(res.data[0].nick)
-//       })
-//   }
+  .head_info {
+    width: 100%;
+    padding: 0 1em;
+    box-sizing: border-box;
 
-//   return (
-//     <>
-//       {postData.map((data) =>
-//         <StImageBox key={data.id} src={data.imgFile}/>
-//       )}
-//       <StImageInfo>
-//         <StInfoLeft>
-//           {postData.map((data) => (
-//             <Fragment key={data.id}>
-//               <p>{data.food}</p>
-//               <p>{data.restaurant}</p>
-//               <p>{data.location}</p>
-//             </Fragment>
-//           ))}
-//         </StInfoLeft>
-//         <StInfoRight>
-//           <p>{postData[0]?.name}</p>
-//           <p className={"commentLength"}><FaRegCommentAlt/>{commentLength}</p>
-//           {
-//             postData[0]?.name === nickName
-//             ? <button onClick={()=> {navigate(`/edit/${id}`)}}>수정하기</button>
-//               : null
-//           }
-//         </StInfoRight>
-//       </StImageInfo>
-//       {postData.map((data) => (
-//         <StImageDesc key={data.id}>
-//           {data.review}
-//         </StImageDesc>
-//       ))}
-//     </>
-//   )
-// }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-// // 스타일 컴포넌트
-// const StImageBox = styled.img`
-//   background-image: url(${placeholder});
-//   background-size: cover;
-//   background-repeat: no-repeat;
-//   background-position: center;
-//   width: 100%;
-//   height: 300px;
-//   object-fit: fill;
-// `
+    .right {
+      flex: 1 1 auto;
+      text-align: right;
+    }
+  }
 
-// const StImageInfo = styled.div`
-//   display: flex;
-//   justify-content: space-between;
-//   border-bottom: 1px solid #eee;
-//   padding-bottom: 10px;
-//   margin-top: 30px;
-// `
+  .profile_box {
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+  }
 
-// const StInfoLeft = styled.div`
+  .profile_picture {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
 
-//   & p {
-//     padding: 3px 0;
-//     font-size: 18px;
-//     font-weight: bold;
-//   }
-//   & button {
+    background-color: #eee;
+    background-image: url(${(props)=> props.profilePicture});
     
-//   }
-// `
-// const StInfoRight = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: space-between;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+`
 
-//   & p {
-//     padding: 3px 0;
-//     display: flex;
-//     align-items: center;
-//     justify-content: flex-end;
+const Section2 = styled.div`
+  flex: 1 1 auto;
+  height: calc(100vh - 250px);
+  margin-top: 40px;
 
-//     & svg {
-//       margin-right: 5px;
-//     }
-//   }
+  background-color: #eee;
+  position: relative;
+  
+  .album_cover {
+    text-align: center;
+    font-weight: 900;
+    font-size: 20px;
+    
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 
-//   & .commentLength {
-//     text-align: right;
-//   }
-// `
-// const StImageDesc = styled.div`
-//   margin-top: 30px;
-//   flex: 1;
-//   overflow: auto;
-// `
+    color: #444;
 
-// export default DetailInfo
+  }
+  .album_cover_title {
+    font-size: 1.2em;
+    padding-bottom: 16px;
+    border-bottom: 2px dotted #aaa;
+    color: #222;
+  }
+`
+
+const Section3 = styled.div`
+  flex: 0 0 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+  font-size: .7em;
+
+  .comments_title {
+    width: 100%;
+    line-height: 40px;
+
+    margin: 0;
+    padding: 0 10px;
+    box-sizing: border-box;
+  }
+`

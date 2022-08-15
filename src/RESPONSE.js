@@ -81,7 +81,7 @@ const data = {
 
             email: "test@email.com",
             nickname: "닉네임0",
-            MBTI: "MBTI",
+            MBTI: "ENTF",
             profilePicture: "프로필사진URL",
         },
         {
@@ -98,7 +98,7 @@ const data = {
 
             email: "test@email.com",
             nickname: "닉네임1",
-            MBTI: "MBTI",
+            MBTI: "INFJ",
             profilePicture: "프로필사진URL",
         },
         {
@@ -115,7 +115,7 @@ const data = {
 
             email: "test@email.com",
             nickname: "닉네임2",
-            MBTI: "MBTI",
+            MBTI: "ENFJ",
             profilePicture: "프로필사진URL",
         },
         {
@@ -132,7 +132,7 @@ const data = {
 
             email: "test@email.com",
             nickname: "닉네임3",
-            MBTI: "MBTI",
+            MBTI: "ISFJ",
             profilePicture: "프로필사진URL",
         }
     ],
