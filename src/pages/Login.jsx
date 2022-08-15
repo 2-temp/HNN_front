@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux'
 import styled from "styled-components";
@@ -10,7 +10,12 @@ function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
+  const [user, setUser] = useState({
+    email: "",
+    pw: ""
+  });
   const email = useRef("");
+  const pw = useRef("");
 
   const submitHandler = async (ev) => {
     ev.preventDefault();
@@ -19,6 +24,8 @@ function Login() {
       alert('이메일 형식을 확인하세요.')
       return null;
     }
+
+    console.log({email: email.current.value, password: pw.current.value});
 
     // await axios.post(`/sign/in`, null, {
     //     headers: { 
@@ -59,14 +66,13 @@ function Login() {
           ref={email} 
           required
           maxLength={20}
-          value="fsd@dfd.com"
         />
 
         <input 
           type="password" 
           placeholder="비밀번호를 입력하세요." 
+          ref={pw} 
           required
-          value="fsd@dfd.com"
         />
 
         <button>로그인하기</button>
