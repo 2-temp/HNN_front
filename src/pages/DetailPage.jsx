@@ -15,9 +15,13 @@ const DetailPage = () => {
 
     //   앨범 커버 사진, 곡 제목 및 가수명, 감상평
   const [posts, setPosts] = useState([]);
+  const [song, setSong] = useState([]);
   useEffect(() => {
     let data = RESPONSE.DETAIL.poster;
     setPosts(data);
+
+    let song = RESPONSE.DETAIL.poster.info;
+    setSong(song);
   });
 
   //   Article3의 댓글 목록
@@ -31,24 +35,28 @@ const DetailPage = () => {
     <Wrap>
       <div className="section1">
         <div className="profile">
-          <p>게시물 작성자의 프로필 사진: profilePicture</p>
-          <p>게시물 작성자의 MBTI: MBTI</p>
-          <p>게시물 작성자의 닉네임: nickname</p>
+          <p>게시물 작성자의 프로필 사진: {posts.profilePicture}</p>
+          <p>게시물 작성자의 MBTI: {posts.MBTI}</p>
+          <p>게시물 작성자의 닉네임: {posts.nickname} </p>
         </div>
 
         <div>
-          <p>게시물이 작성된 시간: createdAt</p>
+          <p>게시물이 작성된 시간: {posts.createdAt} </p>
           <button>좋아요</button>
-          <p>좋아요 수: likeNum</p>
-          <p>댓글 수: countComments</p>
+          <p>좋아요 수: {posts.likeNum} </p>
+          {/* <p>댓글 수: countComments</p> */}
           <button>게시물 수정</button>
           <button>게시물 삭제</button>
         </div>
       </div>
 
-      <div className="section2"> {/* 앨범 커버 사진, 곡 제목 및 가수명, 감상평 */}
+      <div className="section2">
+        {" "}
+        {/* 앨범 커버 사진, 곡 제목 및 가수명, 감상평 */}
         <div className="albumCover">앨범 커버 사진: {posts.imageUrl}</div>
-        <p>곡 제목 및 가수명: {posts.info}</p>
+        <p>
+          곡 제목 및 가수명: <span>{song.songTitle}</span>, <span>{song.singer}</span>
+        </p>
         <p>감상평: {posts.content}</p>
       </div>
 
