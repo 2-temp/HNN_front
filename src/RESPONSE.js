@@ -156,25 +156,34 @@ const data = {
         {
             commentId: 2,
             nickname: "닉네임2",
-            content: "댓글입니다0",
+            content: "댓글입니다2",
             MBTI: "MBTI",
             createdAt: "2022-99-99, 99:99",
             profilePicture: "프로필사진URL",
+        },
+        {
+            commentId: 3,
+            nickname: "프론트 찌끄레기",
+            content: "2조 아좌좌 화이팅! 2조 아좌좌 화이팅! 2조 아좌좌 화이팅! 2조 아좌좌 화이팅! 2조 아좌좌 화이팅!",
+            MBTI: "INTP",
+            createdAt: "2022-08-14, 12:32",
+            profilePicture: "🌅",
         },
     ],
     DETAIL: {
         poster: {
             userId: 0,
             nickname: "닉네임3",
-            info: {
-                songTitle: "곡 제목",
-                singer: "가수명"
-            },
             MBTI: "MBTI",
             profilePicture: "프로필사진URL",
             createdAt: "2022-99-99, 99:99",
             likeNum: 9999,
-            content: "게시물 내용"
+            imageUrl: "앨범 커버 사진.jpg",
+            info: {
+                songTitle: "곡 제목",
+                singer: "가수명"
+            },
+            content: "게시물 내용"        
         },
         commenter: [
             {
