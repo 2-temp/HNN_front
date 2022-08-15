@@ -9,7 +9,7 @@ import Login from "../pages/Login";
 import SignUp from "../pages/SignUp";
 import Profile from "../pages/Profile";
 import Post from "../pages/Post";
-import Detail from "../pages/Detail";
+import DetailPage from "../pages/DetailPage";
 import NotFound from "../pages/NotFound";
 import MyPage from "../pages/MyPage";
 import Edit from "../pages/Edit";
@@ -42,7 +42,7 @@ const Router = () => {
           <Route path="/" element={<Main/>}/>
           <Route path="/post/" element={<Post />}/>
           <Route path="/post/:postId/edit" element={<Edit />}/>
-          <Route path="/post/:postId" element={<Detail />}/>
+          <Route path="/post/:postId" element={<DetailPage />}/>
           <Route path="/sign/in" element={<Login setIsLog={setIsLog} />} />
           <Route path="/sign/up" element={<SignUp />}/>
           <Route path="/mypage" element={<MyPage />}/>
