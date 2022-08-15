@@ -56,7 +56,7 @@ const MyPagination = styled.div`
 
     button.active {
       color: orange;
-      border-bottom: 2px solid orange;
+      border-bottom: 2px solid orange !important;
     }
 
     button.unactive {

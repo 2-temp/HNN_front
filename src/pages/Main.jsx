@@ -10,7 +10,7 @@ import RESPONSE from '../RESPONSE'
 function Main() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(1); 
   const [limit, setLimit] = useState(10);
 
   useEffect(() => {
@@ -28,8 +28,7 @@ function Main() {
   const indexLast = page * limit; // 1 * 10 / 2 * 10
   const indexFirst = indexLast - limit; // 10 - 10 / 20 - 10
   const current = (posts) => {
-    let current = 0;
-    current = posts.slice(indexFirst, indexLast);
+    let current = posts.slice(indexFirst, indexLast);
     return current;
   }  
 
