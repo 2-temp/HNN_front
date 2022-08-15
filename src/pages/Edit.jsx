@@ -14,16 +14,18 @@ function Edit() {
   const { postId } = useParams();
   const editList = data.POSTS[postId]
 
+
+  console.log(editList)
+
   //타이틀, 내용, 이미지, 가수, 노래 명 변경  저장 할 곳 선언
   const [editInputs, seTeditInputs] = useState({
+    id: postId,
     title: editList.title,
     content: editList.content,
     imageUrl: editList.imageUrl,
     singer: editList.info.singer,
     songTitle: editList.info.songTitle,
   }); 
-
-  console.log(editList.info)
 
   const { title, content, imageUrl, songTitle, singer } = editInputs;
 
@@ -36,7 +38,6 @@ function Edit() {
       alert('빈칸이 있습니다 !')
       return;
     }
-    
     const new_data = { data, editInputs}
     console.log(new_data)
 
@@ -52,7 +53,7 @@ function Edit() {
       alert(response.msg)
       navigate(`/post/${postId}`)
     } else {
-      alert(response.msg)
+      alert(response.msg) 
       navigate(`/post/${postId}`)
     }
   }

@@ -1,4 +1,4 @@
-const data={
+const data = {
     LOGIN: {
         success: true,
         token: "testCookieString"
@@ -13,40 +13,55 @@ const data={
         success: true
     },
     SIGNUP: {
-        msg : "회원가입을 축하드립니다!",
+        msg: "회원가입을 축하드립니다!",
         success: true
     },
     EMAIL_CHECK: {
-        msg : "사용할 수 있는 닉네임입니다.",
+        msg: "사용할 수 있는 닉네임입니다.",
         success: true,
         // msg : "이미 존재하는 이메일입니다.",
         // success: false
     },
     PASSWORD_CHECK: {
-        msg : "사용할 수 있는 이메일입니다.",
+        msg: "사용할 수 있는 이메일입니다.",
         success: true
     },
-    USER_PROFILE:{
-        userId: 0,
-        email: "test@email.com",
-        nickname: "닉네임0",
-        MBTI: "MBTI",
-        profilePicture: "프로필사진URL",
+    USER_PROFILE: [
+        {
+            userId: 0,
+            email: "test@email.com",
+            nickname: "닉네임0",
+            MBTI: "MBTI",
+            profilePicture: "프로필사진URL",
+        },
+        {
+            userId: 1,
+            email: "test12@email.com",
+            nickname: "닉네임1",
+            MBTI: "MBTI1",
+            profilePicture: "프로필사진URL1",
+        }
+    ],
+    PROFILE_CHECK : {
+        msg: "수정되었습니다",
+        success: true,
+        // msg: "수정 실패하였습니다",
+        // success: false,
     },
-    POST_CHECK:{
-        msg : "게시물이 작성되었습니다",
+    POST_CHECK: {
+        msg: "게시물이 작성되었습니다",
         success: true,
         // msg : "로그인이 필요한 기능입니다",
         // success: false,
     },
-    EDIT_CHECK:{
-        msg : "게시물이 수정되었습니다",
+    EDIT_CHECK: {
+        msg: "게시물이 수정되었습니다",
         success: true,
-        //  msg : "게시물 수정이 실패했습니다",
-        //  success: false,
+        //      msg : "게시물 수정이 실패했습니다",
+        //      success: false,
     },
     POSTS: [
-        {  
+        {
             postId: 0,
             info: {
                 songTitle: "곡 제목0",
@@ -57,13 +72,13 @@ const data={
             createdAt: "2022-99-99, 99:99",
             likeNum: 999,
             countComments: 9999,
-            
+
             email: "test@email.com",
             nickname: "닉네임0",
             MBTI: "MBTI",
             profilePicture: "프로필사진URL",
         },
-        {  
+        {
             postId: 1,
             info: {
                 songTitle: "곡 제목1",
@@ -74,13 +89,13 @@ const data={
             createdAt: "2022-99-99, 99:99",
             likeNum: 9999,
             countComments: 9999,
-            
+
             email: "test@email.com",
             nickname: "닉네임1",
             MBTI: "MBTI",
             profilePicture: "프로필사진URL",
         },
-        {  
+        {
             postId: 2,
             info: {
                 songTitle: "곡 제목2",
@@ -91,13 +106,13 @@ const data={
             createdAt: "2022-99-99, 99:99",
             likeNum: 9999,
             countComments: 9999,
-            
+
             email: "test@email.com",
             nickname: "닉네임2",
             MBTI: "MBTI",
             profilePicture: "프로필사진URL",
         },
-        {  
+        {
             postId: 3,
             info: {
                 songTitle: "곡 제목3",
@@ -108,7 +123,7 @@ const data={
             createdAt: "2022-99-99, 99:99",
             likeNum: 9999,
             countComments: 9999,
-            
+
             email: "test@email.com",
             nickname: "닉네임3",
             MBTI: "MBTI",
@@ -142,7 +157,7 @@ const data={
         },
     ],
     DETAIL: {
-        poster: {  
+        poster: {
             userId: 0,
             nickname: "닉네임3",
             info: {
@@ -153,7 +168,7 @@ const data={
             profilePicture: "프로필사진URL",
             createdAt: "2022-99-99, 99:99",
             likeNum: 9999,
-            content: "게시물 내용"           
+            content: "게시물 내용"
         },
         commenter: [
             {

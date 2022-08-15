@@ -64,11 +64,11 @@ function Post() {
     <BigBox>
       <Box>
         <h4>제목</h4>
-        <input onChange={onChange} value={singer} name='singer' placeholder="가수명"></input>
-        <input onChange={onChange} value={songTitle} name='songTitle' placeholder="곡 제목"></input>
-        <input onChange={onChange} value={title} name='title' placeholder="제목"></input>
-        <input onChange={onChange} value={imageUrl} name='imageUrl' placeholder="이미지 Url"></input>
-        <input onChange={onChange} value={content} name='content' placeholder="게시물 내용"></input>
+        <input onChange={onChange} value={singer} name='singer' placeholder="가수명"/>
+        <input onChange={onChange} value={songTitle} name='songTitle' placeholder="곡 제목"/>
+        <input onChange={onChange} value={title} name='title' placeholder="제목"/>
+        <input onChange={onChange} value={imageUrl} name='imageUrl' placeholder="이미지 Url"/>
+        <input onChange={onChange} value={content} name='content' placeholder="게시물 내용"/>
         <button onClick={() => { onClickEditButtonHandler(inputs) }}>작성하기</button>
       </Box>
     </BigBox>
