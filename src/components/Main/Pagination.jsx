@@ -1,4 +1,6 @@
-function Detail(props) {
+import styled from "styled-components";
+
+function Pagination(props) {
   const {totalPost, setPage, page, limit} = props
   const pageNum = [];
   const lastPage = Math.ceil(totalPost / limit);
@@ -8,7 +10,7 @@ function Detail(props) {
   }
 
   return (
-  <>
+  <MyPagination>
     <div className="pagination">
         <button
           className={page === 1?'unactive':""}
@@ -34,8 +36,32 @@ function Detail(props) {
           ⇨
         </button>
     </div>
-  </>
+  </MyPagination>
   )
 }
 
-export default Detail;
+export default Pagination;
+
+const MyPagination = styled.div`
+  
+  .pagination {
+    text-align: center;
+
+    button {
+      all: unset;
+      padding: 5px 5px;
+      margin: 0 10px;
+      cursor: pointer;
+    }
+
+    button.active {
+      color: orange;
+      border-bottom: 2px solid orange;
+    }
+
+    button.unactive {
+      opacity: .3;
+      pointer-events: none;
+    }
+  }
+`

@@ -4,23 +4,43 @@ import styled from "styled-components";
 
 import Article from "../components/Main/Article";
 import Pagination from "../components/Main/Pagination";
+import PageSet from "../components/Main/PageSet";
 import RESPONSE from '../RESPONSE'
 
 function MyPage(){
   const navigate = useNavigate();
-  const [posts, setPosts] = useState([]);
-
-  // 쿠키에 있는 유저 정보
+  //유저정보
   let userData = RESPONSE.USER_PROFILE;
-  
+
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+
   useEffect(() => {
-    // let data = axios.get('/posts')
-    let data = RESPONSE.POSTS;
-    setPosts(data)
+    setLoading(true)
+
+    const fetchData = async () => {
+      // const data = await axios.get('/posts')
+      const data = RESPONSE.POSTS;
+      setPosts(data);
+      setLoading(false);
+    };
+    fetchData();
   })
+
+  const indexLast = page * limit; // 1 * 10 / 2 * 10
+  const indexFirst = indexLast - limit; // 10 - 10 / 20 - 10
+  const current = (posts) => {
+    let current = 0;
+    current = posts.slice(indexFirst, indexLast);
+    return current;
+  }  
+
   
   return(
     <MyPagePost profilePicture={userData.profilePicture}>
+
       <div className="profile_box">
         <div className="profile_picture">
           img: {userData.profilePicture}
@@ -40,14 +60,25 @@ function MyPage(){
           </div>
         </div>
       </div>
+      
+      <PageSet
+        limit = {limit} 
+        setLimit = {setLimit} 
+      />
+
       <h4>내가 작성한 글</h4>
       <div className="posts_box">
-        { posts.map((list, i) => {
+        {!loading && current(posts).map((list, i) => {
           return <Article list={list} key={i} />
         }) }
       </div>
 
-      <Pagination />
+      <Pagination 
+        totalPost = {posts.length}
+        limit = {limit}
+        page = {page}
+        setPage = {setPage}
+      />
 
     </MyPagePost>
   )
