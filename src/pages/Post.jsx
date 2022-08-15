@@ -63,7 +63,6 @@ function Post() {
   return (
     <BigBox>
       <Box>
-        <h4>제목</h4>
         <input onChange={onChange} value={singer} name='singer' placeholder="가수명"/>
         <input onChange={onChange} value={songTitle} name='songTitle' placeholder="곡 제목"/>
         <input onChange={onChange} value={title} name='title' placeholder="제목"/>
