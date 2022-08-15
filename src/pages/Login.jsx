@@ -1,15 +1,21 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux'
 import styled from "styled-components";
 
-import { setCookie, getCookie } from '../cookie'
 import RESPONSE from "../RESPONSE";
+import { signInUser, signOutUser } from '../redux/modules/user'
 
-function Login(props) {
+function Login() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   
-  const { setIsLog } = props;
+  const [user, setUser] = useState({
+    email: "",
+    pw: ""
+  });
   const email = useRef("");
+  const pw = useRef("");
 
   const submitHandler = async (ev) => {
     ev.preventDefault();
@@ -18,7 +24,8 @@ function Login(props) {
       alert('이메일 형식을 확인하세요.')
       return null;
     }
-    // console.log();
+
+    console.log({email: email.current.value, password: pw.current.value});
 
     // await axios.post(`/sign/in`, null, {
     //     headers: { 
@@ -26,23 +33,25 @@ function Login(props) {
     //     }
     // })
     const response = RESPONSE.LOGIN;
+    const userData = RESPONSE.USER_PROFILE;
 
     if (response.success) {
-      let token = response.token
+      let token = response.token;
+      let info = userData;
 
-      setCookie('token', token);
-      console.log(getCookie('token'))
       alert('로그인에 성공하였습니다.')
-      setIsLog(true)
-
+      
+      dispatch(signInUser({
+        'token': token, 
+        "info": info
+      }));
       navigate("/")
       
     } else {
       let msg = response.msg
-      
-      setCookie('token', null);
-      alert(response.msg)
-      setIsLog(false)
+    
+      alert(msg)
+      dispatch(signOutUser())
     }
   };
 
@@ -60,8 +69,9 @@ function Login(props) {
         />
 
         <input 
-          type="text" 
+          type="password" 
           placeholder="비밀번호를 입력하세요." 
+          ref={pw} 
           required
         />
 

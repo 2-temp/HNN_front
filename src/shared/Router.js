@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
-import { useState } from "react";
+import { useSelector } from "react-redux";
+import { useDispatch } from 'react-redux'
 
 import styled from "styled-components";
+import { checkUser, signOutUser } from '../redux/modules/user'
+
 import Header from "../components/Header"
 import Main from "../pages/Main";
 import Login from "../pages/Login";
@@ -15,27 +18,17 @@ import MyPage from "../pages/MyPage";
 import Edit from "../pages/Edit";
 
 const Router = () => {
-  const [isLog, setIsLog] = useState(false)
-
+  const dispatch = useDispatch();
+  const userLoggin = useSelector(state => state.user.loggin);
+  
   // 로그인 토큰 확인
-  // useEffect(()=> {
-  //   if(localStorage.getItem("token")===null) {
-  //     setIsLog(true)
-  //   }else {
-  //     setIsLog(false)
-  //   }
-  // })
-
-  // const onLogoutHandler = () => {
-  //   localStorage.clear()
-  //   navigate("/login")
-  // }
-
-  // LoginSection
+  useEffect(()=> {
+    dispatch(checkUser())
+  }, [])
 
   return (
     <>
-      <Header isLog={isLog} setIsLog={setIsLog} />
+      <Header userLoggin={userLoggin} />
       <Layout>
         <Routes>
 
@@ -43,10 +36,10 @@ const Router = () => {
           <Route path="/post/" element={<Post />}/>
           <Route path="/post/:postId/edit" element={<Edit />}/>
           <Route path="/post/:postId" element={<DetailPage />}/>
-          <Route path="/sign/in" element={<Login setIsLog={setIsLog} />} />
+          <Route path="/sign/in" element={<Login userLoggin={userLoggin} />} />
           <Route path="/sign/up" element={<SignUp />}/>
           <Route path="/mypage" element={<MyPage />}/>
-          <Route path="/profile" element={<Profile />}/>
+          <Route path="/mypage/:userId/profile" element={<Profile />}/>
           <Route path="*" element={<NotFound />}/>
 
         </Routes>
