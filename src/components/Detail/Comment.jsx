@@ -3,6 +3,9 @@ import styled from "styled-components";
 function Comment (props) {
   const { list } = props;
   
+  
+  const writeByThisUser = true;
+
   return (
     <MyArticle>
       <div className="comment_head">

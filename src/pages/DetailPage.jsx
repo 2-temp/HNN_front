@@ -12,7 +12,7 @@ const DetailPage = () => {
   const [posts, setPosts] = useState([]);
   const [song, setSong] = useState([]);
   const [comments, setComments] = useState([]);
-
+  
   useEffect(() => {
     let data = RESPONSE.DETAIL.poster;
     let comment = RESPONSE.DETAIL.commenter;
@@ -42,7 +42,7 @@ const DetailPage = () => {
             <button className="button button_like">{posts.likeNum} 좋아요!</button> 
             <div></div>
             <button className="button"
-              onClick={()=> navigate(`/mypage/profile/${posts.userId}`)}
+              onClick={()=> navigate(`/post/${posts.userId}/edit`)}
             >게시물 수정</button>
             {/* 작성해야 함 */}
             <button className="button"
