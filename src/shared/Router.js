@@ -38,8 +38,8 @@ const Router = () => {
           <Route path="/post/:postId" element={<DetailPage />}/>
           <Route path="/sign/in" element={<Login userLoggin={userLoggin} />} />
           <Route path="/sign/up" element={<SignUp />}/>
-          <Route path="/mypage" element={<MyPage />}/>
-          <Route path="/mypage/:userId/profile" element={<Profile />}/>
+          <Route path="/mypage" element={userLoggin?<MyPage />:<NotFound />}/>
+          <Route path="/mypage/profile/:userId" element={userLoggin?<Profile />:<NotFound />}/>
           <Route path="*" element={<NotFound />}/>
 
         </Routes>
@@ -51,8 +51,11 @@ const Router = () => {
 export default Router;
 
 const Layout = styled.div`
-  width: 100%;
-  max-width: 1200px;
+  max-width: 1024px;
+
+  display: flex;
+  flex-direction: column;
+
   margin: 0 auto;
   padding: 0 40px;
   box-sizing: border-box;

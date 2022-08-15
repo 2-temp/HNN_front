@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { FaHeart } from "react-icons/fa";
+import { FaRegHeart } from "react-icons/fa";
 
 function Article(props) {
   const navigate = useNavigate();
@@ -26,6 +28,10 @@ function Article(props) {
           좋아요 <b>{list.likeNum}</b>
         </li>
       </ul>
+      <div className="icon_box">
+        {/* <FaHeart /> */}
+        <FaRegHeart />
+      </div>
     </MyArticle>
   );
 }
@@ -35,19 +41,23 @@ export default Article;
 const MyArticle = styled.div`
   padding: 10px 20px;
   margin-bottom: 10px;
-  border: 1px solid #222;
+  border: 1px solid #aaa;
 
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 40px;
+  gap: 10px;
 
   cursor: pointer;
   transition: all 0.2s;
 
   &:hover {
       background-color: #eee;
+  }
+
+  .icon_box {
+    color: #e16720;
   }
 
   .right {
@@ -57,6 +67,7 @@ const MyArticle = styled.div`
   }
 
   .mbti {
+    width: 80px;
     font-size: 2em;
     margin-top: -3px;
   }
