@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from 'react-redux'
@@ -12,7 +12,7 @@ import Login from "../pages/Login";
 import SignUp from "../pages/SignUp";
 import Profile from "../pages/Profile";
 import Post from "../pages/Post";
-import Detail from "../pages/Detail";
+import DetailPage from "../pages/DetailPage";
 import NotFound from "../pages/NotFound";
 import MyPage from "../pages/MyPage";
 import Edit from "../pages/Edit";
@@ -35,11 +35,11 @@ const Router = () => {
           <Route path="/" element={<Main/>}/>
           <Route path="/post/" element={<Post />}/>
           <Route path="/post/:postId/edit" element={<Edit />}/>
-          <Route path="/post/:postId" element={<Detail />}/>
+          <Route path="/post/:postId" element={<DetailPage />}/>
           <Route path="/sign/in" element={<Login userLoggin={userLoggin} />} />
           <Route path="/sign/up" element={<SignUp />}/>
-          <Route path="/mypage" element={<MyPage />}/>
-          <Route path="/profile" element={<Profile />}/>
+          <Route path="/mypage" element={userLoggin?<MyPage />:<NotFound />}/>
+          <Route path="/mypage/profile/:userId" element={userLoggin?<Profile />:<NotFound />}/>
           <Route path="*" element={<NotFound />}/>
 
         </Routes>
@@ -51,8 +51,11 @@ const Router = () => {
 export default Router;
 
 const Layout = styled.div`
-  width: 100%;
-  max-width: 1200px;
+  max-width: 1024px;
+
+  display: flex;
+  flex-direction: column;
+
   margin: 0 auto;
   padding: 0 40px;
   box-sizing: border-box;

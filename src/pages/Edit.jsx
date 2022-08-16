@@ -14,87 +14,135 @@ function Edit() {
   const { postId } = useParams();
   const editList = data.POSTS[postId]
 
+
+  console.log(editList)
+
+  //타이틀, 내용, 이미지, 가수, 노래 명 변경  저장 할 곳 선언
   const [editInputs, seTeditInputs] = useState({
+    id: postId,
     title: editList.title,
     content: editList.content,
     imageUrl: editList.imageUrl,
-    songTitle: editList.songTitle,
-    singer: editList.singer,
-  });
-
-
-
+    singer: editList.info.singer,
+    songTitle: editList.info.songTitle,
+  }); 
 
   const { title, content, imageUrl, songTitle, singer } = editInputs;
-  
 
-  const oneditHandler = async (inputs) => {
 
-    const new_data = { data, inputs }
 
+  //edit 핸들러 설정
+  const oneEditHandler = async (event) => {
+    event.preventDefault();
+
+    if(title === '' || content === '' || imageUrl ==='' || songTitle === '' || singer === '') {
+      alert('빈칸이 있습니다 !')
+      return;
+    }
+    const new_data = { data, editInputs}
     console.log(new_data)
 
-    const response = RESPONSE.EDIT
+    // const response =  await axios.PATCH("/PATCH", editInputs, singers, {
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //     }
+    // });
+
+    const response = RESPONSE.EDIT_CHECK
     console.log(response)
     if (response.success) {
       alert(response.msg)
-      navigate('/')
+      navigate(`/post/${postId}`)
     } else {
-      alert(response.msg)
-      navigate('/sign/in')
+      alert(response.msg) 
+      navigate(`/post/${postId}`)
     }
   }
 
-  console.log(title, content, imageUrl)
-
   return (
-    <BigBox>
-      <Box>
-        <h4>제목</h4>
-        {editList.title}
-        <input value={title} name='title' placeholder="제목"></input>
-        <input value={imageUrl} name='imageUrl' placeholder="이미지 Url"></input>
-        <input value={content} name='content' placeholder="게시물 내용"></input>
-        <input value={songTitle} name='songTitle' placeholder="노래 이름"></input>
-        <input value={singer} name='singer' placeholder="가수"></input>
-        <button onClick={() => { oneditHandler(editInputs) }}>수정하기</button>
-      </Box>
-    </BigBox>
+    <Contents>
+      <form onSubmit={(event) => { oneEditHandler(event) }}>
+        <h3>글 수정</h3>
+        <input onChange={(ev) => {
+          seTeditInputs({
+            ...editInputs,
+            title: ev.target.value,
+          });
+        }} value={title} name='title' placeholder="제목"></input>
+        <input onChange={(ev) => {
+          seTeditInputs({
+              ...editInputs,
+              imageUrl: ev.target.value,
+            });
+          }} 
+          value={imageUrl} 
+          name='imageUrl' 
+          placeholder="이미지 Url"
+        ></input>
+        <input onChange={(ev) => {
+            seTeditInputs({
+              ...editInputs,
+              content: ev.target.value,
+            });
+          }} 
+          value={content} 
+          name='content' 
+          placeholder="게시물 내용"
+        ></input>
+        <input onChange={(ev) => {
+          seTeditInputs({
+            ...editInputs,
+            songTitle: ev.target.value,
+          });
+        }} value={songTitle} name='songTitle' placeholder="노래 이름"></input>
+        <input onChange={(ev) => {
+          seTeditInputs({
+            ...editInputs,
+            singer: ev.target.value,
+          });
+        }} value={singer} name='singer' placeholder="가수"></input>
+        <button>수정하기</button>
+      </form>
+    </Contents>
   )
 }
-
 export default Edit;
 
+const Contents = styled.div`
+margin-top: 10vh;
 
+padding: 0 20px;
+box-sizing: border-box;
 
-const BigBox = styled.div`
- border: 1px solid red;
- max-width: 1200px;
- width: 100%;
- height: 650px;
-display: flex;
-justify-content: center;
-margin-top: 10px;
+form {
+    max-width: 600px;
+    margin: 0 auto;
 
-`
+    display: flex;
+    flex-flow: column;
+    gap: 16px;
 
-const Box = styled.div`
-  background-color: gray;
-  width: 600px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  border-radius: 12px;
+    text-align: center;
 
-  input {
-    height: 3%;
-  }
+    h3 {
+      font-size: 28px;
+    }
 
-  button{
-    height: 30px;
-    width: 100px;
+    input, button {
+      font-size: 18px;
+      padding: 6px 26px;
+      box-sizing: border-box;
+      border-radius: 20px;
+
+      border: none;
+      box-shadow: 2px 2px 5px #ddd;
+
+      transition: all .2s;
+    }
     
+    button:hover {
+      background-color: #ccc;
+      cursor: pointer;
+    }
   }
 `

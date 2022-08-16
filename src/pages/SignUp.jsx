@@ -151,7 +151,7 @@ function SignUp(){
           minLength={6}
           maxLength={20}
           />
-
+        
         <div className="input_box">
           <input 
             type="text" 
@@ -162,7 +162,6 @@ function SignUp(){
             maxLength={20}
             className={nicknameChecked?"enable":""}
           />
-          
           <button 
             type="button"
             onClick={(ev) => nicknameCheckButtonClickHandler(ev)}
@@ -221,15 +220,51 @@ function SignUp(){
 export default SignUp;
 
 const Contents = styled.div`
+  margin-top: 10vh;
+
+  padding: 0 20px;
+  box-sizing: border-box;
+
   form {
+    max-width: 600px;
+    margin: 0 auto;
+
     display: flex;
     flex-flow: column;
     gap: 10px;
+
     text-align: center;
   }
 
   .section_title {
     margin-bottom: 0;
+  }
+
+  h3 {
+    font-size: 28px;
+  }
+
+  input, button, select {
+    font-size: 18px;
+    padding: 6px 26px;
+    box-sizing: border-box;
+    border-radius: 20px;
+
+    border: none;
+    box-shadow: 0px 0px 5px #ddd, 3px 2px 2px #aaa;
+    border: 1px solid #eee;
+
+    transition: all .2s;
+  }
+  button:hover {
+    background-color: #ccc;
+    cursor: pointer;
+  }
+  
+  select {
+    text-align: center;
+    padding: 6px 5px;
+    margin: 10px 2px 0;
   }
 
   .instruction_box {
@@ -245,17 +280,21 @@ const Contents = styled.div`
   }
 
   .my_mbti_box {
+    min-height: 100px;
+
     display: flex;
     flex-flow: column;
     gap: 10px;
     
     strong {
-      font-size: 20px;
+      font-size: 30px;
     }
   }
 
   .input_box {
     display: flex;
+    gap: 10px;
+    max-height: 35px;
 
     input {
       flex:  1 1 auto;
