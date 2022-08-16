@@ -97,13 +97,11 @@ const nicknameCheckHandler = async () => {
   }
 
   return (
-    <>
-      <BigBox>
-        <Box>
+    <Contents>
           <form onSubmit={(ev) => { profileEditHandler(ev) }}>
             <h4>제목</h4>
             <input
-             className='enable'
+              className='enable'
             value={emails} />
             <input
               type="password"
@@ -193,45 +191,42 @@ const nicknameCheckHandler = async () => {
           </button>
             </div>
           </form>
-
-        </Box>
-      </BigBox>
-    </>
+    </Contents>
   )
 }
 
-const BigBox = styled.div`
- border: 1px solid red;
- max-width: 1200px;
- width: 100%;
- height: 650px;
-display: flex;
-justify-content: center;
-margin-top: 10px;
-`
+const Contents = styled.div`
+margin-top: 10vh;
 
-const Box = styled.div`
-  
+padding: 0 20px;
+box-sizing: border-box;
 
-  form {
-    background-color: gray;
-  width: 600px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  border-radius: 12px;
 
-  input {
-    height: 3%;
-  }
+form {
+    max-width: 600px;
+    margin: 0 auto;
 
-  button{
-    height: 30px;
-    width: 100px;
+    display: flex;
+    flex-flow: column;
+    gap: 16px;
+
+    text-align: center;
+
+    h3 {
+      font-size: 28px;
+    }
     
-  }
+    input, button {
+      font-size: 18px;
+      padding: 6px 26px;
+      box-sizing: border-box;
+      border-radius: 20px;
+
+      border: none;
+      box-shadow: 2px 2px 5px #ddd;
+
+      transition: all .2s;
+    }
   .sumbit_button,
   .enable {
     pointer-events: none;
