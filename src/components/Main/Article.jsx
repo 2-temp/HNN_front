@@ -5,7 +5,7 @@ import { FaRegHeart } from "react-icons/fa";
 
 function Article(props) {
   const navigate = useNavigate();
-  const { list, i } = props;
+  const { list } = props;
 
   let dateCreatedAt = new Date(list.createdAt).toLocaleDateString()
   dateCreatedAt = dateCreatedAt === "Invalid Date"?"":dateCreatedAt;

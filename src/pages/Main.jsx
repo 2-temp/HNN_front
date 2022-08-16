@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { getCookie } from '../cookie';
 
 import Article from "../components/Main/Article";
 import Pagination from "../components/Main/Pagination";
@@ -21,11 +22,24 @@ function Main() {
       console.log(axiosData.data.data);
       setPosts(axiosData.data.data)
       setLoading(false);
-      //const data = RESPONSE.POSTS;
     };
     fetchAxiosData();
-  }, [])
 
+    const token = getCookie('token');
+    
+    // post요청
+    // const postAxiosData = async () => {
+    //   await axios.post('http://gwonyeong.shop/post', "요청할 값", {
+    //     headers: {
+    //       authorization: `Bearer ${token}`
+    //     }
+    //   }).then(res => {
+    //     console.log(res)
+    //     console.log(res.data)
+    //   })
+    // };
+    // postAxiosData();
+  }, [])
 
   const indexLast = page * limit; // 1 * 10 / 2 * 10
   const indexFirst = indexLast - limit; // 10 - 10 / 20 - 10
