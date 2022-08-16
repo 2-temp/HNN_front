@@ -134,6 +134,312 @@ const data = {
             nickname: "닉네임3",
             MBTI: "ISFJ",
             profilePicture: "프로필사진URL",
+        },
+        {
+            postId: 3,
+            info: {
+                songTitle: "곡 제목3",
+                singer: "가수명3"
+            },
+            content: "게시글 내용3",
+            imageUrl: "post_img.jpg",
+            createdAt: "2022-99-99, 99:99",
+            likeNum: 9999,
+            countComments: 9999,
+
+            email: "test@email.com",
+            nickname: "닉네임3",
+            MBTI: "ISFJ",
+            profilePicture: "프로필사진URL",
+        },
+        {
+            postId: 3,
+            info: {
+                songTitle: "곡 제목3",
+                singer: "가수명3"
+            },
+            content: "게시글 내용3",
+            imageUrl: "post_img.jpg",
+            createdAt: "2022-99-99, 99:99",
+            likeNum: 9999,
+            countComments: 9999,
+
+            email: "test@email.com",
+            nickname: "닉네임3",
+            MBTI: "ISFJ",
+            profilePicture: "프로필사진URL",
+        },
+        {
+            postId: 3,
+            info: {
+                songTitle: "곡 제목3",
+                singer: "가수명3"
+            },
+            content: "게시글 내용3",
+            imageUrl: "post_img.jpg",
+            createdAt: "2022-99-99, 99:99",
+            likeNum: 9999,
+            countComments: 9999,
+
+            email: "test@email.com",
+            nickname: "닉네임3",
+            MBTI: "ISFJ",
+            profilePicture: "프로필사진URL",
+        },
+        {
+            postId: 3,
+            info: {
+                songTitle: "곡 제목3",
+                singer: "가수명3"
+            },
+            content: "게시글 내용3",
+            imageUrl: "post_img.jpg",
+            createdAt: "2022-99-99, 99:99",
+            likeNum: 9999,
+            countComments: 9999,
+
+            email: "test@email.com",
+            nickname: "닉네임3",
+            MBTI: "ISFJ",
+            profilePicture: "프로필사진URL",
+        },
+        {
+            postId: 3,
+            info: {
+                songTitle: "곡 제목3",
+                singer: "가수명3"
+            },
+            content: "게시글 내용3",
+            imageUrl: "post_img.jpg",
+            createdAt: "2022-99-99, 99:99",
+            likeNum: 9999,
+            countComments: 9999,
+
+            email: "test@email.com",
+            nickname: "닉네임3",
+            MBTI: "ISFJ",
+            profilePicture: "프로필사진URL",
+        },
+        {
+            postId: 3,
+            info: {
+                songTitle: "곡 제목3",
+                singer: "가수명3"
+            },
+            content: "게시글 내용3",
+            imageUrl: "post_img.jpg",
+            createdAt: "2022-99-99, 99:99",
+            likeNum: 9999,
+            countComments: 9999,
+
+            email: "test@email.com",
+            nickname: "닉네임3",
+            MBTI: "ISFJ",
+            profilePicture: "프로필사진URL",
+        },
+        {
+            postId: 3,
+            info: {
+                songTitle: "곡 제목3",
+                singer: "가수명3"
+            },
+            content: "게시글 내용3",
+            imageUrl: "post_img.jpg",
+            createdAt: "2022-99-99, 99:99",
+            likeNum: 9999,
+            countComments: 9999,
+
+            email: "test@email.com",
+            nickname: "닉네임3",
+            MBTI: "ISFJ",
+            profilePicture: "프로필사진URL",
+        },
+        {
+            postId: 3,
+            info: {
+                songTitle: "곡 제목3",
+                singer: "가수명3"
+            },
+            content: "게시글 내용3",
+            imageUrl: "post_img.jpg",
+            createdAt: "2022-99-99, 99:99",
+            likeNum: 9999,
+            countComments: 9999,
+
+            email: "test@email.com",
+            nickname: "닉네임3",
+            MBTI: "ISFJ",
+            profilePicture: "프로필사진URL",
+        },
+        {
+            postId: 3,
+            info: {
+                songTitle: "곡 제목3",
+                singer: "가수명3"
+            },
+            content: "게시글 내용3",
+            imageUrl: "post_img.jpg",
+            createdAt: "2022-99-99, 99:99",
+            likeNum: 9999,
+            countComments: 9999,
+
+            email: "test@email.com",
+            nickname: "닉네임3",
+            MBTI: "ISFJ",
+            profilePicture: "프로필사진URL",
+        },
+        {
+            postId: 3,
+            info: {
+                songTitle: "곡 제목3",
+                singer: "가수명3"
+            },
+            content: "게시글 내용3",
+            imageUrl: "post_img.jpg",
+            createdAt: "2022-99-99, 99:99",
+            likeNum: 9999,
+            countComments: 9999,
+
+            email: "test@email.com",
+            nickname: "닉네임3",
+            MBTI: "ISFJ",
+            profilePicture: "프로필사진URL",
+        },
+        {
+            postId: 3,
+            info: {
+                songTitle: "곡 제목3",
+                singer: "가수명3"
+            },
+            content: "게시글 내용3",
+            imageUrl: "post_img.jpg",
+            createdAt: "2022-99-99, 99:99",
+            likeNum: 9999,
+            countComments: 9999,
+
+            email: "test@email.com",
+            nickname: "닉네임3",
+            MBTI: "ISFJ",
+            profilePicture: "프로필사진URL",
+        },
+        {
+            postId: 3,
+            info: {
+                songTitle: "곡 제목3",
+                singer: "가수명3"
+            },
+            content: "게시글 내용3",
+            imageUrl: "post_img.jpg",
+            createdAt: "2022-99-99, 99:99",
+            likeNum: 9999,
+            countComments: 9999,
+
+            email: "test@email.com",
+            nickname: "닉네임3",
+            MBTI: "ISFJ",
+            profilePicture: "프로필사진URL",
+        },
+        {
+            postId: 3,
+            info: {
+                songTitle: "곡 제목3",
+                singer: "가수명3"
+            },
+            content: "게시글 내용3",
+            imageUrl: "post_img.jpg",
+            createdAt: "2022-99-99, 99:99",
+            likeNum: 9999,
+            countComments: 9999,
+
+            email: "test@email.com",
+            nickname: "닉네임3",
+            MBTI: "ISFJ",
+            profilePicture: "프로필사진URL",
+        },
+        {
+            postId: 3,
+            info: {
+                songTitle: "곡 제목3",
+                singer: "가수명3"
+            },
+            content: "게시글 내용3",
+            imageUrl: "post_img.jpg",
+            createdAt: "2022-99-99, 99:99",
+            likeNum: 9999,
+            countComments: 9999,
+
+            email: "test@email.com",
+            nickname: "닉네임3",
+            MBTI: "ISFJ",
+            profilePicture: "프로필사진URL",
+        },
+        {
+            postId: 3,
+            info: {
+                songTitle: "곡 제목3",
+                singer: "가수명3"
+            },
+            content: "게시글 내용3",
+            imageUrl: "post_img.jpg",
+            createdAt: "2022-99-99, 99:99",
+            likeNum: 9999,
+            countComments: 9999,
+
+            email: "test@email.com",
+            nickname: "닉네임3",
+            MBTI: "ISFJ",
+            profilePicture: "프로필사진URL",
+        },
+        {
+            postId: 3,
+            info: {
+                songTitle: "곡 제목3",
+                singer: "가수명3"
+            },
+            content: "게시글 내용3",
+            imageUrl: "post_img.jpg",
+            createdAt: "2022-99-99, 99:99",
+            likeNum: 9999,
+            countComments: 9999,
+
+            email: "test@email.com",
+            nickname: "닉네임3",
+            MBTI: "ISFJ",
+            profilePicture: "프로필사진URL",
+        },
+        {
+            postId: 3,
+            info: {
+                songTitle: "곡 제목3",
+                singer: "가수명3"
+            },
+            content: "게시글 내용3",
+            imageUrl: "post_img.jpg",
+            createdAt: "2022-99-99, 99:99",
+            likeNum: 9999,
+            countComments: 9999,
+
+            email: "test@email.com",
+            nickname: "닉네임3",
+            MBTI: "ISFJ",
+            profilePicture: "프로필사진URL",
+        },
+        {
+            postId: 3,
+            info: {
+                songTitle: "곡 제목3",
+                singer: "가수명3"
+            },
+            content: "게시글 내용3",
+            imageUrl: "post_img.jpg",
+            createdAt: "2022-99-99, 99:99",
+            likeNum: 9999,
+            countComments: 9999,
+
+            email: "test@email.com",
+            nickname: "닉네임3",
+            MBTI: "ISFJ",
+            profilePicture: "프로필사진URL",
         }
     ],
     COMMENTS: [
