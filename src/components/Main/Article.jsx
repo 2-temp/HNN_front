@@ -39,9 +39,9 @@ function Article(props) {
 export default Article;
 
 const MyArticle = styled.div`
+
   padding: 10px 20px;
-  margin-bottom: 10px;
-  border: 1px solid #aaa;
+  box-shadow: 0 0 1px #555;
 
   display: flex;
   justify-content: space-between;
@@ -54,6 +54,10 @@ const MyArticle = styled.div`
 
   &:hover {
       background-color: #eee;
+  }
+
+  &.wide {
+    flex: 1 1 200px;
   }
 
   .icon_box {

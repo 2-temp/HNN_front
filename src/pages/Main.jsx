@@ -39,6 +39,8 @@ function Main() {
       <PageSet
         limit = {limit} 
         setLimit = {setLimit} 
+        setPage = {setPage} 
+        setLoading = {setLoading} 
       />
       
       <div className="posts_box">
@@ -63,6 +65,8 @@ export default Main;
 
 const MainPost = styled.div`
   .posts_box {
-    min-height: calc(100vh - 200px);
+    min-height: calc(100vh - 250px);
+    display: flex;
+    flex-direction: column;
   }
 `
