@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
-
-import RESPONSE from "../RESPONSE";
 import Comment from "../components/Detail/Comment";
 
 const DetailPage = () => {
@@ -12,35 +10,24 @@ const DetailPage = () => {
   const {postId} = useParams();
 
   const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [users, setUsers] = useState([]);
   const [song, setSong] = useState([]);
   const [comments, setComments] = useState([]);
 
-console.log(postId)
 
+
+  //게시물 데이터 불러오기
   useEffect(() => {
-    setLoading(true)
-
     const fetchAxiosData = async () => {
-      const axiosData = await axios.get('http://gwonyeong.shop/post')
-      console.log(axiosData.data.data);
-      setPosts(axiosData.data.data)
-      setLoading(false);
-    };
+      const axiosData = await axios.get(`http://gwonyeong.shop/post/${postId}`)
+      setUsers(axiosData.data.data.poster.User)
+      setPosts(axiosData.data.data.poster)
+      console.log(axiosData.data.data.poster.User)
+      console.log(axiosData.data.data.poster)
+    };  
     fetchAxiosData();
   }, [])
  
-
-  useEffect(() => {
-    let data = RESPONSE.DETAIL.poster;
-    let comment = RESPONSE.DETAIL.commenter;
-
-    setPosts(data);
-    setSong(data.info);
-    setComments(comment);
-    // 임시 
-    
-  });
 
   // 게시물 삭제 버튼 이벤트 핸들러
   const deleteButtonClickHandler = (postId) => {
@@ -55,12 +42,12 @@ console.log(postId)
   return (
     <Wrap>
       <Section1 profilePicture={posts.profilePicture}>
-        <div className="head_info">
+        <div className="head_info"> 
           <div className="profile_box">
               <div className="profile_picture">
-                <p>{posts.MBTI}</p>
+                <p>{users.MBTI}</p>
               </div>
-              <p>{posts.nickname} </p>
+              <p>{users.nickname} </p>
           </div>
           <div className="right">
             
@@ -83,7 +70,7 @@ console.log(postId)
           <p className="created_at">{posts.createdAt}</p>
           <div className="album_cover">  
             <p className="album_cover_title">
-              <span>{song.songTitle}</span> - <span>{song.singer}</span>
+              <span>{posts.songTitle}</span> - <span>{posts.singer}</span>
             </p>
             <p>{posts.content}</p>
           </div>
