@@ -14,38 +14,37 @@ const DetailPage = () => {
 
   const [posts, setPosts] = useState([]);
   const [users, setUsers] = useState([]);
-  const [song, setSong] = useState([]);
   const [comments, setComments] = useState([]);
   const [likeNum, setLikeNum] = useState();
-console.log(postId)
 
-
-  //게시물 데이터 불러오기
+  //게시물, 댓글 리스트 불러오기
   useEffect(() => {
     const fetchAxiosData = async () => {
       const axiosData = await axios.get(`http://gwonyeong.shop/post/${postId}`)
       const poster=axiosData.data.data.poster
       setUsers(poster.User)
       setPosts(poster)
-      console.log(poster.User)
-      console.log(poster)
+      setComments(axiosData.data.data.commenter)
+      console.log(axiosData.data.data)
+
 
       setLikeNum(axiosData.data.data.like)
     };  
     fetchAxiosData();
 
   }, [])
+  
  
 
-  // 게시물 삭제 버튼 이벤트 핸들러
-  const deleteButtonClickHandler = (postId) => {
-    if (window.confirm('게시물을 정말 삭제할까요?')) {
-      alert('삭제 완료!');
-      axios.delete(`/post/${postId}`); // /post/:postId/${postId}
-      console.log('delete postId');
-      navigate('/');
-    };
-  };
+  // 게시물 삭제
+  const deleteButtonClickHandler = async (ev) => {
+    ev.preventDefault();
+    await axios.delete(`http://gwonyeong.shop/post/${postId}`, null)
+    .then(res => {
+      console.log(res)
+      console.log(res.data)
+    })
+  }
 
   const likeButtonClickHandler = (event) => {
     const token = getCookie('token');
@@ -92,7 +91,7 @@ console.log(postId)
             >게시물 수정</button>
             {/* 작성해야 함 */}
             <button className="button"
-              onClick={()=> deleteButtonClickHandler()}
+              onClick={(ev)=> deleteButtonClickHandler(ev)}
             >게시물 삭제</button>
           </div>
         </div>
@@ -114,7 +113,8 @@ console.log(postId)
           <h3 className="comments_title">댓글 목록</h3>
           <div className="comments_box">
             {comments.map((list, i) => {
-              return <Comment list={list} postId={postId} key={i} />;
+              console.log(comments)
+              return <Comment list={list} i={i} postId={postId} key={i} />;
             })}
           </div>
         </Section3>

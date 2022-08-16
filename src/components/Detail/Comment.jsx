@@ -2,12 +2,19 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
+import userEvent from "@testing-library/user-event";
 
 function Comment (props) {
   const navigate = useNavigate();
 
   const { list } = props;
-  
+  console.log(props)
+ 
+
+  // const qwe = list.User
+
+  // console.log(qwe)
+
   let dateCreatedAt = new Date(list.createdAt).toLocaleDateString()
   dateCreatedAt = dateCreatedAt === "Invalid Date"?"":dateCreatedAt;
 
@@ -46,6 +53,7 @@ function Comment (props) {
   };
 
   return (
+    <>
     <MyArticle>
       <div className="comment_head">
         <div className="left_box">
@@ -93,6 +101,8 @@ function Comment (props) {
       <p className="commentTime">{dateCreatedAt}</p>
 
     </MyArticle>
+    </>
+    
   );
 }
 
