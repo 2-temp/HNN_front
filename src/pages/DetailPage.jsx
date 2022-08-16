@@ -12,7 +12,8 @@ const DetailPage = () => {
   const [posts, setPosts] = useState([]);
   const [song, setSong] = useState([]);
   const [comments, setComments] = useState([]);
-  
+  const postId = 0;
+
   useEffect(() => {
     let data = RESPONSE.DETAIL.poster;
     let comment = RESPONSE.DETAIL.commenter;
@@ -20,6 +21,8 @@ const DetailPage = () => {
     setPosts(data);
     setSong(data.info);
     setComments(comment);
+    // 임시 
+    
   });
 
   const deleteButtonClickHandler = () => {
@@ -69,7 +72,7 @@ const DetailPage = () => {
           <h3 className="comments_title">댓글 목록</h3>
           <div className="comments_box">
             {comments.map((list, i) => {
-              return <Comment list={list} key={i} />;
+              return <Comment list={list} postId={postId} key={i} />;
             })}
           </div>
         </Section3>
