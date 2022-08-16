@@ -12,7 +12,8 @@ const DetailPage = () => {
   const [posts, setPosts] = useState([]);
   const [song, setSong] = useState([]);
   const [comments, setComments] = useState([]);
-  
+  const postId = 0;
+
   useEffect(() => {
     let data = RESPONSE.DETAIL.poster;
     let comment = RESPONSE.DETAIL.commenter;
@@ -20,12 +21,19 @@ const DetailPage = () => {
     setPosts(data);
     setSong(data.info);
     setComments(comment);
+    // 임시 
+    
   });
 
-  const deleteButtonClickHandler = () => {
-    // axios.delete('/post/:postId')
-    console.log('delete postId');
-  }
+  // 게시물 삭제 버튼 이벤트 핸들러
+  const deleteButtonClickHandler = (postId) => {
+    if (window.confirm('게시물을 정말 삭제할까요?')) {
+      alert('삭제 완료!');
+      axios.delete(`/post/${postId}`); // /post/:postId/${postId}
+      console.log('delete postId');
+      navigate('/');
+    };
+  };
 
   return (
     <Wrap>
@@ -48,7 +56,6 @@ const DetailPage = () => {
             <button className="button"
               onClick={()=> deleteButtonClickHandler()}
             >게시물 삭제</button>
-            {/* 작성해야 함 */}
           </div>
         </div>
       </Section1>
@@ -69,7 +76,7 @@ const DetailPage = () => {
           <h3 className="comments_title">댓글 목록</h3>
           <div className="comments_box">
             {comments.map((list, i) => {
-              return <Comment list={list} key={i} />;
+              return <Comment list={list} postId={postId} key={i} />;
             })}
           </div>
         </Section3>

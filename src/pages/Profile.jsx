@@ -78,7 +78,7 @@ const nicknameCheckHandler = async () => {
       return;
     }
 
-    // const response =  await axios.PATCH("/PATCH", null, {
+    // const response =  await axios.PATCH("/sign/user/:userId", null, {
     //   headers: {
     //     'Content-Type': 'application/json'
     //     }

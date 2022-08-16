@@ -136,7 +136,7 @@ const data = {
             profilePicture: "프로필사진URL",
         },
         {
-            postId: 3,
+            postId: 4,
             info: {
                 songTitle: "곡 제목3",
                 singer: "가수명3"
@@ -153,7 +153,7 @@ const data = {
             profilePicture: "프로필사진URL",
         },
         {
-            postId: 3,
+            postId: 5,
             info: {
                 songTitle: "곡 제목3",
                 singer: "가수명3"
@@ -170,7 +170,7 @@ const data = {
             profilePicture: "프로필사진URL",
         },
         {
-            postId: 3,
+            postId: 6,
             info: {
                 songTitle: "곡 제목3",
                 singer: "가수명3"
@@ -187,7 +187,7 @@ const data = {
             profilePicture: "프로필사진URL",
         },
         {
-            postId: 3,
+            postId: 7,
             info: {
                 songTitle: "곡 제목3",
                 singer: "가수명3"
