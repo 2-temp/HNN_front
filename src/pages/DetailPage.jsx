@@ -25,10 +25,15 @@ const DetailPage = () => {
     
   });
 
-  const deleteButtonClickHandler = () => {
-    // axios.delete('/post/:postId')
-    console.log('delete postId');
-  }
+  // 게시물 삭제 버튼 이벤트 핸들러
+  const deleteButtonClickHandler = (postId) => {
+    if (window.confirm('게시물을 정말 삭제할까요?')) {
+      alert('삭제 완료!');
+      axios.delete(`/post/${postId}`); // /post/:postId/${postId}
+      console.log('delete postId');
+      navigate('/');
+    };
+  };
 
   return (
     <Wrap>
@@ -51,7 +56,6 @@ const DetailPage = () => {
             <button className="button"
               onClick={()=> deleteButtonClickHandler()}
             >게시물 삭제</button>
-            {/* 작성해야 함 */}
           </div>
         </div>
       </Section1>

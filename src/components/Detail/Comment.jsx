@@ -1,4 +1,6 @@
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import styled from "styled-components";
 
 function Comment (props) {
@@ -7,6 +9,8 @@ function Comment (props) {
   const [inputCotent, setInputContent] = useState(list.content);
   const [editing, setEditing] = useState(false);
   const writeByThisUser = true;
+
+  const navigate = useNavigate();
 
   const editButtonClickHandler = () => {
     setEditing(true)
@@ -26,9 +30,15 @@ function Comment (props) {
     console.log(newComment)
   }
 
-  const deleteButtonClickHandler = () => {
-    
-  }
+   // 댓글 삭제 버튼 이벤트 핸들러
+   const deleteButtonClickHandler = (commentId) => {
+    if (window.confirm('댓글을 정말 삭제할까요?')) {
+      alert('삭제 완료!');
+      axios.delete(`/post/${commentId}`); 
+      console.log('delete commentId');
+      navigate('/post/:postId');
+    };
+  };
 
   return (
     <MyArticle>
