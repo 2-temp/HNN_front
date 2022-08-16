@@ -54,7 +54,7 @@ function MyPage(){
           </h3>
           <div className="button_box"
           onClick={()=>{
-            navigate("/profile/profile/:userId");
+            navigate(`/mypage/profile/0`);
           }}>
             정보 수정하기
           </div>
@@ -64,6 +64,7 @@ function MyPage(){
       <PageSet
         limit = {limit} 
         setLimit = {setLimit} 
+        limitOpt = {5}
       />
 
       <h4>내가 작성한 글</h4>
@@ -88,7 +89,7 @@ export default MyPage;
 
 const MyPagePost = styled.div`
   .posts_box {
-    min-height: calc(100vh - 330px);
+    min-height: calc(100vh - 550px);
   }
 
   .button_box {

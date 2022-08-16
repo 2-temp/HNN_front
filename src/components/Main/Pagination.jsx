@@ -43,14 +43,16 @@ function Pagination(props) {
 export default Pagination;
 
 const MyPagination = styled.div`
-  
   .pagination {
+    font-weight: 800;
     text-align: center;
-
+    
     button {
       all: unset;
       padding: 5px 5px;
       margin: 0 10px;
+
+      transition: all .2s;
       cursor: pointer;
     }
 

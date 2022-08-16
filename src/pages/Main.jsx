@@ -16,14 +16,16 @@ function Main() {
   useEffect(() => {
     setLoading(true)
 
-    const fetchData = async () => {
-      // const data = await axios.get('/post')   
-      const data = RESPONSE.POSTS;
-      setPosts(data);
+    const fetchAxiosData = async () => {
+      const axiosData = await axios.get('http://gwonyeong.shop/post')
+      console.log(axiosData.data.data);
+      setPosts(axiosData.data.data)
       setLoading(false);
+      //const data = RESPONSE.POSTS;
     };
-    fetchData();
-  })
+    fetchAxiosData();
+  }, [])
+
 
   const indexLast = page * limit; // 1 * 10 / 2 * 10
   const indexFirst = indexLast - limit; // 10 - 10 / 20 - 10
@@ -39,6 +41,8 @@ function Main() {
       <PageSet
         limit = {limit} 
         setLimit = {setLimit} 
+        setPage = {setPage} 
+        setLoading = {setLoading} 
       />
       
       <div className="posts_box">
@@ -63,6 +67,8 @@ export default Main;
 
 const MainPost = styled.div`
   .posts_box {
-    min-height: calc(100vh - 200px);
+    min-height: calc(100vh - 250px);
+    display: flex;
+    flex-direction: column;
   }
 `
