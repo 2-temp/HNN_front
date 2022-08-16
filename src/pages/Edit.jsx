@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useState } from "react";
 import axios from "axios";
@@ -9,15 +9,32 @@ import { useParams } from "react-router-dom";
 import { getCookie } from '../cookie';
 
 function Edit() {
+  const navigate = useNavigate();
+  const { postId } = useParams();
   //쿠키 가져옴
   const token = getCookie("token");
 
-  const navigate = useNavigate();
+  useEffect(()=>{
+    const fetchPost = async () => {
+      await axios
+      .get(`http://gwonyeong.shop/post/${1}`)
+      .then((res) => {
+        const currentPost = res.data.data.poster;
+        console.log(currentPost);
+        setEditInputs({
+          songTitle: currentPost.songTitle,
+          singer: currentPost.singer,
+          imageUrl: currentPost.imageUrl,
+          content: currentPost.content,
+        })
+      })
+    }
+    fetchPost();
+  }, [])
 
-  const { postId } = useParams();
   const editList = data.POSTS[postId];
 
-  console.log(editList);
+  // console.log(editList);
 
   // 변경된 가수, 노래명, 이미지, 게시물 내용을 저장할 곳 선언
   const [editInputs, setEditInputs] = useState({
@@ -26,8 +43,7 @@ function Edit() {
     imageUrl: editList.imageUrl,
     content: editList.content,
   });
-
-  const { content, imageUrl, songTitle, singer } = editInputs;
+  const {songTitle, singer, imageUrl, content} = editInputs;
 
   const onChange = (e) => {
     const { value, name } = e.target; // 우선 e.target 에서 name 과 value 를 추출
@@ -68,31 +84,41 @@ function Edit() {
     //   alert("변경된 사항이 없습니다.");
     // }
 
-    const new_data = { data, editInputs };
-    console.log(new_data);
+    // const new_data = { data, editInputs };
+    // console.log(new_data);
 
-    const response = RESPONSE.EDIT_CHECK;
-    console.log(response);
-    if (response.success) {
-      alert(response.msg);
-      navigate(`/post/${postId}`);
-    } else {
-      alert(response.msg);
-      navigate(`/post/${postId}`);
-    }
+    // const response = RESPONSE.EDIT_CHECK;
+    // console.log(response);
+    // if (response.success) {
+    //   alert(response.msg);
+    //   navigate(`/post/${postId}`);
+    // } else {
+    //   alert(response.msg);
+    //   navigate(`/post/${postId}`);
+    // }
 
-    // patch 요청
-    const onEditHandler = async (event) => {
-      event.preventDefault();
-
-      await axios
-        .patch("http://gwonyeong.shop/patch", editInputs, {
-          headers: { authorization: `Bearer ${token}` },
-        }).then((res) => {
-          console.log(res);
-          console.log(res.data);
-        });
+    editInputs = {
+      content: editInputs.content, 
+      imageUrl: editInputs.imageUrl, 
+      info: {
+        songTitle: editInputs.songTitle, 
+        singer: editInputs.singer
+      }
     };
+
+    await axios
+    .patch(`http://gwonyeong.shop/post/${1}`, editInputs, {
+      headers: { authorization: `Bearer ${token}` },
+    }).then((res) => {
+      const {success, msg} = res.data.data;
+      if (success) {
+        console.log(msg);
+        navigate(`/post/${postId}`);
+      } else {
+        alert(msg);
+      }
+    })
+  }
 
   return (
     <Contents>
@@ -136,7 +162,6 @@ function Edit() {
     </Contents>
   );
 }
-}
 
 export default Edit;
 
@@ -147,34 +172,34 @@ padding: 0 20px;
 box-sizing: border-box;
 
 form {
-    max-width: 600px;
-    margin: 0 auto;
+  max-width: 600px;
+  margin: 0 auto;
 
-    display: flex;
-    flex-flow: column;
-    gap: 16px;
+  display: flex;
+  flex-flow: column;
+  gap: 16px;
 
-    text-align: center;
+  text-align: center;
 
-    h3 {
-      font-size: 28px;
-    }
-
-    input, button {
-      font-size: 18px;
-      padding: 6px 26px;
-      box-sizing: border-box;
-      border-radius: 20px;
-
-      border: none;
-      box-shadow: 2px 2px 5px #ddd;
-
-      transition: all .2s;
-    }
-    
-    button:hover {
-      background-color: #ccc;
-      cursor: pointer;
-    }
+  h3 {
+    font-size: 28px;
   }
+
+  input, button {
+    font-size: 18px;
+    padding: 6px 26px;
+    box-sizing: border-box;
+    border-radius: 20px;
+
+    border: none;
+    box-shadow: 2px 2px 5px #ddd;
+
+    transition: all .2s;
+  }
+  
+  button:hover {
+    background-color: #ccc;
+    cursor: pointer;
+  }
+}
 `
