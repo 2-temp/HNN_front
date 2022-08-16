@@ -7,6 +7,9 @@ function Article(props) {
   const navigate = useNavigate();
   const { list, i } = props;
 
+  let dateCreatedAt = new Date(list.createdAt).toLocaleDateString()
+  dateCreatedAt = dateCreatedAt === "Invalid Date"?"":dateCreatedAt;
+
   return (
     <MyArticle
       onClick={() => {
@@ -24,6 +27,9 @@ function Article(props) {
         {list.content.length>17?list.content.slice(0, 17)+"...":list.content}
       </span>
       <ul className="right">
+        <li>
+          {dateCreatedAt}
+        </li>
         <li>
           좋아요 <b>{list.likeNum}</b>
         </li>
@@ -67,7 +73,10 @@ const MyArticle = styled.div`
   .right {
     flex: 1 1 auto;
     font-size: 12px;
-    text-align: right;
+
+    display: flex;
+    justify-content: right;
+    gap: 10px;
   }
 
   .mbti {

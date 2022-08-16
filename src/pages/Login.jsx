@@ -75,6 +75,8 @@ function Login() {
 
       if(response.data.success){
         console.log('로그인 성공')
+        console.log(response);
+        console.log(response.cookie);
       } else {
         console.log(response.data.msg)
       }
