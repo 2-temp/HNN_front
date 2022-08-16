@@ -20,7 +20,7 @@ function Edit() {
   console.log(editList);
 
   // 변경된 가수, 노래명, 이미지, 게시물 내용을 저장할 곳 선언
-  const [editInputs, seTeditInputs] = useState({
+  const [editInputs, setEditInputs] = useState({
     songTitle: editList.info.songTitle,
     singer: editList.info.singer,
     imageUrl: editList.imageUrl,
@@ -31,14 +31,14 @@ function Edit() {
 
   const onChange = (e) => {
     const { value, name } = e.target; // 우선 e.target 에서 name 과 value 를 추출
-    seTeditInputs({
+    setEditInputs({
       ...editInputs, // 기존의 input 객체를 복사한 뒤
       [name]: value, // name 키를 가진 값을 value 로 설정
     });
   };
 
   // edit 핸들러 설정
-  const oneEditHandler = async (event) => {
+  const onEditHandler = async (event) => {
     event.preventDefault();
 
     // 채워지지 않은 칸이 있을 경우
@@ -52,10 +52,10 @@ function Edit() {
       return;
     }
 
-    // 게시물 수정 버그
+    // // 게시물 수정 버그
     // let count = 0;
 
-    // 수정될 때마다 count++
+    // // 수정될 때마다 count++
     // for (const x in editInputs) {
     //   if (editInputs[x] !== editList[x]) {
     //     console.log(editInputs[x], editList[x]);
@@ -81,25 +81,24 @@ function Edit() {
       navigate(`/post/${postId}`);
     }
 
-    /////////////////////////////////////////////////////////////
-    // post 요청
-const oneEditHandler = async (event) => {
-  event.preventDefault();
-  await axios.post('http://gwonyeong.shop/post', editInputs, {
-  headers: {
-  authorization: `Bearer ${token}`
-  }
-  }).then(res => {
-  console.log(res)
-  console.log(res.data)
-  })
-  };
+    // patch 요청
+    const onEditHandler = async (event) => {
+      event.preventDefault();
+
+      await axios
+        .patch("http://gwonyeong.shop/patch", editInputs, {
+          headers: { authorization: `Bearer ${token}` },
+        }).then((res) => {
+          console.log(res);
+          console.log(res.data);
+        });
+    };
 
   return (
     <Contents>
       <form
         onSubmit={(event) => {
-          oneEditHandler(event)
+          onEditHandler(event)
         }}
       >
         <h3>글 수정</h3>
