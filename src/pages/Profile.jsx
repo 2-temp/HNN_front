@@ -17,7 +17,6 @@ function Profile() {
   const newProfilePicture = useRef("");
 
   const navigate = useNavigate();
-
   const { userId } = useParams();
   const userList = data.USER_PROFILE[userId]
 
@@ -27,7 +26,10 @@ function Profile() {
   const [MBTI2, setMBTI2] = useState();
   const [MBTI3, setMBTI3] = useState();
   const [MBTI4, setMBTI4] = useState();
+  
+  const [nicknameChecked, setNicknameChecked] = useState(false);
 
+  //이전 방식 안됌
   // const [newProfile, setNewProfile] = useState({
   //   password: '',
   //   newPassword: '',
@@ -40,7 +42,28 @@ function Profile() {
   // const { password, newPassword, confirmNewPassword, newNickname, newProfilePicture } = newProfile;
 
 
+
+//닉네임 확인
+const nicknameCheckHandler = async () => {
+
+  // const response = await axios.post(`/sign/checkNickname`, null, {
+  //   headers: { 
+  //     'Content-Type': 'application/json' 
+  //   }
+  // })
+  const response = RESPONSE.NICKNAME_CHECK;
+  
+  if(response.success){
+    alert(response.msg);
+    setNicknameChecked(true);
+  } else {
+    alert(response.msg);
+  }
+}
+
+  //수정된 정보 서버 보내기
   const profileEditHandler = async (ev) => {
+    ev.preventDefault();
     const submitValue = {
       password: password.current.value,
       newPassword: newPassword.current.value,
@@ -49,12 +72,6 @@ function Profile() {
       newProfilePicture: newProfilePicture.current.value,
       MBTI: MBTI1 + MBTI2 + MBTI3 + MBTI4,
     }
-
-    // if (submitValue.password === '' || submitValue.newPassword === '' || submitValue.confirmNewPassword === '' || submitValue.newNickname === '' || submitValue.newProfilePicture === '' ||
-    //   submitValue.MBTI === '') {
-    //   alert('빈칸이 있습니다')
-    //   return;
-    // }
 
     if (submitValue.newPassword !== submitValue.confirmNewPassword) {
       alert('비밀번호가 일치하지 않습니다.');
@@ -73,18 +90,19 @@ function Profile() {
     console.log(response)
     if (response.success) {
       alert(response.msg)
+      navigate('/mypage')
     } else {
       alert(response.msg)
     }
   }
 
   return (
-    <>
-      <BigBox>
-        <Box>
+    <Contents>
           <form onSubmit={(ev) => { profileEditHandler(ev) }}>
             <h4>제목</h4>
-            <input value={emails} />
+            <input
+              className='enable'
+            value={emails} />
             <input
               type="password"
               placeholder="현재 비밀번호"
@@ -112,12 +130,19 @@ function Profile() {
             <input
               type="text"
               placeholder="새로운 닉네임"
+              className={nicknameChecked?"enable":""}
               ref={newNickname}
               required
               minLength={6}
               maxLength={20}
             />
-            <button>닉네임 확인</button>
+            <button 
+            type="button"
+            onClick={(ev) => nicknameCheckHandler(ev)}
+            className={nicknameChecked?"enable":""}
+            >
+              닉네임 확인
+          </button>
             <input
               type="text"
               placeholder="새로운 프로필 사진"
@@ -160,48 +185,57 @@ function Profile() {
                 <strong>{MBTI3}</strong>
                 <strong>{MBTI4}</strong>
               </div>
-              <button>수정하기</button>
+              <button 
+        className={nicknameChecked?"sumbit_button all_checked":"sumbit_button"}
+        >수정하기
+          </button>
             </div>
-      
           </form>
-
-        </Box>
-      </BigBox>
-    </>
+    </Contents>
   )
 }
 
-const BigBox = styled.div`
- border: 1px solid red;
- max-width: 1200px;
- width: 100%;
- height: 650px;
-display: flex;
-justify-content: center;
-margin-top: 10px;
-`
+const Contents = styled.div`
+margin-top: 10vh;
 
-const Box = styled.div`
-  
+padding: 0 20px;
+box-sizing: border-box;
 
-  form {
-    background-color: gray;
-  width: 600px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  border-radius: 12px;
 
-  input {
-    height: 3%;
+form {
+    max-width: 600px;
+    margin: 0 auto;
+
+    display: flex;
+    flex-flow: column;
+    gap: 16px;
+
+    text-align: center;
+
+    h3 {
+      font-size: 28px;
+    }
+    
+    input, button {
+      font-size: 18px;
+      padding: 6px 26px;
+      box-sizing: border-box;
+      border-radius: 20px;
+
+      border: none;
+      box-shadow: 2px 2px 5px #ddd;
+
+      transition: all .2s;
+    }
+  .sumbit_button,
+  .enable {
+    pointer-events: none;
+    opacity: 0.5;
   }
 
-  button{
-    height: 30px;
-    width: 100px;
-    
+  .sumbit_button.all_checked {
+    pointer-events: all;
+    opacity: 1;
   }
   }
 `

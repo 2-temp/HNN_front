@@ -32,7 +32,8 @@ function Edit() {
 
 
   //edit 핸들러 설정
-  const oneEditHandler = async (editInputs) => {
+  const oneEditHandler = async (event) => {
+    event.preventDefault();
 
     if(title === '' || content === '' || imageUrl ==='' || songTitle === '' || singer === '') {
       alert('빈칸이 있습니다 !')
@@ -59,9 +60,9 @@ function Edit() {
   }
 
   return (
-    <BigBox>
-      <Box>
-        <h4>제목</h4>
+    <Contents>
+      <form onSubmit={(event) => { oneEditHandler(event) }}>
+        <h3>글 수정</h3>
         <input onChange={(ev) => {
           seTeditInputs({
             ...editInputs,
@@ -70,16 +71,24 @@ function Edit() {
         }} value={title} name='title' placeholder="제목"></input>
         <input onChange={(ev) => {
           seTeditInputs({
-            ...editInputs,
-            imageUrl: ev.target.value,
-          });
-        }} value={imageUrl} name='imageUrl' placeholder="이미지 Url"></input>
+              ...editInputs,
+              imageUrl: ev.target.value,
+            });
+          }} 
+          value={imageUrl} 
+          name='imageUrl' 
+          placeholder="이미지 Url"
+        ></input>
         <input onChange={(ev) => {
-          seTeditInputs({
-            ...editInputs,
-            content: ev.target.value,
-          });
-        }} value={content} name='content' placeholder="게시물 내용"></input>
+            seTeditInputs({
+              ...editInputs,
+              content: ev.target.value,
+            });
+          }} 
+          value={content} 
+          name='content' 
+          placeholder="게시물 내용"
+        ></input>
         <input onChange={(ev) => {
           seTeditInputs({
             ...editInputs,
@@ -92,43 +101,48 @@ function Edit() {
             singer: ev.target.value,
           });
         }} value={singer} name='singer' placeholder="가수"></input>
-        <button onClick={() => { oneEditHandler(editInputs) }}>수정하기</button>
-      </Box>
-    </BigBox>
+        <button>수정하기</button>
+      </form>
+    </Contents>
   )
 }
 export default Edit;
 
+const Contents = styled.div`
+margin-top: 10vh;
 
+padding: 0 20px;
+box-sizing: border-box;
 
-const BigBox = styled.div`
- border: 1px solid red;
- max-width: 1200px;
- width: 100%;
- height: 650px;
-display: flex;
-justify-content: center;
-margin-top: 10px;
+form {
+    max-width: 600px;
+    margin: 0 auto;
 
-`
+    display: flex;
+    flex-flow: column;
+    gap: 16px;
 
-const Box = styled.div`
-  background-color: gray;
-  width: 600px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  border-radius: 12px;
+    text-align: center;
 
-  input {
-    height: 3%;
-  }
+    h3 {
+      font-size: 28px;
+    }
 
-  button{
-    height: 30px;
-    width: 100px;
+    input, button {
+      font-size: 18px;
+      padding: 6px 26px;
+      box-sizing: border-box;
+      border-radius: 20px;
+
+      border: none;
+      box-shadow: 2px 2px 5px #ddd;
+
+      transition: all .2s;
+    }
     
+    button:hover {
+      background-color: #ccc;
+      cursor: pointer;
+    }
   }
 `
