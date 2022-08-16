@@ -14,36 +14,45 @@ function Edit() {
   const { postId } = useParams();
   const editList = data.POSTS[postId]
 
-
   console.log(editList)
 
-  //타이틀, 내용, 이미지, 가수, 노래 명 변경  저장 할 곳 선언
+  // 변경된 게시물 내용, 이미지, 가수, 노래명을 저장할 곳 선언
   const [editInputs, seTeditInputs] = useState({
-    title: '',
     content: editList.content,
     imageUrl: editList.imageUrl,
     singer: editList.info.singer,
     songTitle: editList.info.songTitle,
   });
 
-  const { title, content, imageUrl, songTitle, singer } = editInputs;
+  const { content, imageUrl, songTitle, singer } = editInputs;
 
-  //edit 핸들러 설정
+  // edit 핸들러 설정
   const oneEditHandler = async (event) => {
     event.preventDefault();
 
-    if (title === '' || content === '' || imageUrl === '' || songTitle === '' || singer === '') {
+    // 채워지지 않은 칸이 있을 경우
+    if (content === '' || imageUrl === '' || songTitle === '' || singer === '') {
       alert('빈칸이 있습니다 !')
       return;
     }
+
+    // let count = 0;
+
+    // 수정될 때마다 count++
+    for (const x in editInputs) {
+      if (editInputs[x] !== editList[x]) {
+        console.log(editInputs[x], editList[x]);
+        count++;
+        // alert("변경사항 있음");
+      }
+    }
+
+    if(count === 0) {
+      // alert("변경된 사항이 없습니다.");
+    }
+
     const new_data = { data, editInputs }
     console.log(new_data)
-
-    // const response =  await axios.PATCH("/post/:postId", editInputs, {
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //     }
-    // });
 
     const response = RESPONSE.EDIT_CHECK
     console.log(response)
@@ -60,12 +69,7 @@ function Edit() {
     <Contents>
       <form onSubmit={(event) => { oneEditHandler(event) }}>
         <h3>글 수정</h3>
-        <input onChange={(ev) => {
-          seTeditInputs({
-            ...editInputs,
-            title: ev.target.value,
-          });
-        }} value={title} name='title' placeholder="제목" />
+
         <input onChange={(ev) => {
           seTeditInputs({
             ...editInputs,
@@ -76,6 +80,7 @@ function Edit() {
           name='imageUrl'
           placeholder="이미지 Url"
         />
+
         <input onChange={(ev) => {
           seTeditInputs({
             ...editInputs,
@@ -86,18 +91,21 @@ function Edit() {
           name='content'
           placeholder="게시물 내용"
         />
+
         <input onChange={(ev) => {
           seTeditInputs({
             ...editInputs,
             songTitle: ev.target.value,
           });
         }} value={songTitle} name='songTitle' placeholder="노래 이름" />
+
         <input onChange={(ev) => {
           seTeditInputs({
             ...editInputs,
             singer: ev.target.value,
           });
         }} value={singer} name='singer' placeholder="가수" />
+        
         <button>수정하기</button>
       </form>
     </Contents>

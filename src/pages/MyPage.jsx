@@ -15,7 +15,7 @@ function MyPage(){
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(5);
 
   useEffect(() => {
     setLoading(true)
@@ -44,13 +44,12 @@ function MyPage(){
       <div className="profile_box">
         <div className="profile_picture">
           img: {userData.profilePicture}
+
+          {/* 프로필 기본 이미지 */}
+          {/* <img alt="defaultProfile" src="img/defaultProfile.png" /> */}
         </div>
         <div>
           <h3 className="section_title">
-            <strong>
-              {userData.nickname}
-            </strong>
-            님
           </h3>
           <div className="button_box"
           onClick={()=>{
