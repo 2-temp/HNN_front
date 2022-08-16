@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 
@@ -9,10 +9,27 @@ import Comment from "../components/Detail/Comment";
 const DetailPage = () => {
   const navigate = useNavigate();
 
+  const {postId} = useParams();
+
   const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [song, setSong] = useState([]);
   const [comments, setComments] = useState([]);
-  const postId = 0;
+
+console.log(postId)
+
+  useEffect(() => {
+    setLoading(true)
+
+    const fetchAxiosData = async () => {
+      const axiosData = await axios.get('http://gwonyeong.shop/post')
+      console.log(axiosData.data.data);
+      setPosts(axiosData.data.data)
+      setLoading(false);
+    };
+    fetchAxiosData();
+  }, [])
+ 
 
   useEffect(() => {
     let data = RESPONSE.DETAIL.poster;
