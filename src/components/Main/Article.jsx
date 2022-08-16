@@ -1,5 +1,10 @@
-import styled from "styled-components";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { getCookie } from '../../cookie';
+
+import styled from "styled-components";
+
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
 
@@ -7,9 +12,34 @@ function Article(props) {
   const navigate = useNavigate();
   const { list } = props;
 
+  const [likeNum, setLikeNum] = useState(list.like);
+
   let dateCreatedAt = new Date(list.createdAt).toLocaleDateString()
   dateCreatedAt = dateCreatedAt === "Invalid Date"?"":dateCreatedAt;
 
+  const likeButtonClickHandler = (event) => {
+    event.stopPropagation();
+
+    const token = getCookie('token');
+    
+    // patch요청
+    const postAxiosData = async () => {
+      await axios.patch(`http://gwonyeong.shop/post/like/${list.postId}`, {postId: list.postId}, {
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      }).then(res => {
+
+        console.log(`http://gwonyeong.shop/post/${list.postId}`);
+        axios.get(`http://gwonyeong.shop/post/${list.postId}`).then(r => {
+          console.log(r.data.data.like)
+          setLikeNum(r.data.data.like)
+        })
+      })
+    };
+    postAxiosData();
+  }
+  
   return (
     <MyArticle
       onClick={() => {
@@ -31,12 +61,15 @@ function Article(props) {
           {dateCreatedAt}
         </li>
         <li>
-          좋아요 <b>{list.likeNum}</b>
+          좋아요 <b>{likeNum}</b>
         </li>
       </ul>
-      <div className="icon_box">
-        {/* <FaHeart /> */}
-        <FaRegHeart />
+      <div 
+        className="icon_box"
+        onClick={(event)=> { likeButtonClickHandler(event)}}  
+      >
+        {list.like? <FaHeart />:""}
+        {!list.like? <FaRegHeart />:""}
       </div>
     </MyArticle>
   );
@@ -67,6 +100,7 @@ const MyArticle = styled.div`
   }
 
   .icon_box {
+    width: 20px;
     color: #e16720;
   }
 

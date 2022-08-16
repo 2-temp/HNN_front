@@ -19,7 +19,7 @@ function Main() {
 
     const fetchAxiosData = async () => {
       const axiosData = await axios.get('http://gwonyeong.shop/post')
-      console.log(axiosData.data.data);
+      // console.log(axiosData.data.data);
       setPosts(axiosData.data.data)
       setLoading(false);
     };
