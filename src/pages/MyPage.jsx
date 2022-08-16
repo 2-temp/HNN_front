@@ -54,7 +54,7 @@ function MyPage(){
           </h3>
           <div className="button_box"
           onClick={()=>{
-            navigate("/profile/profile/:userId");
+            navigate(`/mypage/profile/0`);
           }}>
             정보 수정하기
           </div>
