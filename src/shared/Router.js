@@ -33,13 +33,13 @@ const Router = () => {
         <Routes>
 
           <Route path="/" element={<Main/>}/>
-          <Route path="/post/" element={<Post />}/>
+          <Route path="/post/" element={ userLoggin ? <Post /> : <Main/> }/>
           <Route path="/post/:postId/edit" element={<Edit />}/>
           <Route path="/post/:postId" element={<DetailPage />}/>
           <Route path="/sign/in" element={<Login userLoggin={userLoggin} />} />
           <Route path="/sign/up" element={<SignUp />}/>
-          <Route path="/mypage" element={userLoggin?<MyPage />:<NotFound />}/>
-          <Route path="/mypage/profile/:userId" element={userLoggin?<Profile />:<NotFound />}/>
+          <Route path="/mypage" element={userLoggin ? <MyPage /> : <NotFound />}/>
+          <Route path="/mypage/profile/:userId" element={userLoggin ? <Profile /> :<NotFound />}/>
           <Route path="*" element={<NotFound />}/>
 
         </Routes>
