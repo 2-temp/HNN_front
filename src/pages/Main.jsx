@@ -16,14 +16,17 @@ function Main() {
   useEffect(() => {
     setLoading(true)
 
-    const fetchData = async () => {
-      // const data = await axios.get('/posts')
-      const data = RESPONSE.POSTS;
-      setPosts(data);
+    const fetchAxiosData = async () => {
+      const axiosData = await axios.get('http://gwonyeong.shop/post')
+      console.log(axiosData.data.data);
+      setPosts(axiosData.data.data)
       setLoading(false);
+
+      //const data = RESPONSE.POSTS;
     };
-    fetchData();
-  })
+    fetchAxiosData();
+  }, [])
+
 
   const indexLast = page * limit; // 1 * 10 / 2 * 10
   const indexFirst = indexLast - limit; // 10 - 10 / 20 - 10
