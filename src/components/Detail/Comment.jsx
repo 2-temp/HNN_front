@@ -4,14 +4,19 @@ import axios from "axios";
 import styled from "styled-components";
 
 function Comment (props) {
+  const navigate = useNavigate();
+
   const { list } = props;
+  
+  let dateCreatedAt = new Date(list.createdAt).toLocaleDateString()
+  dateCreatedAt = dateCreatedAt === "Invalid Date"?"":dateCreatedAt;
+
   const input_content = useRef();
   const [inputCotent, setInputContent] = useState(list.content);
   const [editing, setEditing] = useState(false);
   const writeByThisUser = true;
 
-  const navigate = useNavigate();
-
+  
   const editButtonClickHandler = () => {
     setEditing(true)
     input_content.current.focus();
@@ -85,7 +90,7 @@ function Comment (props) {
           ref={input_content}
         />
       </p>
-      <p className="commentTime">{list.createdAt}</p>
+      <p className="commentTime">{dateCreatedAt}</p>
 
     </MyArticle>
   );
