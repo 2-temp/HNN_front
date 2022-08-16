@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
+import { getCookie } from '../cookie';
+
+import RESPONSE from "../RESPONSE";
 import Comment from "../components/Detail/Comment";
 
 const DetailPage = () => {
@@ -13,19 +16,24 @@ const DetailPage = () => {
   const [users, setUsers] = useState([]);
   const [song, setSong] = useState([]);
   const [comments, setComments] = useState([]);
-
+  const [likeNum, setLikeNum] = useState();
+console.log(postId)
 
 
   //게시물 데이터 불러오기
   useEffect(() => {
     const fetchAxiosData = async () => {
       const axiosData = await axios.get(`http://gwonyeong.shop/post/${postId}`)
-      setUsers(axiosData.data.data.poster.User)
-      setPosts(axiosData.data.data.poster)
-      console.log(axiosData.data.data.poster.User)
-      console.log(axiosData.data.data.poster)
+      const poster=axiosData.data.data.poster
+      setUsers(poster.User)
+      setPosts(poster)
+      console.log(poster.User)
+      console.log(poster)
+
+      setLikeNum(axiosData.data.data.like)
     };  
     fetchAxiosData();
+
   }, [])
  
 
@@ -39,6 +47,26 @@ const DetailPage = () => {
     };
   };
 
+  const likeButtonClickHandler = (event) => {
+    const token = getCookie('token');
+    
+    // // patch요청
+    const postAxiosData = async () => {
+      await axios.patch(`http://gwonyeong.shop/post/like/${postId}`, {postId: postId}, {
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      }).then(res => {
+        console.log(res)
+        console.log(res.data)
+        setLikeNum(posts.likeNum)
+      })
+    };
+    postAxiosData();
+
+    // console.log("/post/like/"+posts.postId);
+  }
+
   return (
     <Wrap>
       <Section1 profilePicture={posts.profilePicture}>
@@ -51,7 +79,13 @@ const DetailPage = () => {
           </div>
           <div className="right">
             
-            <button className="button button_like">{posts.likeNum} 좋아요!</button> 
+            <button 
+              className="button button_like"
+              onClick={(event)=> { likeButtonClickHandler(event)}} 
+            >
+              {likeNum}
+              좋아요!
+            </button> 
             <div></div>
             <button className="button"
               onClick={()=> navigate(`/post/${posts.userId}/edit`)}
