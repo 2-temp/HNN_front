@@ -19,30 +19,27 @@ function Edit() {
 
   //타이틀, 내용, 이미지, 가수, 노래 명 변경  저장 할 곳 선언
   const [editInputs, seTeditInputs] = useState({
-    id: postId,
-    title: editList.title,
+    title: '',
     content: editList.content,
     imageUrl: editList.imageUrl,
     singer: editList.info.singer,
     songTitle: editList.info.songTitle,
-  }); 
+  });
 
   const { title, content, imageUrl, songTitle, singer } = editInputs;
-
-
 
   //edit 핸들러 설정
   const oneEditHandler = async (event) => {
     event.preventDefault();
 
-    if(title === '' || content === '' || imageUrl ==='' || songTitle === '' || singer === '') {
+    if (title === '' || content === '' || imageUrl === '' || songTitle === '' || singer === '') {
       alert('빈칸이 있습니다 !')
       return;
     }
-    const new_data = { data, editInputs}
+    const new_data = { data, editInputs }
     console.log(new_data)
 
-    // const response =  await axios.PATCH("/PATCH", editInputs, singers, {
+    // const response =  await axios.PATCH("/post/:postId", editInputs, {
     //   headers: {
     //     'Content-Type': 'application/json'
     //     }
@@ -54,7 +51,7 @@ function Edit() {
       alert(response.msg)
       navigate(`/post/${postId}`)
     } else {
-      alert(response.msg) 
+      alert(response.msg)
       navigate(`/post/${postId}`)
     }
   }
@@ -68,39 +65,39 @@ function Edit() {
             ...editInputs,
             title: ev.target.value,
           });
-        }} value={title} name='title' placeholder="제목"></input>
+        }} value={title} name='title' placeholder="제목" />
         <input onChange={(ev) => {
           seTeditInputs({
-              ...editInputs,
-              imageUrl: ev.target.value,
-            });
-          }} 
-          value={imageUrl} 
-          name='imageUrl' 
+            ...editInputs,
+            imageUrl: ev.target.value,
+          });
+        }}
+          value={imageUrl}
+          name='imageUrl'
           placeholder="이미지 Url"
-        ></input>
+        />
         <input onChange={(ev) => {
-            seTeditInputs({
-              ...editInputs,
-              content: ev.target.value,
-            });
-          }} 
-          value={content} 
-          name='content' 
+          seTeditInputs({
+            ...editInputs,
+            content: ev.target.value,
+          });
+        }}
+          value={content}
+          name='content'
           placeholder="게시물 내용"
-        ></input>
+        />
         <input onChange={(ev) => {
           seTeditInputs({
             ...editInputs,
             songTitle: ev.target.value,
           });
-        }} value={songTitle} name='songTitle' placeholder="노래 이름"></input>
+        }} value={songTitle} name='songTitle' placeholder="노래 이름" />
         <input onChange={(ev) => {
           seTeditInputs({
             ...editInputs,
             singer: ev.target.value,
           });
-        }} value={singer} name='singer' placeholder="가수"></input>
+        }} value={singer} name='singer' placeholder="가수" />
         <button>수정하기</button>
       </form>
     </Contents>

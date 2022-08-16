@@ -17,7 +17,7 @@ function Main() {
     setLoading(true)
 
     const fetchData = async () => {
-      // const data = await axios.get('/posts')
+      // const data = await axios.get('/post')   
       const data = RESPONSE.POSTS;
       setPosts(data);
       setLoading(false);
