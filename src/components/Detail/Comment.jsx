@@ -1,10 +1,34 @@
+import { useRef, useState } from "react";
 import styled from "styled-components";
 
 function Comment (props) {
   const { list } = props;
-  
-  
+  const input_content = useRef();
+  const [inputCotent, setInputContent] = useState(list.content);
+  const [editing, setEditing] = useState(false);
   const writeByThisUser = true;
+
+  const editButtonClickHandler = () => {
+    setEditing(true)
+    input_content.current.focus();
+  }
+  
+  const editCompleteButtonClickHandler = () => {
+    setEditing(false)   
+    const newComment = {comment: inputCotent};
+
+    // const response = await axios.post(`/comment/:postId/${list.commentId}`, newComment, {
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //     }
+    // });
+    
+    console.log(newComment)
+  }
+
+  const deleteButtonClickHandler = () => {
+    
+  }
 
   return (
     <MyArticle>
@@ -18,12 +42,38 @@ function Comment (props) {
           </span>
         </div>
         <div className="right_box">
-          <button>수정</button>
-          <button>삭제</button>
+
+          {!editing && <button
+            type="button"
+            onClick={()=> editButtonClickHandler()}
+          >
+            수정
+          </button>}
+
+          {editing && <button
+            type="button"
+            onClick={()=> editCompleteButtonClickHandler()}
+          >
+            완료
+          </button>}
+          
+          
+          <button
+            type="button"
+            onClick={()=> deleteButtonClickHandler()}
+          >
+            삭제
+          </button>
+
         </div>
       </div>
       <p className="content">
-        {list.content} 
+        <textarea 
+          className={editing ? "input_content" : "input_content unable"} 
+          value={inputCotent}
+          onChange={(e)=> setInputContent(e.target.value) }
+          ref={input_content}
+        />
       </p>
       <p className="commentTime">{list.createdAt}</p>
 
@@ -121,6 +171,27 @@ const MyArticle = styled.div`
     font-weight: 800;
     text-align: right;
     font-size: .7em;
+  }
+
+  .input_content {
+    width: 100%;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    resize: none;
+
+    border: none;
+    border-radius: 20px;
+    background-color: #f2ffe8;
+  }
+
+  .input_content:focus {
+    outline: none;
+    box-shadow: 0 0 3px #6e6e6f;
+  }
+
+  .unable {
+    pointer-events: none;
+    background-color: #fff;
   }
 
   .content {
