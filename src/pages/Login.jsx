@@ -1,10 +1,12 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux'
+import axios from "axios";
+
 import styled from "styled-components";
+import { signInUser, signOutUser } from '../redux/modules/user'
 
 import RESPONSE from "../RESPONSE";
-import { signInUser, signOutUser } from '../redux/modules/user'
 
 function Login() {
   const dispatch = useDispatch();
@@ -27,11 +29,20 @@ function Login() {
 
     console.log({email: email.current.value, password: pw.current.value});
 
-    // await axios.post(`/sign/in`, null, {
-    //     headers: { 
-    //         'Content-Type': 'application/json' 
-    //     }
+    //
+    // await axios.post('http://gwonyeong.shop/sign/in', {
+    //   email: 'minsun@gmail.com', 
+    //   password: 'Asd2222!'
+    // }).then(response => {
+
+    //   if(response.data.success){
+    //     console.log('로그인 성공')
+    //   } else {
+    //     console.log(response.data.msg)
+    //   }
     // })
+    //
+
     const response = RESPONSE.LOGIN;
     const userData = RESPONSE.USER_PROFILE;
 
@@ -54,6 +65,24 @@ function Login() {
       dispatch(signOutUser())
     }
   };
+
+  // 예시 코드
+  const fetchAxiosData = async () => {
+    await axios.post('http://gwonyeong.shop/sign/in', {
+      email: 'minsun@gmail.com', 
+      password: 'Asd2222!'
+    }).then(response => {
+
+      if(response.data.success){
+        console.log('로그인 성공')
+      } else {
+        console.log(response.data.msg)
+      }
+    })
+
+    //const data = RESPONSE.POSTS;
+  };
+  fetchAxiosData();
 
   return (
     <Contents>
