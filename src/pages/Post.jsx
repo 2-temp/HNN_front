@@ -33,19 +33,11 @@ function Post() {
 //onClick 함수 생성
   const onClickEditButtonHandler = async (event) => {
     event.preventDefault();
-    //빈칸일시 입력안댐
-    if(title === '' || content === '' || imageUrl ==='' || songTitle === '' || singer === '') {
-      alert('빈칸이 있습니다 !')
-      return;
-    }
-
-    // const new_data = { data, inputs }
-    // console.log(new_data)
-    
+  
     const new_data = { inputs }
     console.log(inputs)
 
-    // const response = await axios.post("/post", asd, {
+    // const response = await axios.post("/post", null, {
     //   headers: {
     //     'Content-Type': 'application/json'
     //     }
@@ -68,11 +60,11 @@ function Post() {
       <form onSubmit={(event) => { onClickEditButtonHandler(event) }}>
         <h3>글 작성</h3>
 
-        <input onChange={onChange} value={singer} name='singer' placeholder="가수명"/>
-        <input onChange={onChange} value={songTitle} name='songTitle' placeholder="곡 제목"/>
-        <input onChange={onChange} value={title} name='title' placeholder="제목"/>
-        <input onChange={onChange} value={imageUrl} name='imageUrl' placeholder="이미지 Url"/>
-        <input onChange={onChange} value={content} name='content' placeholder="게시물 내용"/>
+        <input onChange={onChange} minLength={1} value={singer} name='singer' placeholder="가수명"/>
+        <input onChange={onChange} minLength={1} value={songTitle} name='songTitle' placeholder="곡 제목"/>
+        <input onChange={onChange} minLength={1} value={title} name='title' placeholder="제목"/>
+        <input onChange={onChange} minLength={1} value={imageUrl} name='imageUrl' placeholder="이미지 Url"/>
+        <input onChange={onChange} minLength={5} value={content} name='content' placeholder="게시물 내용"/>
         <button>작성하기</button>
       </form>
     </Contents>

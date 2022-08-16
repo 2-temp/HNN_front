@@ -21,7 +21,6 @@ function Main() {
       console.log(axiosData.data.data);
       setPosts(axiosData.data.data)
       setLoading(false);
-
       //const data = RESPONSE.POSTS;
     };
     fetchAxiosData();
