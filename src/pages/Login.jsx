@@ -14,47 +14,33 @@ function Login() {
   
   const [user, setUser] = useState({
     email: "",
-    pw: ""
+    password: ""
   });
-  const email = useRef("");
-  const pw = useRef("");
 
   const submitHandler = async (ev) => {
     ev.preventDefault();
 
-    if(email.current.value.indexOf('.') < 0){
+    if(user.email.indexOf('.') < 0){
       alert('이메일 형식을 확인하세요.')
       return null;
     }
 
-    console.log({email: email.current.value, password: pw.current.value});
+    console.log(user);
 
-    //
-    // await axios.post('http://gwonyeong.shop/sign/in', {
-    //   email: 'minsun@gmail.com', 
-    //   password: 'Asd2222!'
-    // }).then(response => {
+    await axios.post('http://gwonyeong.shop/sign/in', {
+      email: 'minsun@gmail.com', 
+      password: 'Asd2222!'
+    }).then(response => {
 
-    //   if(response.data.success){
-    //     console.log('로그인 성공')
-    //   } else {
-    //     console.log(response.data.msg)
-    //   }
-    // })
-    //
-
-    const response = RESPONSE.LOGIN;
-    const userData = RESPONSE.USER_PROFILE;
-
-    if (response.success) {
-      let token = response.token;
-      let info = userData;
+    if(response.data.success){
+      let token = response.data.token;
+      // let info = userData;
 
       alert('로그인에 성공하였습니다.')
       
       dispatch(signInUser({
         'token': token, 
-        "info": info
+        // "info": info
       }));
       navigate("/")
       
@@ -64,27 +50,26 @@ function Login() {
       alert(msg)
       dispatch(signOutUser())
     }
-  };
+  });
+  
 
   // 예시 코드
-  const fetchAxiosData = async () => {
-    await axios.post('http://gwonyeong.shop/sign/in', {
-      email: 'minsun@gmail.com', 
-      password: 'Asd2222!'
-    }).then(response => {
-
-      if(response.data.success){
-        console.log('로그인 성공')
-        console.log(response);
-        console.log(response.cookie);
-      } else {
-        console.log(response.data.msg)
-      }
-    })
-
-    //const data = RESPONSE.POSTS;
-  };
-  fetchAxiosData();
+  // const fetchAxiosData = async () => {
+  //   await axios.post('http://gwonyeong.shop/sign/in', {
+  //     email: 'minsun@gmail.com', 
+  //     password: 'Asd2222!'
+  //   }).then(response => {
+  //     if(response.data.success){
+  //       console.log('로그인 성공')
+  //       console.log(response);
+  //       console.log(response.cookie);
+  //     } else {
+  //       console.log(response.data.msg)
+  //     }
+  //   })
+  // };
+  // fetchAxiosData();
+  }
 
   return (
     <Contents>
@@ -94,16 +79,20 @@ function Login() {
         <input 
           type="email"
           placeholder="이메일을 입력하세요." 
-          ref={email} 
           required
           maxLength={20}
+          onChange={(ev)=> {
+            setUser({...user, email: ev.target.value})
+          }}
         />
 
         <input 
           type="password" 
-          placeholder="비밀번호를 입력하세요." 
-          ref={pw} 
+          placeholder="비밀번호를 입력하세요."
           required
+          onChange={(ev)=> {
+            setUser({...user, password: ev.target.value})
+          }}
         />
 
         <button>로그인하기</button>
