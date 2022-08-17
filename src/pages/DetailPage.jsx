@@ -30,10 +30,8 @@ const DetailPage = () => {
         
         const res = axiosData.data.data;
         const poster = res.poster;
-        const commenter = res.poster;
+        const commenter = res.commenter;
         const user = res.poster.User;
-        
-        console.log(res)
         
         let dateCreatedAt = new Date(poster.createdAt).toLocaleDateString();
       
@@ -49,17 +47,9 @@ const DetailPage = () => {
         setLikeNum(res.like)
         
       } catch (err) {
-
         console.log(err);
         // navigate('/error')
-        
-      } finally {
-        console.log(user);
-        console.log(comments);
-        console.log(post);
       }
-      
-      
     };  
     fetchAxiosData();
 
@@ -90,8 +80,10 @@ const DetailPage = () => {
     const fetchAxiosData = async () => {
       try {
         const axiosData = await axios.get(`http://gwonyeong.shop/post/${postId}`)
-        //여기에 없는 post 입력시 오류너게 처리해야함
 
+        if(0){
+          
+        }
         const poster = axiosData.data.data.poster
         setUser(poster.User)
         setPost(poster)
@@ -100,7 +92,7 @@ const DetailPage = () => {
         setLikeNum(axiosData.data.data.like)
       } catch (err) {
         console.log(err);
-        navigate('/error')
+        // navigate('/error')
       }
 
     };
@@ -223,9 +215,9 @@ const likeButtonClickHandler = (event) => {
 
           <h3 className="comments_title">댓글 목록</h3>
           <div className="comments_box">
-            {/* {comments.map((list, i) => {
+            {comments.map((list, i) => {
               return <Comment list={list} i={i} postId={postId} key={i} />;
-            })} */}
+            })}
           </div>
         </Section3>
       </div>
