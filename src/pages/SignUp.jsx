@@ -75,17 +75,19 @@ function SignUp(){
   const signUpSubmitHandler = async (ev) => {
     ev.preventDefault();
     try {
-       const submitValue = {
+    const submitValue = {
       email : email.current.value,
       nickname: nickname.current.value,
       password: password.current.value,
-      confirmPw: confirmPw.current.value,
-      MBTI: MBTI1+MBTI2+MBTI3+MBTI4,
+      confirmPw: confirmPw.current.value
     }
-    console.log(submitValue);
+    console.log(submitValue.MBTI.length);
 
     if(submitValue.password != submitValue.confirmPw){
       alert('비밀번호가 일치하지 않습니다.');
+      return null;
+    } else if (submitValue.MBTI.length !== 4){
+      alert('올바른 MBTI가 아닙니다.');
       return null;
     }
 

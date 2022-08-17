@@ -1,46 +1,76 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import styled from "styled-components";
 import axios from "axios";
-import { getCookie } from '../cookie';
 
-import RESPONSE from "../RESPONSE";
+import { getCookie } from '../cookie';
+import styled from "styled-components";
+
 import Comment from "../components/Detail/Comment";
 
 const DetailPage = () => {
-  //쿠키 가져오기
-  const token = getCookie('token');
-
   const navigate = useNavigate();
-
   const {postId} = useParams();
-
-  const [posts, setPosts] = useState([]);
-  const [users, setUsers] = useState([]);
+  const token = getCookie('token');
+  
+  const [post, setPost] = useState([]);
+  const [user, setUser] = useState({});
   const [comments, setComments] = useState([]);
   const [likeNum, setLikeNum] = useState();
-
-  // 새로 추가할 댓글을 저장할 useState 생성
-  const [comment, setComment] = useState({
+  
+  const [currComment, setCurrComment] = useState({
     content: "",
-  }); const { content } = comment;
+  });
+  
+  // 게시물, 댓글 목록 불러오기
+  useEffect(() => {
+    const fetchAxiosData = async () => {
+      try {
+        const axiosData = await axios.get(`http://gwonyeong.shop/post/${postId}`)
+        
+        const res = axiosData.data.data;
+        const poster = res.poster;
+        const commenter = res.poster;
+        const user = res.poster.User;
+        
+        console.log(res)
+        
+        let dateCreatedAt = new Date(poster.createdAt).toLocaleDateString();
+      
+        setUser(user)
+        setPost({
+          content: poster.content,
+          createdAt: dateCreatedAt,
+          imageUrl: poster.imageUrl,
+          singer: poster.singer,
+          songTitle: poster.songTitle
+        })
+        setComments(commenter)
+        setLikeNum(res.like)
+        
+      } catch (err) {
 
-  // 댓글 입력창 변화 감지
-  const onChange = (e) => {
-    const { value, name } = e.target; 
-    setComment({
-      ...comment, 
-      [name]: value, 
-    });
-  };
+        console.log(err);
+        // navigate('/error')
+        
+      } finally {
+        console.log(user);
+        console.log(comments);
+        console.log(post);
+      }
+      
+      
+    };  
+    fetchAxiosData();
 
-  // 댓글 달기 핸들러
+  }, [])
+  
+  
   // POST 요청
   const onClickAddCommentHandler = async (event) => {
-      event.preventDefault();
-
-      try{ 	
-        await axios.post(`http://gwonyeong.shop/post/comment/${postId}`, comment, { 
+    event.preventDefault();
+    
+    try{ 	
+      await axios.post(`http://gwonyeong.shop/post/comment/${postId}`, currComment, { 
         headers: {
           authorization: `Bearer ${token}`
         }
@@ -48,84 +78,50 @@ const DetailPage = () => {
         console.log(res)
         console.log(res.data)
       })
-      } catch(err) {
-        console.log(err);
-        navigate('/error')
-      }
-  };
-
-  // 게시물, 댓글 목록 불러오기
-  useEffect(() => {
-    const fetchAxiosData = async () => {
-      try{
-        const axiosData = await axios.get(`http://gwonyeong.shop/post/${postId}`)
-        //여기에 없는 post 입력시 오류너게 처리해야함
-
-        const poster=axiosData.data.data.poster
-        setUsers(poster.User)
-        setPosts(poster)
-        setComments(axiosData.data.data.commenter)
-        console.log(axiosData.data.data)
-        setLikeNum(axiosData.data.data.like)
-      } catch (err) {
-        console.log(err);
-        navigate('/error')
-      }
-
-     
-    };  
-    fetchAxiosData();
-
-  }, [])
-  
- 
-
-  // 게시물 삭제
-  // const deleteButtonClickHandler = async (ev) => {
-  //   ev.preventDefault();
-  //   await axios.delete(`http://gwonyeong.shop/post/${postId}`, null,{
-  //     headers: {
-  //       authorization: `Bearer ${token}`
-  //     } )
-  //   .then(res => {
-  //     console.log(res)
-  //     console.log(res.data)
-  //   })
-  // }
-
-  //게시물 삭제
-  const deleteButtonClickHandler = async (ev) => {
-    ev.preventDefault();
-    try {
-    await axios.delete(`http://gwonyeong.shop/post/${postId}`, {
-      headers: {
-        authorization: `Bearer ${token}`
-      }
-    }).then(res => {
-      console.log(res)
-      console.log(res.data)
-    })
-    } catch (err) {
+    } catch(err) {
       console.log(err);
       navigate('/error')
     }
   };
-
-  // 좋아요 버튼 핸들러
-  const likeButtonClickHandler = (event) => {
-    const token = getCookie('token')  ;
-    
-    // // patch 요청
-    const postAxiosData = async () => {
-      try {
-        await axios.patch(`http://gwonyeong.shop/post/like/${postId}`, {postId: postId}, {
+  
+  //게시물 삭제
+  const deleteButtonClickHandler = async (ev) => {
+    ev.preventDefault();
+    try {
+      await axios.delete(`http://gwonyeong.shop/post/${postId}`, {
         headers: {
           authorization: `Bearer ${token}`
         }
-      }).then(res => {
-        console.log(res)
-        console.log(res.data)
-        setLikeNum(posts.likeNum)
+    }).then(res => {
+      alert('게시물이 삭제되었습니다.')
+      navigate('/')
+    })
+  } catch (err) {
+    console.log(err);
+    navigate('/error')
+  }
+};
+
+// 좋아요 버튼 핸들러
+const likeButtonClickHandler = (event) => {
+  const token = getCookie('token')  ;
+  
+  const postAxiosData = async () => {
+    try {
+      await axios.patch(`http://gwonyeong.shop/post/like/${postId}`, {postId: postId}, {
+        headers: {
+          authorization: `Bearer ${token}`
+          }
+        }).then(res => {
+          console.log(res)
+          console.log(res.data)
+          if(res.data.msg === "좋아요!"){
+            alert('좋아요를 눌렀습니다!')
+            setLikeNum(likeNum+1)
+          } else {
+          alert('좋아요를 취소했습니다.')
+          setLikeNum(likeNum-1)
+        }
       })
       }
       catch (err) {
@@ -134,18 +130,17 @@ const DetailPage = () => {
       }
     };
     postAxiosData();
-    // console.log("/post/like/"+posts.postId);
   }
-
+  
   return (
     <Wrap>
-      <Section1 profilePicture={posts.profilePicture}>
+      <Section1 profilePicture = {user.profilePicture?user.profilePicture:"img/defaultProfile.png"}>
         <div className="head_info">
           <div className="profile_box">
             <div className="profile_picture">
-              <p>{users.MBTI}</p>
+              <p>{user.MBTI}</p>
             </div>
-            <p>{users.nickname} </p>
+            <p>{user.nickname} </p>
           </div>
           <div className="right">
             <button
@@ -154,8 +149,9 @@ const DetailPage = () => {
                 likeButtonClickHandler(event);
               }}
             >
-              {likeNum}
-              좋아요!
+              <strong>
+                {likeNum} 
+              </strong> 좋아요!
             </button>
             <div></div>
             <button
@@ -164,7 +160,6 @@ const DetailPage = () => {
             >
               게시물 수정
             </button>
-            {/* 작성해야 함 */}
             <button
               className="button"
               onClick={(ev) => deleteButtonClickHandler(ev)}
@@ -176,27 +171,26 @@ const DetailPage = () => {
       </Section1>
 
       <div className="detail_body">
-        <Section2 albumCover={posts.imageUrl}>
-          <p className="created_at">{posts.createdAt}</p>
+        <Section2 albumCover={post.imageUrl}>
+          <p className="created_at">{post.createdAt}</p>
           <div className="album_cover">
             <p className="album_cover_title">
-              <span>{posts.songTitle}</span> - <span>{posts.singer}</span>
+              <span>{post.songTitle}</span> - <span>{post.singer}</span>
             </p>
-            <p>{posts.content}</p>
+            <p>{post.content}</p>
           </div>
         </Section2>
 
         <Section3>
-          {/* 댓글 달기 기능 추가 */}
           <form
             onSubmit={(event) => {
               onClickAddCommentHandler(event);
             }}
           >
             <input
-              onChange={onChange}
+              onChange={(e)=> setCurrComment({content: e.target.value})}
               minLength={5}
-              value={content}
+              value={currComment.content}
               name="content"
               placeholder="댓글 내용"
             />
@@ -205,10 +199,9 @@ const DetailPage = () => {
 
           <h3 className="comments_title">댓글 목록</h3>
           <div className="comments_box">
-            {comments.map((list, i) => {
-              console.log(comments);
+            {/* {comments.map((list, i) => {
               return <Comment list={list} i={i} postId={postId} key={i} />;
-            })}
+            })} */}
           </div>
         </Section3>
       </div>
@@ -290,8 +283,7 @@ const Section1 = styled.div`
     height: 80px;
     border-radius: 50%;
 
-    background-color: #eee;
-    background-image: url(${(props)=> props.profilePicture});
+    background: #eee url(${(props)=> props.profilePicture}) no-repeat center / contain;
     
     display: flex;
     justify-content: center;

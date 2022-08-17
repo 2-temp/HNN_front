@@ -19,7 +19,7 @@ function Profile() {
     password: '',
     newPassword: '',
     confirmNewPassword: '',
-    newNickname: '',
+    newNickname: ''
   });
   // newProfilePicture: ''
   
@@ -58,16 +58,18 @@ function Profile() {
   const profileEditHandler = async (ev) => {
     ev.preventDefault();
     const submitValue = {
-      userId: userData.userId, ...user
+      userId: userData.userId, 
+      ...user,
+      newMBTI: MBTI1+MBTI2+MBTI3+MBTI4
     }
-    console.log(submitValue)
 
     if (submitValue.newPassword !== submitValue.confirmNewPassword) {
       alert('비밀번호가 일치하지 않습니다.');
       return;
+    } else if (submitValue.newMBTI.length !== 4){
+      alert('올바른 MBTI가 아닙니다.');
+      return null;
     }
-    
-    console.log(userId);
     
     await axios.patch(`http://gwonyeong.shop/sign/user/${userId}`, submitValue ,{
       headers: {
@@ -84,122 +86,119 @@ function Profile() {
 
   return (
     <Contents>
-          <form onSubmit={(ev) => { profileEditHandler(ev) }}>
-            <h4>정보 수정하기</h4>
-            <p>안녕하세요. {userData.nickname}님</p>
-            
-            <input
-              type="password"
-              placeholder="현재 비밀번호"
-              required
-              minLength={6}
-              maxLength={20}
-              onChange={(e)=> 
-                setUser({
-                  ...user, 
-                  password : e.target.value
-                })
-              }
-            />
-            <input
-              type="password"
-              placeholder="새로운 비밀번호"
-              minLength={6}
-              maxLength={20}
-              onChange={(e)=> 
-                setUser({
-                  ...user, 
-                  newPassword : e.target.value
-                })
-              }
-            />
-            <input
-              type="password"
-              placeholder="새로운 비밀번호 확인"
-              minLength={6}
-              maxLength={20}
-              onChange={(e)=> 
-                setUser({
-                  ...user, 
-                  confirmNewPassword : e.target.value
-                })
-              }
-            />
-            <input
-              type="text"
-              placeholder="새로운 닉네임"
-              className={nicknameChecked?"enable":""}
-              minLength={2}
-              maxLength={20}
-              onChange={(e)=> 
-                setUser({
-                  ...user, 
-                  newNickname : e.target.value
-                })
-              }
-            />
-            <button 
-              type="button"
-              onClick={(ev) => nicknameCheckButtonClickHandler(ev)}
-              className={nicknameChecked?"enable":""}
-              >
-                닉네임 확인
-            </button>
-            <input
-              disabled
-              type="file"
-              placeholder="새로운 프로필 사진"
-              minLength={6}
-              maxLength={20}
-              onChange={(e)=> 
-                setUser({
-                  ...user, 
-                  newProfilePicture : e.target.value
-                })
-              }
-            />
-            <div className="my_mbti_box">
-              <div>
-                <span>MBTI </span>
-                <select name="MBTI-1"
-                  onChange={(e) => setMBTI1(e.target.value)}>
-                  <option value="">선택</option>
-                  <option value="I">I</option>
-                  <option value="E">E</option>
-                </select>
-                <select name="MBTI-2"
-                  onChange={(e) => setMBTI2(e.target.value)}>
-                  <option value="">선택</option>
-                  <option value="S">S</option>
-                  <option value="N">N</option>
-                </select>
-                <select name="MBTI-3"
-                  onChange={(e) => setMBTI3(e.target.value)}>
-                  <option value="">선택</option>
-                  <option value="T">T</option>
-                  <option value="F">F</option>
-                </select>
-                <select name="MBTI-4"
-                  onChange={(e) => setMBTI4(e.target.value)}>
-                  <option value="">선택</option>
-                  <option value="J">J</option>
-                  <option value="P">P</option>
-                </select>
-              </div>
-              <div>
-                <strong>{MBTI1}</strong>
-                <strong>{MBTI2}</strong>
-                <strong>{MBTI3}</strong>
-                <strong>{MBTI4}</strong>
-              </div>
-              <button 
-        className={nicknameChecked?"sumbit_button all_checked":"sumbit_button"}
-        >수정하기
-          </button>
-            </div>
-          </form>
+      <form
+        onSubmit={(ev) => {
+          profileEditHandler(ev);
+        }}
+      >
+        <h4>정보 수정하기</h4>
+        <p>안녕하세요. {userData.nickname}님</p>
+
+        <input
+          type="password"
+          placeholder="현재 비밀번호"
+          required
+          minLength={6}
+          maxLength={20}
+          onChange={(e) =>
+            setUser({
+              ...user,
+              password: e.target.value,
+            })
+          }
+        />
+        <input
+          type="password"
+          placeholder="새로운 비밀번호"
+          minLength={6}
+          maxLength={20}
+          onChange={(e) =>
+            setUser({
+              ...user,
+              newPassword: e.target.value,
+            })
+          }
+        />
+        <input
+          type="password"
+          placeholder="새로운 비밀번호 확인"
+          minLength={6}
+          maxLength={20}
+          onChange={(e) =>
+            setUser({
+              ...user,
+              confirmNewPassword: e.target.value,
+            })
+          }
+        />
+        <input
+          type="text"
+          placeholder="새로운 닉네임"
+          className={nicknameChecked ? "enable" : ""}
+          minLength={2}
+          maxLength={20}
+          onChange={(e) =>
+            setUser({
+              ...user,
+              newNickname: e.target.value,
+            })
+          }
+        />
+        <button
+          type="button"
+          onClick={(ev) => nicknameCheckButtonClickHandler(ev)}
+          className={nicknameChecked ? "enable" : ""}
+        >
+          닉네임 확인
+        </button>
+        <input
+          disabled
+          type="file"
+          placeholder="새로운 프로필 사진"
+          minLength={6}
+          maxLength={20}
+          onChange={(e) =>
+            setUser({
+              ...user,
+              newProfilePicture: e.target.value,
+            })
+          }
+        />
+        <div className="my_mbti_box">
+          <div>
+            <span>MBTI </span>
+            <select name="MBTI-1" onChange={(e) => setMBTI1(e.target.value)}>
+              <option value="">선택</option>
+              <option value="I">I</option>
+              <option value="E">E</option>
+            </select>
+            <select name="MBTI-2" onChange={(e) => setMBTI2(e.target.value)}>
+              <option value="">선택</option>
+              <option value="S">S</option>
+              <option value="N">N</option>
+            </select>
+            <select name="MBTI-3" onChange={(e) => setMBTI3(e.target.value)}>
+              <option value="">선택</option>
+              <option value="T">T</option>
+              <option value="F">F</option>
+            </select>
+            <select name="MBTI-4" onChange={(e) => setMBTI4(e.target.value)}>
+              <option value="">선택</option>
+              <option value="J">J</option>
+              <option value="P">P</option>
+            </select>
+          </div>
+          <div>
+            <strong>{MBTI1}</strong>
+            <strong>{MBTI2}</strong>
+            <strong>{MBTI3}</strong>
+            <strong>{MBTI4}</strong>
+          </div>
+          <button className={"sumbit_button all_checked"}>수정하기</button>
+        </div>
+      </form>
     </Contents>
-  )
+  );
 }
 
 const Contents = styled.div`
