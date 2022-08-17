@@ -8,7 +8,7 @@ const initialState = {
         email: "test@email.com",
         nickname: "닉네임0",
         MBTI: "MBTI",
-        profilePicture: "프로필사진URL"
+        profilePicture: "기본이미지.png"
     }
 }
 

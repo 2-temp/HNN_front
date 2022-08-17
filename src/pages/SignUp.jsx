@@ -30,13 +30,13 @@ function SignUp(){
         console.log(res)
         console.log(res.data)
 
-        
         const {success, msg} = res.data;
         if(success){
           setEmailChecked(true);
         } else {
           alert(msg);
         }
+        console.log(emailCheck);
 
       })
     // const response = RESPONSE.EMAIL_CHECK;
@@ -89,20 +89,17 @@ function SignUp(){
       return null;
     }
 
-    // const response = await axios.post(`/sign/up`, null, {
-    //   headers: { 
-    //     'Content-Type': 'application/json' 
-    //   }
-    // })
+    await axios.post('http://gwonyeong.shop/sign/up', submitValue).then(res => {
+      const {success, msg} = res.data;
 
-    const response = RESPONSE.SIGNUP;
+      if(success){
+        alert("회원 가입이 완료되었습니다.")
+        navigate("/sign/in")
+      } else {
+        alert(msg);
+      }
 
-    if(response.success){
-      alert(response.msg)
-      navigate("/sign/in")
-    } else {
-      alert(response.msg)
-    }
+    })
   };
 
   return(
@@ -125,22 +122,22 @@ function SignUp(){
         </div>
 
         <div className="input_box">
-                <input 
-                  type="email" 
-                  placeholder="이메일" 
-                  ref={email} 
-                  className={emailChecked?"enable":""}
-                  required
-                  maxLength={30}
-                  />
+          <input 
+            type="email" 
+            placeholder="이메일" 
+            ref={email} 
+            className={emailChecked?"enable":""}
+            required
+            maxLength={30}
+            />
 
-                <button 
-                type="button"
-                onClick={(ev) => emailCheckButtonClickHandler(ev)}
-                className={emailChecked?"enable":""}
-                >
-                  이메일 확인
-                </button>
+          <button 
+          type="button"
+          onClick={(ev) => emailCheckButtonClickHandler(ev)}
+          className={emailChecked?"enable":""}
+          >
+            이메일 확인
+          </button>
         </div>
 
         <input 

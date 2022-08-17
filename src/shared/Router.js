@@ -14,6 +14,7 @@ import Profile from "../pages/Profile";
 import Post from "../pages/Post";
 import DetailPage from "../pages/DetailPage";
 import NotFound from "../pages/NotFound";
+import Error from "../pages/Error";
 import MyPage from "../pages/MyPage";
 import Edit from "../pages/Edit";
 
@@ -40,6 +41,7 @@ const Router = () => {
           <Route path="/sign/up" element={<SignUp />}/>
           <Route path="/mypage" element={userLoggin ? <MyPage /> : <NotFound />}/>
           <Route path="/mypage/profile/:userId" element={userLoggin ? <Profile /> :<NotFound />}/>
+          <Route path="/error" element={<Error />}/>
           <Route path="*" element={<NotFound />}/>
 
         </Routes>

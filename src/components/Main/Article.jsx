@@ -34,7 +34,9 @@ function Article(props) {
           console.log(r.data.data.like)
           setLikeNum(r.data.data.like)
         })
-      }).catch(err => console.log(err))
+      }).catch(err => {
+        console.log(err)
+      })
     };
     postAxiosData();
   }

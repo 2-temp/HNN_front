@@ -18,10 +18,16 @@ function Main() {
     setLoading(true)
 
     const fetchAxiosData = async () => {
-      const axiosData = await axios.get('http://gwonyeong.shop/post')
+      try {
+        const axiosData = await axios.get('http://gwonyeong.shop/post')
+        
+        console.log(axiosData);
+        setPosts(axiosData.data.data)
+        setLoading(false);
+      } catch (err) {
+        console.log(err);
+      }
       // console.log(axiosData.data.data);
-      setPosts(axiosData.data.data)
-      setLoading(false);
     };
     fetchAxiosData();
 
