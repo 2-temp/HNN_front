@@ -189,7 +189,7 @@ const DetailPage = () => {
         </Section2>
 
         <Section3>
-          {/* 댓글 달기 */}
+          {/* 댓글 달기 기능 추가 */}
           <form
             onSubmit={(event) => {
               onClickAddCommentHandler(event);
