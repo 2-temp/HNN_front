@@ -18,8 +18,8 @@ function Post() {
     title: "",
     content: "",
     imageUrl: "",
-    songTitle:"",
-    singer:"",
+    songTitle: "",
+    singer: "",
   });
 
   const { title, content, imageUrl, songTitle, singer } = inputs;
@@ -66,7 +66,6 @@ function Post() {
     const onClickEditButtonHandler = async (event) => {
       event.preventDefault();
 
-      //주소 바꿨을시 오류 나긴함
       try{
         await axios.post('http://gwonyeong.shop/post', inputs, {
         headers: {
@@ -75,6 +74,7 @@ function Post() {
       }).then(res => {
         console.log(res)
         console.log(res.data)
+        navigate('/')
       })
       } catch(err) {
         console.log(err);

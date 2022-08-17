@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 function Comment (props) {
   const navigate = useNavigate();
 
-  const { list } = props;
+  const { list, userLoggin } = props;
 
   const {postId} = useParams();
 
@@ -86,6 +86,7 @@ function Comment (props) {
 
           {!editing && <button
             type="button"
+            className={userLoggin?"":" display_unable"}
             onClick={()=> editButtonClickHandler()}
           >
             수정
@@ -93,6 +94,7 @@ function Comment (props) {
 
           {editing && <button
             type="button"
+            className={userLoggin?"":" display_unable"}
             onClick={(ev)=> editCompleteButtonClickHandler(ev)}
           >
             완료
@@ -101,6 +103,7 @@ function Comment (props) {
           
           <button
             type="button"
+            className={userLoggin?"":" display_unable"}
             onClick={(ev)=> deleteButtonClickHandler(ev)}
           >
             삭제

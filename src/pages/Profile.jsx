@@ -66,7 +66,7 @@ function Profile() {
     if (submitValue.newPassword !== submitValue.confirmNewPassword) {
       alert('비밀번호가 일치하지 않습니다.');
       return;
-    } else if (submitValue.newMBTI.length !== 4){
+    } else if (submitValue.newMBTI.length !== 4 && submitValue.newMBTI.length > 0){
       alert('올바른 MBTI가 아닙니다.');
       return null;
     }
