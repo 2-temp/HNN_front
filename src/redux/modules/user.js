@@ -4,7 +4,7 @@ import { setCookie, getCookie, deleteCookie } from '../../cookie';
 const initialState = {
     loggin: false,
     info: {
-        userId: 0,
+        userId: 999,
         nickname: "기본 닉네임",
         MBTI: "MBTI",
         profilePicture: "img/defaultProfile.png"

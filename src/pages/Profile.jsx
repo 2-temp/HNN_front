@@ -3,13 +3,13 @@ import styled from "styled-components";
 import { useState } from "react";
 import axios from "axios";
 import RESPONSE from "../RESPONSE";
-import { useNavigate } from "react-router-dom";
-import data from "../RESPONSE";
-import { useParams } from "react-router-dom";
-import { useRef } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useRef, useEffect } from "react";
+import { getCookie } from '../cookie';
 
 function Profile() {
-
+    //쿠키 가져옴
+    const token = getCookie('token');
   const password = useRef("");
   const newPassword = useRef("");
   const confirmNewPassword = useRef("");
@@ -18,15 +18,16 @@ function Profile() {
 
   const navigate = useNavigate();
   const { userId } = useParams();
-  const userList = data.USER_PROFILE[userId]
-
-  const emails = data.USER_PROFILE[userId].email
-
+  const [user, setUser] = useState([]);
+  const [post, setPost] = useState([]);
+  
+  //MBTI 받아오기
   const [MBTI1, setMBTI1] = useState();
   const [MBTI2, setMBTI2] = useState();
   const [MBTI3, setMBTI3] = useState();
   const [MBTI4, setMBTI4] = useState();
   
+  //닉네임 체크 
   const [nicknameChecked, setNicknameChecked] = useState(false);
 
   // 닉네임 확인
@@ -45,6 +46,31 @@ function Profile() {
   }
 
   // get요청 받아서 출력
+
+
+ //내 정보 불러오기
+ 
+  // const fetchAxiosData = async () => {
+  //   try {
+  //     const axiosData = await axios.get(`http://gwonyeong.shop/post/${postId}`)
+      
+  //     // console.log(axiosData.data);
+
+  //     const result = axiosData.data.data;
+  //     setPost(result);
+  //     console.log(post)
+
+  //   } catch (err) {
+
+  //     console.log(err);
+  //     navigate('/error')
+      
+  //   }
+  // };
+  // fetchAxiosData();
+
+
+  
   //수정된 정보 서버 보내기
   
   const profileEditHandler = async (ev) => {
@@ -55,39 +81,41 @@ function Profile() {
       confirmNewPassword: confirmNewPassword.current.value,
       newNickname: newNickname.current.value,
       newProfilePicture: newProfilePicture.current.value,
-      MBTI: MBTI1 + MBTI2 + MBTI3 + MBTI4,
+      newMBTI: MBTI1 + MBTI2 + MBTI3 + MBTI4,
+      userId :userId
     }
+    console.log(submitValue)
 
-    if (submitValue.newPassword !== submitValue.confirmNewPassword) {
-      alert('비밀번호가 일치하지 않습니다.');
-      return;
-    }
+    // if (submitValue.newPassword !== submitValue.confirmNewPassword) {
+    //   alert('비밀번호가 일치하지 않습니다.');
+    //   return;
+    // }
+    await axios.patch(`http://gwonyeong.shop/sign/user/${userId}`, submitValue ,{
+      headers: {
+        authorization: `Bearer ${token}`
+      }
+    }).then(res => {
+      console.log(res)
+      console.log(res.data)
+    })
 
-    // const response =  await axios.PATCH("/sign/user/:userId", null, {
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //     }
-    // });
 
-    console.log(submitValue);
-
-    const response = RESPONSE.PROFILE_CHECK
-    console.log(response)
-    if (response.success) {
-      alert(response.msg)
-      navigate('/mypage')
-    } else {
-      alert(response.msg)
-    }
+  //   const response = RESPONSE.PROFILE_CHECK
+  //   console.log(response)
+  //   if (response.success) {
+  //     alert(response.msg)
+  //     navigate('/mypage')
+  //   } else {
+  //     alert(response.msg)
+  //   }
   }
 
   return (
     <Contents>
           <form onSubmit={(ev) => { profileEditHandler(ev) }}>
             <h4>제목</h4>
-            <input
-              className='enable'
-            value={emails} />
+            {/* <input
+              className='enable' /> */}
             <input
               type="password"
               placeholder="현재 비밀번호"
@@ -118,7 +146,7 @@ function Profile() {
               className={nicknameChecked?"enable":""}
               ref={newNickname}
               required
-              minLength={6}
+              minLength={2}
               maxLength={20}
             />
             <button 
