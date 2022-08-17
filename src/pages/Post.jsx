@@ -65,7 +65,10 @@ function Post() {
   //post요청
     const onClickEditButtonHandler = async (event) => {
       event.preventDefault();
-      await axios.post('http://gwonyeong.shop/post', inputs, {
+
+      //주소 바꿨을시 오류 나긴함
+      try{
+        await axios.post('http://gwonyeong.shop/post', inputs, {
         headers: {
           authorization: `Bearer ${token}`
         }
@@ -73,6 +76,11 @@ function Post() {
         console.log(res)
         console.log(res.data)
       })
+      } catch(err) {
+        console.log(err);
+        navigate('/error')
+      }
+      
     };
 
   return (

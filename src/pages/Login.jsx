@@ -19,8 +19,8 @@ function Login() {
 
   const submitHandler = async (ev) => {
     ev.preventDefault();
-
-    if(user.email.indexOf('.') < 0){
+    try {
+       if(user.email.indexOf('.') < 0){
       alert('이메일 형식을 확인하세요.')
       return null;
     }
@@ -52,6 +52,11 @@ function Login() {
         dispatch(signOutUser())
       }
     });
+    } catch (err) {
+      console.log(err);
+      navigate('/error')
+    }
+   
   
 
   // 예시 코드

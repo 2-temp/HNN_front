@@ -74,8 +74,8 @@ function SignUp(){
   // 회원가입
   const signUpSubmitHandler = async (ev) => {
     ev.preventDefault();
-
-    const submitValue = {
+    try {
+       const submitValue = {
       email : email.current.value,
       nickname: nickname.current.value,
       password: password.current.value,
@@ -100,6 +100,10 @@ function SignUp(){
       }
 
     })
+    } catch (err) {
+      console.log(err);
+      navigate('/error')
+    }
   };
 
   return(

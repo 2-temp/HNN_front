@@ -23,15 +23,22 @@ const DetailPage = () => {
   //게시물, 댓글 리스트 불러오기
   useEffect(() => {
     const fetchAxiosData = async () => {
-      const axiosData = await axios.get(`http://gwonyeong.shop/post/${postId}`)
-      const poster=axiosData.data.data.poster
-      setUsers(poster.User)
-      setPosts(poster)
-      setComments(axiosData.data.data.commenter)
-      console.log(axiosData.data.data)
+      try{
+        const axiosData = await axios.get(`http://gwonyeong.shop/post/${postId}`)
+        //여기에 없는 post 입력시 오류너게 처리해야함
 
+        const poster=axiosData.data.data.poster
+        setUsers(poster.User)
+        setPosts(poster)
+        setComments(axiosData.data.data.commenter)
+        console.log(axiosData.data.data)
+        setLikeNum(axiosData.data.data.like)
+      } catch (err) {
+        console.log(err);
+        navigate('/error')
+      }
 
-      setLikeNum(axiosData.data.data.like)
+     
     };  
     fetchAxiosData();
 
@@ -55,7 +62,8 @@ const DetailPage = () => {
   //게시물 삭제
   const deleteButtonClickHandler = async (ev) => {
     ev.preventDefault();
-    await axios.delete(`http://gwonyeong.shop/post/${postId}`, ev, {
+    try {
+       await axios.delete(`http://gwonyeong.shop/post/${postId}`, ev, {
       headers: {
         authorization: `Bearer ${token}`
       }
@@ -63,6 +71,11 @@ const DetailPage = () => {
       console.log(res)
       console.log(res.data)
     })
+    } catch (err) {
+      console.log(err);
+      navigate('/error')
+    }
+   
   };
 
  
@@ -71,7 +84,8 @@ const DetailPage = () => {
     
     // // patch요청
     const postAxiosData = async () => {
-      await axios.patch(`http://gwonyeong.shop/post/like/${postId}`, {postId: postId}, {
+      try {
+        await axios.patch(`http://gwonyeong.shop/post/like/${postId}`, {postId: postId}, {
         headers: {
           authorization: `Bearer ${token}`
         }
@@ -80,9 +94,13 @@ const DetailPage = () => {
         console.log(res.data)
         setLikeNum(posts.likeNum)
       })
+      }
+      catch (err) {
+        console.log(err);
+        navigate('/error')
+      }
     };
     postAxiosData();
-
     // console.log("/post/like/"+posts.postId);
   }
 

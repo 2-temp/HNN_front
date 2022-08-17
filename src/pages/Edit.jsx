@@ -84,14 +84,19 @@ function Edit() {
     // patch 요청
     const onEditHandler = async (event) => {
       event.preventDefault();
-
-      await axios
+      try {
+         await axios
         .patch("http://gwonyeong.shop/patch", editInputs, {
           headers: { authorization: `Bearer ${token}` },
         }).then((res) => {
           console.log(res);
           console.log(res.data);
         });
+      } catch (err) {
+        console.log(err);
+        navigate('/error')
+      } 
+     
     };
 
   return (
