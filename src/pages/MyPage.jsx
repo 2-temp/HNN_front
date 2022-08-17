@@ -22,7 +22,7 @@ function MyPage(){
   useEffect(() => {
     setLoading(true)
     const token = getCookie('token');
-
+    
     const fetchAxiosData = async () => {
       try {
         const axiosData = await axios.get(`http://gwonyeong.shop/sign/user/${userData.userId}`, {
@@ -34,7 +34,7 @@ function MyPage(){
         const result = axiosData.data.data;
         setPosts(result)
         setLoading(false);
-
+        
       } catch (err) {
 
         console.log(err);
@@ -54,51 +54,52 @@ function MyPage(){
     return current;
   }  
 
-  
-  return(
-    <MyPagePost profilePicture={userData.profilePicture}>
+  console.log(posts);
 
-      <div className="profile_box">
-        <div className="profile_picture">
-          img: {userData.profilePicture}
-        </div>
-        <div>
-          <h3 className="section_title">
-            {userData.MBTI}
-            <strong> {userData.nickname}</strong>
-          </h3>
-          <div className="button_box"
-          onClick={()=>{
-            navigate(`/mypage/profile/0`);
-          }}>
-            정보 수정하기
+  return(
+    <>
+      <MyPagePost profilePicture={userData.profilePicture}>
+
+        <div className="profile_box">
+          <div className="profile_picture"></div>
+          <div>
+            <h3 className="section_title">
+              {userData.MBTI}
+              <strong> {userData.nickname}</strong>
+            </h3>
+            <div className="button_box"
+            onClick={()=>{
+              navigate(`/mypage/profile/0`);
+            }}>
+              정보 수정하기
+            </div>
           </div>
         </div>
-      </div>
-      
-      <PageSet
-        limit = {limit} 
-        setLimit = {setLimit} 
-        limitOpt = {5}
-      />
+        
+        <PageSet
+          limit = {limit} 
+          setLimit = {setLimit} 
+          limitOpt = {5}
+        />
 
-      <h4>내가 작성한 글</h4>
-      <div className="scrollY">
-        <div className="posts_box">
-          {!loading && current(posts).map((list, i) => {
-            return <Article list={list} key={i} userMBTI={userData.MBTI} />
-          }) }
+        <h4>내가 작성한 글</h4>
+        <div className="scrollY">
+          <div className="posts_box">
+            {!loading && current(posts).map((list, i) => {
+              return <Article list={list} key={i} userMBTI={userData.MBTI} />
+            }) }
+          </div>
+
+          <Pagination 
+            totalPost = {posts.length}
+            limit = {limit}
+            page = {page}
+            setPage = {setPage}
+          />
         </div>
 
-        <Pagination 
-          totalPost = {posts.length}
-          limit = {limit}
-          page = {page}
-          setPage = {setPage}
-        />
-      </div>
-
-    </MyPagePost>
+      </MyPagePost>
+    </>
   )
 }
 
@@ -145,7 +146,6 @@ const MyPagePost = styled.div`
 
     background-color: #eee;
     background: url(${(props)=> props.profilePicture}) no-repeat center / contain;
-    opacity: 0.5;
   }
   
   .section_title {

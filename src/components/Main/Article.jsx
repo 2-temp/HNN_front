@@ -40,14 +40,16 @@ function Article(props) {
     };
     postAxiosData();
   }
-  console.log(userMBTI !== "");
   
   return (
     <MyArticle
+      profilePicture={list.profilePicture?list.profilePicture:"img/defaultProfile.png"}
       onClick={() => {
         navigate(`/post/${list.postId}`);
       }}
     >
+      {!userMBTI && 
+        <div className="profile_picture"></div>}
       {!userMBTI && <span className="mbti">
         {list.MBTI}
       </span>}
@@ -102,6 +104,15 @@ const MyArticle = styled.div`
 
   &.wide {
     flex: 1 1 200px;
+  }
+
+  .profile_picture {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-right: 5px;
+
+    background: #ccc url(${(props)=> props.profilePicture}) no-repeat center / contain;
   }
 
   .icon_box {
