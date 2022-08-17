@@ -14,6 +14,7 @@ const DetailPage = () => {
   
   const [post, setPost] = useState([]);
   const [user, setUser] = useState({});
+
   const [comments, setComments] = useState([]);
   const [likeNum, setLikeNum] = useState();
   
@@ -70,7 +71,7 @@ const DetailPage = () => {
     event.preventDefault();
     
     try{ 	
-      await axios.post(`http://gwonyeong.shop/post/comment/${postId}`, currComment, { 
+      await axios.post(`http://gwonyeong.shop/comment/${postId}`, currComment, { 
         headers: {
           authorization: `Bearer ${token}`
         }
@@ -78,12 +79,35 @@ const DetailPage = () => {
         console.log(res)
         console.log(res.data)
       })
-    } catch(err) {
+    } catch (err) {
       console.log(err);
       navigate('/error')
     }
   };
-  
+
+  // 게시물, 댓글 목록 불러오기
+  useEffect(() => {
+    const fetchAxiosData = async () => {
+      try {
+        const axiosData = await axios.get(`http://gwonyeong.shop/post/${postId}`)
+        //여기에 없는 post 입력시 오류너게 처리해야함
+
+        const poster = axiosData.data.data.poster
+        setUser(poster.User)
+        setPost(poster)
+        setComments(axiosData.data.data.commenter)
+        console.log(axiosData.data.data)
+        setLikeNum(axiosData.data.data.like)
+      } catch (err) {
+        console.log(err);
+        navigate('/error')
+      }
+
+    };
+    fetchAxiosData();
+
+  }, [])
+
   //게시물 삭제
   const deleteButtonClickHandler = async (ev) => {
     ev.preventDefault();

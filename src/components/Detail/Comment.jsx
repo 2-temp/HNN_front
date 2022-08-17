@@ -2,11 +2,17 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
+import { getCookie } from '../../cookie';
+import { useParams } from "react-router-dom";
 
 function Comment (props) {
   const navigate = useNavigate();
 
   const { list } = props;
+
+  const {postId} = useParams();
+
+  const userList = list.User
   
   let dateCreatedAt = new Date(list.createdAt).toLocaleDateString()
   dateCreatedAt = dateCreatedAt === "Invalid Date"?"":dateCreatedAt;
@@ -16,12 +22,16 @@ function Comment (props) {
   const [editing, setEditing] = useState(false);
   const writeByThisUser = true;
 
-  
+  const token = getCookie('token');
+
+  //수정 버튼 
   const editButtonClickHandler = () => {
     setEditing(true)
     input_content.current.focus();
   }
   
+
+  //완료
   const editCompleteButtonClickHandler = () => {
     setEditing(false)   
     const newComment = {comment: inputCotent};
@@ -35,25 +45,34 @@ function Comment (props) {
     console.log(newComment)
   }
 
-   // 댓글 삭제 버튼 이벤트 핸들러
-   const deleteButtonClickHandler = (commentId) => {
-    if (window.confirm('댓글을 정말 삭제할까요?')) {
-      alert('삭제 완료!');
-      axios.delete(`/post/${commentId}`); 
-      console.log('delete commentId');
-      navigate('/post/:postId');
-    };
+  //댓글 삭제 기능
+  const deleteButtonClickHandler= async (ev) => {
+    ev.preventDefault();
+    try {
+      await axios.delete(`http://gwonyeong.shop/comment/${postId}/${list.commentId}`, {
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      }).then(res => {
+        console.log(res)
+        console.log(res.data)
+      })
+    } catch (err) {
+      console.log(err);
+      navigate('/error')
+    }
   };
+
 
   return (
     <MyArticle>
       <div className="comment_head">
         <div className="left_box">
           <div className="profilePicture">
-            {list.MBTI}
+            {userList.MBTI}
           </div>
           <span className="nickname">
-            {list.nickname}
+            {userList.nickname}
           </span>
         </div>
         <div className="right_box">
@@ -75,7 +94,7 @@ function Comment (props) {
           
           <button
             type="button"
-            onClick={()=> deleteButtonClickHandler()}
+            onClick={(ev)=> deleteButtonClickHandler(ev)}
           >
             삭제
           </button>
