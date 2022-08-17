@@ -20,7 +20,41 @@ const DetailPage = () => {
   const [comments, setComments] = useState([]);
   const [likeNum, setLikeNum] = useState();
 
-  //게시물, 댓글 리스트 불러오기
+  // 새로 추가할 댓글을 저장할 useState 생성
+  const [comment, setComment] = useState({
+    content: "",
+  }); const { content } = comment;
+
+  // 댓글 입력창 변화 감지
+  const onChange = (e) => {
+    const { value, name } = e.target; 
+    setComment({
+      ...comment, 
+      [name]: value, 
+    });
+  };
+
+  // 댓글 달기 핸들러
+  // POST 요청
+  const onClickAddCommentHandler = async (event) => {
+      event.preventDefault();
+
+      try{ 	
+        await axios.post(`http://gwonyeong.shop/post/comment/${postId}`, comment, { 
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      }).then(res => {
+        console.log(res)
+        console.log(res.data)
+      })
+      } catch(err) {
+        console.log(err);
+        navigate('/error')
+      }
+  };
+
+  // 게시물, 댓글 목록 불러오기
   useEffect(() => {
     const fetchAxiosData = async () => {
       try{
@@ -77,10 +111,11 @@ const DetailPage = () => {
     }
   };
 
+  // 좋아요 버튼 핸들러
   const likeButtonClickHandler = (event) => {
     const token = getCookie('token')  ;
     
-    // // patch요청
+    // // patch 요청
     const postAxiosData = async () => {
       try {
         await axios.patch(`http://gwonyeong.shop/post/like/${postId}`, {postId: postId}, {
@@ -105,39 +140,45 @@ const DetailPage = () => {
   return (
     <Wrap>
       <Section1 profilePicture={posts.profilePicture}>
-        <div className="head_info"> 
+        <div className="head_info">
           <div className="profile_box">
-              <div className="profile_picture">
-                <p>{users.MBTI}</p>
-              </div>
-              <p>{users.nickname} </p>
+            <div className="profile_picture">
+              <p>{users.MBTI}</p>
+            </div>
+            <p>{users.nickname} </p>
           </div>
           <div className="right">
-            
-            <button 
+            <button
               className="button button_like"
-              onClick={(event)=> { likeButtonClickHandler(event)}} 
+              onClick={(event) => {
+                likeButtonClickHandler(event);
+              }}
             >
               {likeNum}
               좋아요!
-            </button> 
+            </button>
             <div></div>
-            <button className="button"
-              onClick={()=> navigate(`/post/${posts.userId}/edit`)}
-            >게시물 수정</button>
+            <button
+              className="button"
+              onClick={() => navigate(`/post/${posts.userId}/edit`)}
+            >
+              게시물 수정
+            </button>
             {/* 작성해야 함 */}
-            <button className="button"
-              onClick={(ev)=> deleteButtonClickHandler(ev)}
-            >게시물 삭제</button>
+            <button
+              className="button"
+              onClick={(ev) => deleteButtonClickHandler(ev)}
+            >
+              게시물 삭제
+            </button>
           </div>
         </div>
       </Section1>
 
       <div className="detail_body">
-
         <Section2 albumCover={posts.imageUrl}>
           <p className="created_at">{posts.createdAt}</p>
-          <div className="album_cover">  
+          <div className="album_cover">
             <p className="album_cover_title">
               <span>{posts.songTitle}</span> - <span>{posts.singer}</span>
             </p>
@@ -146,15 +187,30 @@ const DetailPage = () => {
         </Section2>
 
         <Section3>
+          {/* 댓글 달기 기능 추가 */}
+          <form
+            onSubmit={(event) => {
+              onClickAddCommentHandler(event);
+            }}
+          >
+            <input
+              onChange={onChange}
+              minLength={5}
+              value={content}
+              name="content"
+              placeholder="댓글 내용"
+            />
+            <button>댓글 작성</button>
+          </form>
+
           <h3 className="comments_title">댓글 목록</h3>
           <div className="comments_box">
             {comments.map((list, i) => {
-              console.log(comments)
+              console.log(comments);
               return <Comment list={list} i={i} postId={postId} key={i} />;
             })}
           </div>
         </Section3>
-
       </div>
     </Wrap>
   );
