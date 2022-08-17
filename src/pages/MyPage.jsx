@@ -54,8 +54,6 @@ function MyPage(){
     return current;
   }  
 
-  console.log(posts);
-
   return(
     <>
       <MyPagePost profilePicture={userData.profilePicture}>
@@ -144,8 +142,7 @@ const MyPagePost = styled.div`
     height: 160px;
     border-radius: 50%;
 
-    background-color: #eee;
-    background: url(${(props)=> props.profilePicture}) no-repeat center / contain;
+    background: #eee url(${(props)=> props.profilePicture}) no-repeat center / contain;
   }
   
   .section_title {
