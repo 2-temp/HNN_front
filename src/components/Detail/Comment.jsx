@@ -30,19 +30,22 @@ function Comment (props) {
     input_content.current.focus();
   }
   
-
   //완료
   const editCompleteButtonClickHandler = async() => {
     setEditing(false)   
-    const newComment = {comment: inputCotent};
-     await axios.patch(`http://gwonyeong.shop/comment/${postId}/${list.commentId}`, newComment, {
+    const newComment = {
+      content: inputCotent,
+      commentId: list.commentId
+    };
+    console.log(newComment);
+      await axios.patch(`http://gwonyeong.shop/comment/${postId}/${list.commentId}`, newComment, {
       headers: {
         authorization: `Bearer ${token}`
       }
     }).then(res => {
-      console.log('hi');
+      // console.log('hi');
       console.log(res)
-      console.log(res.data)
+      // console.log(res.data)
     }).catch(err => 
       console.log(err)
     )
