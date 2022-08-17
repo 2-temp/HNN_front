@@ -8,6 +8,9 @@ import RESPONSE from "../RESPONSE";
 import Comment from "../components/Detail/Comment";
 
 const DetailPage = () => {
+  //쿠키 가져오기
+  const token = getCookie('token');
+
   const navigate = useNavigate();
 
   const {postId} = useParams();
@@ -37,17 +40,34 @@ const DetailPage = () => {
  
 
   // 게시물 삭제
+  // const deleteButtonClickHandler = async (ev) => {
+  //   ev.preventDefault();
+  //   await axios.delete(`http://gwonyeong.shop/post/${postId}`, null,{
+  //     headers: {
+  //       authorization: `Bearer ${token}`
+  //     } )
+  //   .then(res => {
+  //     console.log(res)
+  //     console.log(res.data)
+  //   })
+  // }
+
+  //게시물 삭제
   const deleteButtonClickHandler = async (ev) => {
     ev.preventDefault();
-    await axios.delete(`http://gwonyeong.shop/post/${postId}`, null)
-    .then(res => {
+    await axios.delete(`http://gwonyeong.shop/post/${postId}`, ev, {
+      headers: {
+        authorization: `Bearer ${token}`
+      }
+    }).then(res => {
       console.log(res)
       console.log(res.data)
     })
-  }
+  };
 
+ 
   const likeButtonClickHandler = (event) => {
-    const token = getCookie('token');
+    const token = getCookie('token')  ;
     
     // // patch요청
     const postAxiosData = async () => {
