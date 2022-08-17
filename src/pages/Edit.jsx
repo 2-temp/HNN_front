@@ -1,45 +1,52 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import RESPONSE from "../RESPONSE";
-import { useNavigate } from "react-router-dom";
-import data from "../RESPONSE";
-import { useParams } from "react-router-dom";
+
 import { getCookie } from '../cookie';
 
-function Edit() {
+function Edit(){
+
   const navigate = useNavigate();
   const { postId } = useParams();
-  const [prevPost, setPrevPost] = useState();
+  const [loaded, setLoaded] = useState(false);
+
+  const [prevPost, setPrevPost] = useState({});
   const [currPost, setCurrPost] = useState({
-    songTitle: prevPost.songTitle,
-    singer: prevPost.singer,
-    imageUrl: prevPost.imageUrl,
-    content: prevPost.content
+    songTitle: '',
+    singer: '',
+    imageUrl: '',
+    content: ''
   });
 
   const token = getCookie("token");
 
   const fetchAxiosData = async () => {
     try {
+      console.log(postId);
       const axiosData = await axios.get(`http://gwonyeong.shop/post/${postId}`)
       
-      // console.log(axiosData.data);
-
-      const result = axiosData.data.data;
+      const result = axiosData.data.data.poster;
       setPrevPost(result)
 
+      setCurrPost({
+        songTitle: prevPost.songTitle,
+        singer: prevPost.singer,
+        imageUrl: prevPost.imageUrl,
+        content: prevPost.content
+      })
     } catch (err) {
-
       console.log(err);
       navigate('/error')
-      
+    } finally {
+      setLoaded(true)
     }
   };
-  fetchAxiosData();
-
-  console.log(prevPost);
+  
+  useEffect(()=>{
+    setLoaded(false)
+    fetchAxiosData();
+  }, [])
 
   const onChangeHandler = (e) => {
     setCurrPost({
@@ -48,51 +55,54 @@ function Edit() {
     });
   };
 
-  const onEditHandler = async (event) => {
-    event.preventDefault();
+  const compareChanges = () => {
 
+
+  }
+
+  const onEditHandler = (event) => {
+    event.preventDefault();
     console.log(currPost, prevPost);
 
-    // 채워지지 않은 칸이 있을 경우
-    // if (
-    //   content === "" ||
-    //   imageUrl === "" ||
-    //   songTitle === "" ||
-    //   singer === ""
-    // ) {
-    //   alert("빈칸이 있습니다 !");
-    //   return;
-    // }
-
-    try {
-      await axios
-        .patch(`http://gwonyeong.shop/post/${postId}`, currPost, {
-          headers: { authorization: `Bearer ${token}` },
-        })
-        .then((res) => {
-          console.log(res);
-          const { success, msg } = res.data.data;
-
-          if (success) {
-
-            alert(msg);
-            navigate(`/post/${postId}`);
-
-          } else {
-
-            alert(msg);
-
-          }
-        });
-    } catch (err) {
-
-      console.log(err);
-      navigate("/error");
-      
+    let isChanged=false;
+    for (const x in currPost){
+      if(currPost[x]!==prevPost[x]) isChanged=true;
     }
 
-    return (
-      <Contents>
+    if(isChanged){
+      try {
+        axios.patch(`http://gwonyeong.shop/post/${postId}`, currPost, {
+          headers: { authorization: `Bearer ${token}` },
+        }).then((res) => {
+          console.log(res);
+          const { success, msg } = res.data.data;
+      
+          if (success) {
+      
+            alert(msg);
+            navigate(`/post/${postId}`);
+      
+          } else {
+      
+            alert(msg);
+      
+          }
+        });
+        } catch (err) {
+          console.log(err);
+          navigate("/error");
+        }
+    } else {
+      alert('변경된 내용이 없습니다!');
+    }
+
+  }
+
+  console.log(currPost, prevPost);
+
+  return (
+    <>
+      {loaded && <Contents>
         <form
           onSubmit={(event) => {
             onEditHandler(event);
@@ -100,39 +110,48 @@ function Edit() {
         >
           <h3>글 수정</h3>
 
+          <button
+          type="button"
+          onClick={()=>{
+            fetchAxiosData()
+          }}>
+            이전 글 불러오기
+          </button>
+
           <input
             onChange={onChangeHandler}
-            value={prevPost.imageUrl}
+            value={currPost.imageUrl}
             name="imageUrl"
             placeholder="이미지 Url"
           />
 
           <input
             onChange={onChangeHandler}
-            value={prevPost.content}
+            value={currPost.content}
             name="content"
             placeholder="게시물 내용"
           />
 
           <input
             onChange={onChangeHandler}
-            value={prevPost.songTitle}
+            value={currPost.songTitle}
             name="songTitle"
             placeholder="노래 이름"
           />
 
           <input
             onChange={onChangeHandler}
-            value={prevPost.singer}
+            value={currPost.singer}
             name="singer"
             placeholder="가수"
           />
 
           <button>수정하기</button>
         </form>
-      </Contents>
-    );
-  };
+      </Contents>}
+    </>
+    
+  );
 }
 
 export default Edit;
@@ -144,34 +163,34 @@ padding: 0 20px;
 box-sizing: border-box;
 
 form {
-    max-width: 600px;
-    margin: 0 auto;
+  max-width: 600px;
+  margin: 0 auto;
 
-    display: flex;
-    flex-flow: column;
-    gap: 16px;
+  display: flex;
+  flex-flow: column;
+  gap: 16px;
 
-    text-align: center;
+  text-align: center;
 
-    h3 {
-      font-size: 28px;
-    }
-
-    input, button {
-      font-size: 18px;
-      padding: 6px 26px;
-      box-sizing: border-box;
-      border-radius: 20px;
-
-      border: none;
-      box-shadow: 2px 2px 5px #ddd;
-
-      transition: all .2s;
-    }
-    
-    button:hover {
-      background-color: #ccc;
-      cursor: pointer;
-    }
+  h3 {
+    font-size: 28px;
   }
+
+  input, button {
+    font-size: 18px;
+    padding: 6px 26px;
+    box-sizing: border-box;
+    border-radius: 20px;
+
+    border: none;
+    box-shadow: 2px 2px 5px #ddd;
+
+    transition: all .2s;
+  }
+  
+  button:hover {
+    background-color: #ccc;
+    cursor: pointer;
+  }
+}
 `

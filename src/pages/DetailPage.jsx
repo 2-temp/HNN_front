@@ -156,7 +156,7 @@ const likeButtonClickHandler = (event) => {
             <div></div>
             <button
               className="button"
-              onClick={() => navigate(`/post/${posts.userId}/edit`)}
+              onClick={() => navigate(`/post/${postId}/edit`)}
             >
               게시물 수정
             </button>
