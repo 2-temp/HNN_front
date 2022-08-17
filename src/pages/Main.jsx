@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { getCookie } from '../cookie';
 
@@ -9,6 +10,8 @@ import PageSet from "../components/Main/PageSet";
 import RESPONSE from '../RESPONSE'
 
 function Main() {
+  const navigate = useNavigate();
+
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1); 
@@ -26,8 +29,8 @@ function Main() {
         setLoading(false);
       } catch (err) {
         console.log(err);
+        navigate('/error')
       }
-      // console.log(axiosData.data.data);
     };
     fetchAxiosData();
 
