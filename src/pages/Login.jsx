@@ -19,38 +19,44 @@ function Login() {
 
   const submitHandler = async (ev) => {
     ev.preventDefault();
-
-    if(user.email.indexOf('.') < 0){
+    try {
+       if(user.email.indexOf('.') < 0){
       alert('이메일 형식을 확인하세요.')
       return null;
     }
 
-    console.log(user);
+    await axios.post('http://gwonyeong.shop/sign/in', user).then(response => {
+      let data = response.data;
 
-    await axios.post('http://gwonyeong.shop/sign/in', {
-      email: 'minsun@gmail.com', 
-      password: 'Asd2222!'
-    }).then(response => {
+      if(data.success){
+        let token = data.token;
+        let info = {
+          userId: data.userId,
+          nickname: data.nickname,
+          MBTI: data.MBTI,
+          profilePicture: data.profilePicture?data.profilePicture:"img/defaultProfile.png",
+        }
 
-    if(response.data.success){
-      let token = response.data.token;
-      // let info = userData;
-
-      alert('로그인에 성공하였습니다.')
+        alert('로그인에 성공하였습니다.')
+        
+        dispatch(signInUser({
+          'token': token, 
+          "info": info
+        }));
+        navigate("/")
+        
+      } else {
+        let msg = response.msg
       
-      dispatch(signInUser({
-        'token': token, 
-        // "info": info
-      }));
-      navigate("/")
-      
-    } else {
-      let msg = response.msg
-    
-      alert(msg)
-      dispatch(signOutUser())
+        alert(msg)
+        dispatch(signOutUser())
+      }
+    });
+    } catch (err) {
+      console.log(err);
+      navigate('/error')
     }
-  });
+   
   
 
   // 예시 코드

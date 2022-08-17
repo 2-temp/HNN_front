@@ -1,14 +1,16 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { getCookie } from '../cookie';
 
 import Article from "../components/Main/Article";
 import Pagination from "../components/Main/Pagination";
 import PageSet from "../components/Main/PageSet";
-import RESPONSE from '../RESPONSE'
 
 function Main() {
+  const navigate = useNavigate();
+
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1); 
@@ -18,10 +20,21 @@ function Main() {
     setLoading(true)
 
     const fetchAxiosData = async () => {
-      const axiosData = await axios.get('http://gwonyeong.shop/post')
-      // console.log(axiosData.data.data);
-      setPosts(axiosData.data.data)
-      setLoading(false);
+      try {
+        const axiosData = await axios.get('http://gwonyeong.shop/post')
+        
+        // console.log(axiosData.data);
+
+        const result = axiosData.data.data;
+        setPosts(result)
+        setLoading(false);
+
+      } catch (err) {
+
+        console.log(err);
+        navigate('/error')
+        
+      }
     };
     fetchAxiosData();
 

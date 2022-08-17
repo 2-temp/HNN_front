@@ -1,6 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux'
-import axios from "axios";
 
 import styled from "styled-components";
 import { signOutUser } from '../redux/modules/user'
@@ -90,11 +89,14 @@ export default Header;
 const Contents = styled.div`
 
 line-height: 60px;
-position: sticky;
-top: 0;
 
 box-shadow: 2px 0 10px 0 #ddd;
 background-color: #fff;
+
+position: sticky;
+top: 0;
+z-index: 999;
+
 
 .contents_area {
     width: 100%;

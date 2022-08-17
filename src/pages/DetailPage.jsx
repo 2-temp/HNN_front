@@ -1,86 +1,218 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
+import { getCookie } from '../cookie';
 
 import RESPONSE from "../RESPONSE";
 import Comment from "../components/Detail/Comment";
 
 const DetailPage = () => {
+  //쿠키 가져오기
+  const token = getCookie('token');
+
   const navigate = useNavigate();
 
+  const {postId} = useParams();
+
   const [posts, setPosts] = useState([]);
-  const [song, setSong] = useState([]);
+  const [users, setUsers] = useState([]);
   const [comments, setComments] = useState([]);
-  const postId = 0;
+  const [likeNum, setLikeNum] = useState();
 
-  useEffect(() => {
-    let data = RESPONSE.DETAIL.poster;
-    let comment = RESPONSE.DETAIL.commenter;
+  // 새로 추가할 댓글을 저장할 useState 생성
+  const [comment, setComment] = useState({
+    content: "",
+  }); const { content } = comment;
 
-    setPosts(data);
-    setSong(data.info);
-    setComments(comment);
-    // 임시 
-    
-  });
-
-  // 게시물 삭제 버튼 이벤트 핸들러
-  const deleteButtonClickHandler = (postId) => {
-    if (window.confirm('게시물을 정말 삭제할까요?')) {
-      alert('삭제 완료!');
-      axios.delete(`/post/${postId}`); // /post/:postId/${postId}
-      console.log('delete postId');
-      navigate('/');
-    };
+  // 댓글 입력창 변화 감지
+  const onChange = (e) => {
+    const { value, name } = e.target; 
+    setComment({
+      ...comment, 
+      [name]: value, 
+    });
   };
+
+  // 댓글 달기 핸들러
+  // POST 요청
+  const onClickAddCommentHandler = async (event) => {
+      event.preventDefault();
+
+      try{ 	
+        await axios.post(`http://gwonyeong.shop/post/comment/${postId}`, comment, { 
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      }).then(res => {
+        console.log(res)
+        console.log(res.data)
+      })
+      } catch(err) {
+        console.log(err);
+        navigate('/error')
+      }
+  };
+
+  // 게시물, 댓글 목록 불러오기
+  useEffect(() => {
+    const fetchAxiosData = async () => {
+      try{
+        const axiosData = await axios.get(`http://gwonyeong.shop/post/${postId}`)
+        //여기에 없는 post 입력시 오류너게 처리해야함
+
+        const poster=axiosData.data.data.poster
+        setUsers(poster.User)
+        setPosts(poster)
+        setComments(axiosData.data.data.commenter)
+        console.log(axiosData.data.data)
+        setLikeNum(axiosData.data.data.like)
+      } catch (err) {
+        console.log(err);
+        navigate('/error')
+      }
+
+     
+    };  
+    fetchAxiosData();
+
+  }, [])
+  
+ 
+
+  // 게시물 삭제
+  // const deleteButtonClickHandler = async (ev) => {
+  //   ev.preventDefault();
+  //   await axios.delete(`http://gwonyeong.shop/post/${postId}`, null,{
+  //     headers: {
+  //       authorization: `Bearer ${token}`
+  //     } )
+  //   .then(res => {
+  //     console.log(res)
+  //     console.log(res.data)
+  //   })
+  // }
+
+  //게시물 삭제
+  const deleteButtonClickHandler = async (ev) => {
+    ev.preventDefault();
+    try {
+       await axios.delete(`http://gwonyeong.shop/post/${postId}`, ev, {
+      headers: {
+        authorization: `Bearer ${token}`
+      }
+    }).then(res => {
+      console.log(res)
+      console.log(res.data)
+    })
+    } catch (err) {
+      console.log(err);
+      navigate('/error')
+    }
+   
+  };
+
+ 
+  // 좋아요 버튼 핸들러
+  const likeButtonClickHandler = (event) => {
+    const token = getCookie('token')  ;
+    
+    // // patch 요청
+    const postAxiosData = async () => {
+      try {
+        await axios.patch(`http://gwonyeong.shop/post/like/${postId}`, {postId: postId}, {
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      }).then(res => {
+        console.log(res)
+        console.log(res.data)
+        setLikeNum(posts.likeNum)
+      })
+      }
+      catch (err) {
+        console.log(err);
+        navigate('/error')
+      }
+    };
+    postAxiosData();
+    // console.log("/post/like/"+posts.postId);
+  }
 
   return (
     <Wrap>
       <Section1 profilePicture={posts.profilePicture}>
         <div className="head_info">
           <div className="profile_box">
-              <div className="profile_picture">
-                <p>{posts.MBTI}</p>
-              </div>
-              <p>{posts.nickname} </p>
+            <div className="profile_picture">
+              <p>{users.MBTI}</p>
+            </div>
+            <p>{users.nickname} </p>
           </div>
           <div className="right">
-            
-            <button className="button button_like">{posts.likeNum} 좋아요!</button> 
+            <button
+              className="button button_like"
+              onClick={(event) => {
+                likeButtonClickHandler(event);
+              }}
+            >
+              {likeNum}
+              좋아요!
+            </button>
             <div></div>
-            <button className="button"
-              onClick={()=> navigate(`/post/${posts.userId}/edit`)}
-            >게시물 수정</button>
+            <button
+              className="button"
+              onClick={() => navigate(`/post/${posts.userId}/edit`)}
+            >
+              게시물 수정
+            </button>
             {/* 작성해야 함 */}
-            <button className="button"
-              onClick={()=> deleteButtonClickHandler()}
-            >게시물 삭제</button>
+            <button
+              className="button"
+              onClick={(ev) => deleteButtonClickHandler(ev)}
+            >
+              게시물 삭제
+            </button>
           </div>
         </div>
       </Section1>
 
       <div className="detail_body">
-
         <Section2 albumCover={posts.imageUrl}>
           <p className="created_at">{posts.createdAt}</p>
-          <div className="album_cover">  
+          <div className="album_cover">
             <p className="album_cover_title">
-              <span>{song.songTitle}</span> - <span>{song.singer}</span>
+              <span>{posts.songTitle}</span> - <span>{posts.singer}</span>
             </p>
             <p>{posts.content}</p>
           </div>
         </Section2>
 
         <Section3>
+          {/* 댓글 달기 */}
+          <form
+            onSubmit={(event) => {
+              onClickAddCommentHandler(event);
+            }}
+          >
+            <input
+              onChange={onChange}
+              minLength={5}
+              value={content}
+              name="content"
+              placeholder="댓글 내용"
+            />
+            <button>댓글 작성</button>
+          </form>
+
           <h3 className="comments_title">댓글 목록</h3>
           <div className="comments_box">
             {comments.map((list, i) => {
-              return <Comment list={list} postId={postId} key={i} />;
+              console.log(comments);
+              return <Comment list={list} i={i} postId={postId} key={i} />;
             })}
           </div>
         </Section3>
-
       </div>
     </Wrap>
   );

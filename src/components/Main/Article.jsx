@@ -10,7 +10,7 @@ import { FaRegHeart } from "react-icons/fa";
 
 function Article(props) {
   const navigate = useNavigate();
-  const { list } = props;
+  const { list, userMBTI="" } = props;
 
   const [likeNum, setLikeNum] = useState(list.like);
 
@@ -29,12 +29,13 @@ function Article(props) {
           authorization: `Bearer ${token}`
         }
       }).then(res => {
-
         console.log(`http://gwonyeong.shop/post/${list.postId}`);
         axios.get(`http://gwonyeong.shop/post/${list.postId}`).then(r => {
           console.log(r.data.data.like)
           setLikeNum(r.data.data.like)
         })
+      }).catch(err => {
+        console.log(err)
       })
     };
     postAxiosData();
@@ -42,11 +43,16 @@ function Article(props) {
   
   return (
     <MyArticle
+      profilePicture={list.profilePicture?list.profilePicture:"img/defaultProfile.png"}
       onClick={() => {
         navigate(`/post/${list.postId}`);
       }}
     >
-      <span className="mbti">{list.MBTI}</span>
+      {!userMBTI && 
+        <div className="profile_picture"></div>}
+      {!userMBTI && <span className="mbti">
+        {list.MBTI}
+      </span>}
       <span className="nickname">{list.nickname}</span>
       <span className="title">
         {list.info.songTitle}
@@ -79,6 +85,7 @@ export default Article;
 
 const MyArticle = styled.div`
 
+  min-height: 50px;
   padding: 10px 20px;
   box-shadow: 0 0 1px #555;
 
@@ -97,6 +104,15 @@ const MyArticle = styled.div`
 
   &.wide {
     flex: 1 1 200px;
+  }
+
+  .profile_picture {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-right: 5px;
+
+    background: #ccc url(${(props)=> props.profilePicture}) no-repeat center / contain;
   }
 
   .icon_box {
