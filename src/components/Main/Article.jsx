@@ -29,12 +29,13 @@ function Article(props) {
           authorization: `Bearer ${token}`
         }
       }).then(res => {
-
         console.log(`http://gwonyeong.shop/post/${list.postId}`);
         axios.get(`http://gwonyeong.shop/post/${list.postId}`).then(r => {
           console.log(r.data.data.like)
           setLikeNum(r.data.data.like)
         })
+      }).catch(err => {
+        console.log(err)
       })
     };
     postAxiosData();

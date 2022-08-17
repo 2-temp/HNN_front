@@ -25,32 +25,29 @@ function Login() {
       return null;
     }
 
-    console.log(user);
+    await axios.post('http://gwonyeong.shop/sign/in', user).then(response => {
 
-    await axios.post('http://gwonyeong.shop/sign/in', {
-      email: 'minsun@gmail.com', 
-      password: 'Asd2222!'
-    }).then(response => {
+      console.log(response); // info
 
-    if(response.data.success){
-      let token = response.data.token;
-      // let info = userData;
+      if(response.data.success){
+        let token = response.data.token;
+        // let info = userData;
 
-      alert('로그인에 성공하였습니다.')
+        alert('로그인에 성공하였습니다.')
+        
+        dispatch(signInUser({
+          'token': token, 
+          // "info": info
+        }));
+        navigate("/")
+        
+      } else {
+        let msg = response.msg
       
-      dispatch(signInUser({
-        'token': token, 
-        // "info": info
-      }));
-      navigate("/")
-      
-    } else {
-      let msg = response.msg
-    
-      alert(msg)
-      dispatch(signOutUser())
-    }
-  });
+        alert(msg)
+        dispatch(signOutUser())
+      }
+    });
   
 
   // 예시 코드

@@ -1,5 +1,7 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
 import styled from "styled-components";
 
 import RESPONSE from "../RESPONSE";
@@ -23,46 +25,50 @@ function SignUp(){
 
   // 이메일 확인
   const emailCheckButtonClickHandler = async () => {
+      const emailCheck = {email: email.current.value};
+      await axios.post('http://gwonyeong.shop/sign/checkEmail', emailCheck).then(res => {
+        console.log(res)
+        console.log(res.data)
 
-    // const response = await axios.post(`/sign/checkEmail`, null, {
-    //   headers: { 
-    //     'Content-Type': 'application/json' 
-    //   }
-    // })
-    const response = RESPONSE.EMAIL_CHECK;
-    console.log({email: email.current.value});
+        const {success, msg} = res.data;
+        if(success){
+          setEmailChecked(true);
+        } else {
+          alert(msg);
+        }
+        console.log(emailCheck);
+
+      })
+    // const response = RESPONSE.EMAIL_CHECK;
+    // console.log({email: email.current.value});
     
-    if(email.current.value.indexOf('.') > -1){
+    // if(email.current.value.indexOf('.') > -1){
 
-      if(response.success){
-        alert(response.msg);
-        setEmailChecked(true);
-      } else {
-        alert(response.msg);
-      }
+    //   if(response.success){
+    //     alert(response.msg);
+    //     setEmailChecked(true);
+    //   } else {
+    //     alert(response.msg);
+    //   }
 
-    } else {
-      alert('이메일 형식을 확인해주세요.')
-    }
+    // } else {
+    //   alert('이메일 형식을 확인해주세요.')
+    // }
   };
   
   // 닉네임 확인
   const nicknameCheckButtonClickHandler = async () => {
-    
-    // const response = await axios.post(`/sign/checkNickname`, null, {
-    //   headers: { 
-    //     'Content-Type': 'application/json' 
-    //   }
-    // })
-    const response = RESPONSE.NICKNAME_CHECK;
-    console.log({nickname: nickname.current.value});
-    
-    if(response.success){
-      alert(response.msg);
-      setNicknameChecked(true);
-    } else {
-      alert(response.msg);
-    }
+    const nicknameCheck = {nickname: nickname.current.value};
+    console.log(nicknameCheck);
+    await axios.post('http://gwonyeong.shop/sign/checkNickname', nicknameCheck).then(res => {
+      console.log(res.data)
+      const {success, msg} = res.data;
+      if(success){
+        setNicknameChecked(true);
+      } else {
+        alert(msg);
+      }
+    })
   }
   
   // 회원가입
@@ -83,20 +89,17 @@ function SignUp(){
       return null;
     }
 
-    // const response = await axios.post(`/sign/up`, null, {
-    //   headers: { 
-    //     'Content-Type': 'application/json' 
-    //   }
-    // })
+    await axios.post('http://gwonyeong.shop/sign/up', submitValue).then(res => {
+      const {success, msg} = res.data;
 
-    const response = RESPONSE.SIGNUP;
+      if(success){
+        alert("회원 가입이 완료되었습니다.")
+        navigate("/sign/in")
+      } else {
+        alert(msg);
+      }
 
-    if(response.success){
-      alert(response.msg)
-      navigate("/sign/in")
-    } else {
-      alert(response.msg)
-    }
+    })
   };
 
   return(
@@ -108,30 +111,33 @@ function SignUp(){
         <h3 className="section_title">회원가입</h3>
         <div className="instruction_box">
           <span className={instWrong?"wrong":""}>
-            ✔ 안내문 여기 ex) 몇 자 이상 몇 자 이하 입력해주세요.
+            {instWrong?"❌":"✔"} 비밀번호는 특수문자 포함 6자 이상, 20자 미만 
           </span>
-          <span className={"wrong"}>
-            ❌ 닉네임에 특수문자 사용불가 
+          <span className={instWrong?"wrong":""}>
+            {instWrong?"❌":"✔"} 닉네임은 특수문자 없이 2자 이상, 20자 미만 
           </span>
+          {/* <span className={"wrong"}>
+            {instWrong?"❌":"✔"} 닉네임은 특수문자 없이 
+          </span> */}
         </div>
 
         <div className="input_box">
-                <input 
-                  type="email" 
-                  placeholder="이메일" 
-                  ref={email} 
-                  className={emailChecked?"enable":""}
-                  required
-                  maxLength={30}
-                  />
+          <input 
+            type="email" 
+            placeholder="이메일" 
+            ref={email} 
+            className={emailChecked?"enable":""}
+            required
+            maxLength={30}
+            />
 
-                <button 
-                type="button"
-                onClick={(ev) => emailCheckButtonClickHandler(ev)}
-                className={emailChecked?"enable":""}
-                >
-                  이메일 확인
-                </button>
+          <button 
+          type="button"
+          onClick={(ev) => emailCheckButtonClickHandler(ev)}
+          className={emailChecked?"enable":""}
+          >
+            이메일 확인
+          </button>
         </div>
 
         <input 
@@ -245,7 +251,7 @@ const Contents = styled.div`
   }
 
   input, button, select {
-    font-size: 18px;
+    font-size: 16px;
     padding: 6px 26px;
     box-sizing: border-box;
     border-radius: 20px;
@@ -256,6 +262,11 @@ const Contents = styled.div`
 
     transition: all .2s;
   }
+
+  button {
+    font-size: 14px;
+  }
+
   button:hover {
     background-color: #ccc;
     cursor: pointer;
