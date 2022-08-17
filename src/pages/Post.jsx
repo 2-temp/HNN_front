@@ -8,57 +8,87 @@ import { getCookie } from '../cookie';
 
 
 function Post() {
-// 쿠키 가져옴
-const token = getCookie('token');
+  //쿠키 가져옴
+  const token = getCookie('token');
 
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
-// 값들을 저장시켜 놓을 usestate 생성
-const [inputs, setInputs] = useState({
-content: "",
-imageUrl: "",
-songTitle:"",
-singer:"",
-});
-
-const { content, imageUrl, songTitle, singer } = inputs;
-
-const onChange = (e) => {
-  const { value, name } = e.target; // 우선 e.target 에서 name 과 value 를 추출
-  setInputs({
-    ...inputs, // 기존의 input 객체를 복사한 뒤
-    [name]: value, // name 키를 가진 값을 value 로 설정
+  //값들을 저장시켜 놓을 usestate 생성
+  const [inputs, setInputs] = useState({
+    title: "",
+    content: "",
+    imageUrl: "",
+    songTitle:"",
+    singer:"",
   });
-};
 
-// post 요청
-const onClickEditButtonHandler = async (event) => {
-  event.preventDefault();
-  await axios
-    .post("http://gwonyeong.shop/post", inputs, {
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    })
-    .then((res) => {
-      console.log(res);
-      console.log(res.data);
+  const { title, content, imageUrl, songTitle, singer } = inputs;
+
+  const onChange = (e) => {
+    const { value, name } = e.target; // 우선 e.target 에서 name 과 value 를 추출
+    setInputs({
+      ...inputs, // 기존의 input 객체를 복사한 뒤
+      [name]: value, // name 키를 가진 값을 value 로 설정
     });
-};
+  };
 
-return (
-<Contents>
-<form onSubmit={(event) => { onClickEditButtonHandler(event) }}>
-<h3>글 작성</h3>
+//onClick 함수 생성
+  // const onClickEditButtonHandler = async (event) => {
+  //   event.preventDefault();
+  
+  //   const new_data = { inputs }
 
-<input onChange={onChange} minLength={1} value={songTitle} name='songTitle' placeholder="곡 제목"/>
-<input onChange={onChange} minLength={1} value={singer} name='singer' placeholder="가수명"/>
-<input onChange={onChange} minLength={1} value={imageUrl} name='imageUrl' placeholder="이미지 Url"/>
-<input onChange={onChange} minLength={5} value={content} name='content' placeholder="게시물 내용"/>
-<button>작성하기</button>
-</form>
-</Contents>
-)
+  //   const response = await axios.post("/http://gwonyeong.shop/post", inputs, {
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //       }
+  //   });
+
+  //   console.log(response)
+    
+
+  //   //성공 여부에 따라 나올 메세지
+  //   // const response = RESPONSE.POST_CHECK
+  //   // console.log(response)
+  //   // if(response.success) {
+  //   //   alert(response.msg)
+  //   //   navigate('/')
+  //   // }else {
+  //   //   alert(response.msg)
+  //   //   navigate('/sign/in')
+  //   // }
+  // } 
+
+
+
+
+  //post요청
+    const onClickEditButtonHandler = async (event) => {
+      event.preventDefault();
+      await axios.post('http://gwonyeong.shop/post', inputs, {
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      }).then(res => {
+        console.log(res)
+        console.log(res.data)
+      })
+    };
+
+  return (
+    <Contents>
+      <form onSubmit={(event) => { onClickEditButtonHandler(event) }}>
+        <h3>글 작성</h3>
+
+        <input onChange={onChange} minLength={1} value={singer} name='singer' placeholder="가수명"/>
+        <input onChange={onChange} minLength={1} value={songTitle} name='songTitle' placeholder="곡 제목"/>
+        <input onChange={onChange} minLength={1} value={title} name='title' placeholder="제목"/>
+        <input onChange={onChange} minLength={1} value={imageUrl} name='imageUrl' placeholder="이미지 Url"/>
+        <input onChange={onChange} minLength={5} value={content} name='content' placeholder="게시물 내용"/>
+        <button>작성하기</button>
+      </form>
+    </Contents>
+  )
 }
 
 export default Post;
@@ -70,34 +100,34 @@ padding: 0 20px;
 box-sizing: border-box;
 
 form {
-max-width: 600px;
-margin: 0 auto;
+    max-width: 600px;
+    margin: 0 auto;
 
-display: flex;
-flex-flow: column;
-gap: 16px;
+    display: flex;
+    flex-flow: column;
+    gap: 16px;
 
-text-align: center;
+    text-align: center;
 
-h3 {
-font-size: 28px;
-}
+    h3 {
+      font-size: 28px;
+    }
 
-input, button {
-font-size: 18px;
-padding: 6px 26px;
-box-sizing: border-box;
-border-radius: 20px;
+    input, button {
+      font-size: 18px;
+      padding: 6px 26px;
+      box-sizing: border-box;
+      border-radius: 20px;
 
-border: none;
-box-shadow: 2px 2px 5px #ddd;
+      border: none;
+      box-shadow: 2px 2px 5px #ddd;
 
-transition: all .2s;
-}
-
-button:hover {
-background-color: #ccc;
-cursor: pointer;
-}
-}
+      transition: all .2s;
+    }
+    
+    button:hover {
+      background-color: #ccc;
+      cursor: pointer;
+    }
+  }
 `
