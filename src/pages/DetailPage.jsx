@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { useSelector } from "react-redux/es/exports";
 
 import { getCookie } from '../cookie';
 import styled from "styled-components";
@@ -12,7 +13,8 @@ const DetailPage = (props) => {
   const {postId} = useParams();
   const token = getCookie('token');
   const {userLoggin} = props;
-  
+  const userData = useSelector(state => state.user.info.nickname);
+
   const [post, setPost] = useState([]);
   const [user, setUser] = useState({});
 
@@ -22,7 +24,6 @@ const DetailPage = (props) => {
   const [currComment, setCurrComment] = useState({
     content: "",
   });
-
   // 게시물, 댓글 목록 불러오기
   useEffect(() => {
     const fetchAxiosData = async () => {
@@ -88,7 +89,6 @@ const DetailPage = (props) => {
         setUser(poster.User)
         setPost(poster)
         setComments(axiosData.data.data.commenter)
-        console.log(axiosData.data.data)
         setLikeNum(axiosData.data.data.like)
       } catch (err) {
         console.log(err);
@@ -103,6 +103,10 @@ const DetailPage = (props) => {
   //게시물 삭제
   const deleteButtonClickHandler = async (ev) => {
     ev.preventDefault();
+    if( userData !== user.nickname) {
+      alert('본인의 글이 아닙니다 !')
+      return;
+    }
     try {
       await axios.delete(`http://gwonyeong.shop/post/${postId}`, {
         headers: {
@@ -153,6 +157,14 @@ const likeButtonClickHandler = (event) => {
     postAxiosData();
   }
 
+const editClickHandler = ()=>{
+  if( userData !== user.nickname) {
+  alert('본인의 글이 아닙니다 !')}
+  else {
+  navigate(`/post/${postId}/edit`)
+  }
+  }
+
   return (
     <Wrap>
       <Section1 profilePicture = {user.profilePicture?user.profilePicture:"img/defaultProfile.png"}>
@@ -177,7 +189,7 @@ const likeButtonClickHandler = (event) => {
             <div></div>
             <button
               className={userLoggin?"button":"button display_unable"}
-              onClick={() => navigate(`/post/${postId}/edit`)}
+              onClick={editClickHandler}
             >
               게시물 수정
             </button>

@@ -4,6 +4,7 @@ import axios from "axios";
 import styled from "styled-components";
 import { getCookie } from '../../cookie';
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux/es/hooks/useSelector";
 
 function Comment (props) {
   const navigate = useNavigate();
@@ -11,9 +12,15 @@ function Comment (props) {
   const { list, userLoggin } = props;
 
   const {postId} = useParams();
-
   const userList = list.User
   
+  // 자기 설정 기본값
+  const userData = useSelector(state => state.user.info.userId);
+  console.log(userData)
+
+  const comemtId = list.userId
+  console.log(comemtId)
+
   let dateCreatedAt = new Date(list.createdAt).toLocaleDateString()
   dateCreatedAt = dateCreatedAt === "Invalid Date"?"":dateCreatedAt;
 
@@ -26,6 +33,10 @@ function Comment (props) {
 
   //수정 버튼 
   const editButtonClickHandler = () => {
+    if(userData !==comemtId) {
+      alert('본인의 댓글이 아닙니다!')
+      return;
+    }
     setEditing(true)
     input_content.current.focus();
   }
@@ -55,6 +66,10 @@ function Comment (props) {
   //댓글 삭제 기능
   const deleteButtonClickHandler= async (ev) => {
     ev.preventDefault();
+    if(userData !==comemtId) {
+      alert('본인의 댓글이 아닙니다!')
+      return;
+    }
     try {
       await axios.delete(`http://gwonyeong.shop/comment/${postId}/${list.commentId}`, {
         headers: {
