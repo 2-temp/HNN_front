@@ -7,10 +7,11 @@ import styled from "styled-components";
 
 import Comment from "../components/Detail/Comment";
 
-const DetailPage = () => {
+const DetailPage = (props) => {
   const navigate = useNavigate();
   const {postId} = useParams();
   const token = getCookie('token');
+  const {userLoggin} = props;
   
   const [post, setPost] = useState([]);
   const [user, setUser] = useState({});
@@ -21,38 +22,37 @@ const DetailPage = () => {
   const [currComment, setCurrComment] = useState({
     content: "",
   });
-  
+
   // 게시물, 댓글 목록 불러오기
   useEffect(() => {
     const fetchAxiosData = async () => {
-      try {
-        const axiosData = await axios.get(`http://gwonyeong.shop/post/${postId}`)
+        try {
+          const axiosData = await axios.get(`http://gwonyeong.shop/post/${postId}`)
+          
+          const res = axiosData.data.data;
+          const poster = res.poster;
+          const commenter = res.commenter;
+          const user = res.poster.User;
+          
+          let dateCreatedAt = new Date(poster.createdAt).toLocaleDateString();
         
-        const res = axiosData.data.data;
-        const poster = res.poster;
-        const commenter = res.commenter;
-        const user = res.poster.User;
-        
-        let dateCreatedAt = new Date(poster.createdAt).toLocaleDateString();
-      
-        setUser(user)
-        setPost({
-          content: poster.content,
-          createdAt: dateCreatedAt,
-          imageUrl: poster.imageUrl,
-          singer: poster.singer,
-          songTitle: poster.songTitle
-        })
-        setComments(commenter)
-        setLikeNum(res.like)
-        
-      } catch (err) {
-        console.log(err);
-        // navigate('/error')
-      }
+          setUser(user)
+          setPost({
+            content: poster.content,
+            createdAt: dateCreatedAt,
+            imageUrl: poster.imageUrl,
+            singer: poster.singer,
+            songTitle: poster.songTitle
+          })
+          setComments(commenter)
+          setLikeNum(res.like)
+          
+        } catch (err) {
+          console.log(err);
+          // navigate('/error')
+        }
     };  
     fetchAxiosData();
-
   }, [])
   
   
@@ -120,9 +120,14 @@ const DetailPage = () => {
 
 // 좋아요 버튼 핸들러
 const likeButtonClickHandler = (event) => {
+  if(!userLoggin) {
+    alert('로그인 후 이용해주세요!')
+    return null;
+  }
   const token = getCookie('token')  ;
   
   const postAxiosData = async () => {
+    
     try {
       await axios.patch(`http://gwonyeong.shop/post/like/${postId}`, {postId: postId}, {
         headers: {
@@ -147,7 +152,7 @@ const likeButtonClickHandler = (event) => {
     };
     postAxiosData();
   }
-  
+
   return (
     <Wrap>
       <Section1 profilePicture = {user.profilePicture?user.profilePicture:"img/defaultProfile.png"}>
@@ -171,13 +176,13 @@ const likeButtonClickHandler = (event) => {
             </button>
             <div></div>
             <button
-              className="button"
+              className={userLoggin?"button":"button display_unable"}
               onClick={() => navigate(`/post/${postId}/edit`)}
             >
               게시물 수정
             </button>
             <button
-              className="button"
+              className={userLoggin?"button":"button display_unable"}
               onClick={(ev) => deleteButtonClickHandler(ev)}
             >
               게시물 삭제
@@ -199,6 +204,7 @@ const likeButtonClickHandler = (event) => {
 
         <Section3>
           <form
+            className={userLoggin?"":" display_unable"}
             onSubmit={(event) => {
               onClickAddCommentHandler(event);
             }}
@@ -216,7 +222,7 @@ const likeButtonClickHandler = (event) => {
           <h3 className="comments_title">댓글 목록</h3>
           <div className="comments_box">
             {comments.map((list, i) => {
-              return <Comment list={list} i={i} postId={postId} key={i} />;
+              return <Comment userLoggin={userLoggin} list={list} i={i} postId={postId} key={i} />;
             })}
           </div>
         </Section3>
@@ -249,6 +255,12 @@ const Wrap = styled.div`
       color: #fff;
     border: 1px solid #222;
     }
+  }
+
+  .display_unable {
+    /* display: none; */
+    opacity: 0.3;
+    pointer-events: none;
   }
 
   .created_at {
