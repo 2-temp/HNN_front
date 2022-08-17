@@ -17,6 +17,7 @@ import NotFound from "../pages/NotFound";
 import Error from "../pages/Error";
 import MyPage from "../pages/MyPage";
 import Edit from "../pages/Edit";
+import ImgTest from "../pages/ImgTest";
 
 const Router = () => {
   const dispatch = useDispatch();
@@ -39,9 +40,10 @@ const Router = () => {
           <Route path="/post/:postId" element={<DetailPage />}/>
           <Route path="/sign/in" element={<Login userLoggin={userLoggin} />} />
           <Route path="/sign/up" element={<SignUp />}/>
-          <Route path="/mypage" element={userLoggin ? <MyPage /> : <NotFound />}/>
+          <Route path="/mypage" element={userLoggin ? <MyPage userLoggin={userLoggin} /> : <NotFound />}/>
           <Route path="/mypage/profile/:userId" element={userLoggin ? <Profile /> :<NotFound />}/>
           <Route path="/error" element={<Error />}/>
+          <Route path="/imgtest" element={<ImgTest />}/>
           <Route path="*" element={<NotFound />}/>
 
         </Routes>

@@ -5,10 +5,9 @@ const initialState = {
     loggin: false,
     info: {
         userId: 0,
-        email: "test@email.com",
-        nickname: "닉네임0",
+        nickname: "기본 닉네임",
         MBTI: "MBTI",
-        profilePicture: "기본이미지.png"
+        profilePicture: "img/defaultProfile.png"
     }
 }
 
@@ -24,6 +23,7 @@ export const userSlice = createSlice({
             setCookie("token", token)
             
             state.info = action.payload.info;
+            console.log(state.info);
             state.loggin = true;
         },
         signOutUser: (state, action) => {

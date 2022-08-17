@@ -7,7 +7,6 @@ import { getCookie } from '../cookie';
 import Article from "../components/Main/Article";
 import Pagination from "../components/Main/Pagination";
 import PageSet from "../components/Main/PageSet";
-import RESPONSE from '../RESPONSE'
 
 function Main() {
   const navigate = useNavigate();
@@ -24,12 +23,17 @@ function Main() {
       try {
         const axiosData = await axios.get('http://gwonyeong.shop/post')
         
-        console.log(axiosData);
-        setPosts(axiosData.data.data)
+        // console.log(axiosData.data);
+
+        const result = axiosData.data.data;
+        setPosts(result)
         setLoading(false);
+
       } catch (err) {
+
         console.log(err);
         navigate('/error')
+        
       }
     };
     fetchAxiosData();

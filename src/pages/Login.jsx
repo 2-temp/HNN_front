@@ -26,18 +26,22 @@ function Login() {
     }
 
     await axios.post('http://gwonyeong.shop/sign/in', user).then(response => {
+      let data = response.data;
 
-      console.log(response); // info
-
-      if(response.data.success){
-        let token = response.data.token;
-        // let info = userData;
+      if(data.success){
+        let token = data.token;
+        let info = {
+          userId: data.userId,
+          nickname: data.nickname,
+          MBTI: data.MBTI,
+          profilePicture: data.profilePicture?data.profilePicture:"img/defaultProfile.png",
+        }
 
         alert('로그인에 성공하였습니다.')
         
         dispatch(signInUser({
           'token': token, 
-          // "info": info
+          "info": info
         }));
         navigate("/")
         

@@ -10,7 +10,7 @@ import { FaRegHeart } from "react-icons/fa";
 
 function Article(props) {
   const navigate = useNavigate();
-  const { list } = props;
+  const { list, userMBTI="" } = props;
 
   const [likeNum, setLikeNum] = useState(list.like);
 
@@ -40,6 +40,7 @@ function Article(props) {
     };
     postAxiosData();
   }
+  console.log(userMBTI !== "");
   
   return (
     <MyArticle
@@ -47,7 +48,9 @@ function Article(props) {
         navigate(`/post/${list.postId}`);
       }}
     >
-      <span className="mbti">{list.MBTI}</span>
+      {!userMBTI && <span className="mbti">
+        {list.MBTI}
+      </span>}
       <span className="nickname">{list.nickname}</span>
       <span className="title">
         {list.info.songTitle}
@@ -80,6 +83,7 @@ export default Article;
 
 const MyArticle = styled.div`
 
+  min-height: 50px;
   padding: 10px 20px;
   box-shadow: 0 0 1px #555;
 

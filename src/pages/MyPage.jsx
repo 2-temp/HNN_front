@@ -1,16 +1,18 @@
 import axios from "axios";
-import { useEffect, useState } from "react";import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { getCookie } from '../cookie';
 import styled from "styled-components";
 
 import Article from "../components/Main/Article";
 import Pagination from "../components/Main/Pagination";
 import PageSet from "../components/Main/PageSet";
-import RESPONSE from '../RESPONSE'
 
 function MyPage(){
   const navigate = useNavigate();
   //유저정보
-  let userData = RESPONSE.USER_PROFILE;
+  let userData = useSelector(state => state.user.info);
 
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -19,16 +21,31 @@ function MyPage(){
 
   useEffect(() => {
     setLoading(true)
+    const token = getCookie('token');
 
-    const fetchData = async () => {
-      // const data = await axios.get('/posts')
-      const data = RESPONSE.POSTS;
-      setPosts(data);
-      setLoading(false);
+    const fetchAxiosData = async () => {
+      try {
+        const axiosData = await axios.get(`http://gwonyeong.shop/sign/user/${userData.userId}`, {
+          headers: {
+            authorization: `Bearer ${token}`
+          }
+        })
+        
+        const result = axiosData.data.data;
+        setPosts(result)
+        setLoading(false);
+
+      } catch (err) {
+
+        console.log(err);
+        navigate('/error')
+        
+      }
     };
-    fetchData();
-  })
+    fetchAxiosData();
+  }, [])
 
+  
   const indexLast = page * limit; // 1 * 10 / 2 * 10
   const indexFirst = indexLast - limit; // 10 - 10 / 20 - 10
   const current = (posts) => {
@@ -44,12 +61,11 @@ function MyPage(){
       <div className="profile_box">
         <div className="profile_picture">
           img: {userData.profilePicture}
-
-          {/* 프로필 기본 이미지 */}
-          {/* <img alt="defaultProfile" src="img/defaultProfile.png" /> */}
         </div>
         <div>
           <h3 className="section_title">
+            {userData.MBTI}
+            <strong> {userData.nickname}</strong>
           </h3>
           <div className="button_box"
           onClick={()=>{
@@ -67,18 +83,20 @@ function MyPage(){
       />
 
       <h4>내가 작성한 글</h4>
-      <div className="posts_box">
-        {!loading && current(posts).map((list, i) => {
-          return <Article list={list} key={i} />
-        }) }
-      </div>
+      <div className="scrollY">
+        <div className="posts_box">
+          {!loading && current(posts).map((list, i) => {
+            return <Article list={list} key={i} userMBTI={userData.MBTI} />
+          }) }
+        </div>
 
-      <Pagination 
-        totalPost = {posts.length}
-        limit = {limit}
-        page = {page}
-        setPage = {setPage}
-      />
+        <Pagination 
+          totalPost = {posts.length}
+          limit = {limit}
+          page = {page}
+          setPage = {setPage}
+        />
+      </div>
 
     </MyPagePost>
   )
@@ -88,7 +106,7 @@ export default MyPage;
 
 const MyPagePost = styled.div`
   .posts_box {
-    min-height: calc(100vh - 550px);
+    min-height: calc(100vh - 500px);
   }
 
   .button_box {
@@ -108,21 +126,26 @@ const MyPagePost = styled.div`
   }
 
   .profile_box {
-    margin: 10px 0;
+    padding: 40px 0 10px;
+    background-color: #fff;
 
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 20px;
+
+    /* position: sticky;
+    top: 60px; */
   }
 
   .profile_picture {
-    width: 120px;
-    height: 120px;
+    width: 160px;
+    height: 160px;
     border-radius: 50%;
 
     background-color: #eee;
-    background-image: url(${(props)=> props.profilePicture});
+    background: url(${(props)=> props.profilePicture}) no-repeat center / contain;
+    opacity: 0.5;
   }
   
   .section_title {
@@ -138,14 +161,6 @@ const MyPagePost = styled.div`
     display: flex;
     justify-content: center;
     gap: 20px;
-  }
-
-  .profile_picture {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-
-    background-color: #eee;
   }
 
   .pagination {

@@ -6,7 +6,7 @@ function NotFound(){
   alert('페이지를 찾을 수 없습니다.')
   setTimeout(()=>{
     navigate('/')
-  }, 1500)
+  }, 1000)
 
   return(
       <>
