@@ -19,8 +19,17 @@ function Main() {
 
     const fetchAxiosData = async () => {
       const axiosData = await axios.get('http://gwonyeong.shop/post')
-      // console.log(axiosData.data.data);
       setPosts(axiosData.data.data)
+      console.log(axiosData.data.data);
+
+      const axiosData2 = await axios.get('http://3.34.136.141/post')
+      setPosts(axiosData2.data.data)
+      console.log(axiosData2.data.data);
+
+      const axiosData3 = await axios.get('3.34.136.141/post')
+      setPosts(axiosData3.data.data)
+      console.log(axiosData2.data.data);
+
       setLoading(false);
     };
     fetchAxiosData();
