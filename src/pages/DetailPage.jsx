@@ -97,7 +97,7 @@ const DetailPage = () => {
   const deleteButtonClickHandler = async (ev) => {
     ev.preventDefault();
     try {
-       await axios.delete(`http://gwonyeong.shop/post/${postId}`, ev, {
+    await axios.delete(`http://gwonyeong.shop/post/${postId}`, {
       headers: {
         authorization: `Bearer ${token}`
       }
@@ -109,10 +109,8 @@ const DetailPage = () => {
       console.log(err);
       navigate('/error')
     }
-   
   };
 
- 
   // 좋아요 버튼 핸들러
   const likeButtonClickHandler = (event) => {
     const token = getCookie('token')  ;
