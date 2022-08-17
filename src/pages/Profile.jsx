@@ -1,153 +1,142 @@
 import React from "react";
 import styled from "styled-components";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import axios from "axios";
-import RESPONSE from "../RESPONSE";
+
 import { useNavigate, useParams } from "react-router-dom";
 import { useRef, useEffect } from "react";
 import { getCookie } from '../cookie';
 
 function Profile() {
-    //쿠키 가져옴
-    const token = getCookie('token');
-  const password = useRef("");
-  const newPassword = useRef("");
-  const confirmNewPassword = useRef("");
-  const newNickname = useRef("");
-  const newProfilePicture = useRef("");
-
   const navigate = useNavigate();
-  const { userId } = useParams();
-  const [user, setUser] = useState([]);
-  const [post, setPost] = useState([]);
+  let userData = useSelector(state => state.user.info);
+  const userId = userData.userId;
   
-  //MBTI 받아오기
+  const token = getCookie('token');
+  
+  const [user, setUser] = useState({
+    password: '',
+    newPassword: '',
+    confirmNewPassword: '',
+    newNickname: '',
+  });
+  // newProfilePicture: ''
+  
   const [MBTI1, setMBTI1] = useState();
   const [MBTI2, setMBTI2] = useState();
   const [MBTI3, setMBTI3] = useState();
   const [MBTI4, setMBTI4] = useState();
   
-  //닉네임 체크 
   const [nicknameChecked, setNicknameChecked] = useState(false);
 
   // 닉네임 확인
-  const nicknameCheckButtonClickHandler = async () => {
-    const nicknameCheck = {nickname: newNickname.current.value};
-    console.log(nicknameCheck);
+  const nicknameCheckButtonClickHandler = async (ev) => {
+    ev.preventDefault();
+    const nicknameCheck = {nickname: user.newNickname};
+
     await axios.post('http://gwonyeong.shop/sign/checkNickname', nicknameCheck).then(res => {
+
       console.log(res.data)
       const {success, msg} = res.data;
+
       if(success){
+
         setNicknameChecked(true);
-      } else {
         alert(msg);
+
+      } else {
+
+        alert(msg);
+
       }
     })
   }
 
-  // get요청 받아서 출력
-
-
- //내 정보 불러오기
- 
-  // const fetchAxiosData = async () => {
-  //   try {
-  //     const axiosData = await axios.get(`http://gwonyeong.shop/post/${postId}`)
-      
-  //     // console.log(axiosData.data);
-
-  //     const result = axiosData.data.data;
-  //     setPost(result);
-  //     console.log(post)
-
-  //   } catch (err) {
-
-  //     console.log(err);
-  //     navigate('/error')
-      
-  //   }
-  // };
-  // fetchAxiosData();
-
-
-  
   //수정된 정보 서버 보내기
   
   const profileEditHandler = async (ev) => {
     ev.preventDefault();
     const submitValue = {
-      password: password.current.value,
-      newPassword: newPassword.current.value,
-      confirmNewPassword: confirmNewPassword.current.value,
-      newNickname: newNickname.current.value,
-      newProfilePicture: newProfilePicture.current.value,
-      newMBTI: MBTI1 + MBTI2 + MBTI3 + MBTI4,
-      userId :userId
+      userId: userData.userId, ...user
     }
     console.log(submitValue)
 
-    // if (submitValue.newPassword !== submitValue.confirmNewPassword) {
-    //   alert('비밀번호가 일치하지 않습니다.');
-    //   return;
-    // }
+    if (submitValue.newPassword !== submitValue.confirmNewPassword) {
+      alert('비밀번호가 일치하지 않습니다.');
+      return;
+    }
+    
+    console.log(userId);
+    
     await axios.patch(`http://gwonyeong.shop/sign/user/${userId}`, submitValue ,{
       headers: {
         authorization: `Bearer ${token}`
       }
     }).then(res => {
+      console.log('hi');
       console.log(res)
       console.log(res.data)
-    })
-
-
-  //   const response = RESPONSE.PROFILE_CHECK
-  //   console.log(response)
-  //   if (response.success) {
-  //     alert(response.msg)
-  //     navigate('/mypage')
-  //   } else {
-  //     alert(response.msg)
-  //   }
+    }).catch(err => 
+      console.log(err)
+    )
   }
 
   return (
     <Contents>
           <form onSubmit={(ev) => { profileEditHandler(ev) }}>
-            <h4>제목</h4>
-            {/* <input
-              className='enable' /> */}
+            <h4>정보 수정하기</h4>
+            <p>안녕하세요. {userData.nickname}님</p>
+            
             <input
               type="password"
               placeholder="현재 비밀번호"
-              ref={password}
               required
               minLength={6}
               maxLength={20}
+              onChange={(e)=> 
+                setUser({
+                  ...user, 
+                  password : e.target.value
+                })
+              }
             />
             <input
               type="password"
               placeholder="새로운 비밀번호"
-              ref={newPassword}
-              required
               minLength={6}
               maxLength={20}
+              onChange={(e)=> 
+                setUser({
+                  ...user, 
+                  newPassword : e.target.value
+                })
+              }
             />
             <input
               type="password"
               placeholder="새로운 비밀번호 확인"
-              ref={confirmNewPassword}
-              required
               minLength={6}
               maxLength={20}
+              onChange={(e)=> 
+                setUser({
+                  ...user, 
+                  confirmNewPassword : e.target.value
+                })
+              }
             />
             <input
               type="text"
               placeholder="새로운 닉네임"
               className={nicknameChecked?"enable":""}
-              ref={newNickname}
-              required
               minLength={2}
               maxLength={20}
+              onChange={(e)=> 
+                setUser({
+                  ...user, 
+                  newNickname : e.target.value
+                })
+              }
             />
             <button 
               type="button"
@@ -157,35 +146,40 @@ function Profile() {
                 닉네임 확인
             </button>
             <input
-              type="text"
+              disabled
+              type="file"
               placeholder="새로운 프로필 사진"
-              ref={newProfilePicture}
-              required
               minLength={6}
               maxLength={20}
+              onChange={(e)=> 
+                setUser({
+                  ...user, 
+                  newProfilePicture : e.target.value
+                })
+              }
             />
             <div className="my_mbti_box">
               <div>
                 <span>MBTI </span>
-                <select name="MBTI-1" required
+                <select name="MBTI-1"
                   onChange={(e) => setMBTI1(e.target.value)}>
                   <option value="">선택</option>
                   <option value="I">I</option>
                   <option value="E">E</option>
                 </select>
-                <select name="MBTI-2" required
+                <select name="MBTI-2"
                   onChange={(e) => setMBTI2(e.target.value)}>
                   <option value="">선택</option>
                   <option value="S">S</option>
                   <option value="N">N</option>
                 </select>
-                <select name="MBTI-3" required
+                <select name="MBTI-3"
                   onChange={(e) => setMBTI3(e.target.value)}>
                   <option value="">선택</option>
                   <option value="T">T</option>
                   <option value="F">F</option>
                 </select>
-                <select name="MBTI-4" required
+                <select name="MBTI-4"
                   onChange={(e) => setMBTI4(e.target.value)}>
                   <option value="">선택</option>
                   <option value="J">J</option>

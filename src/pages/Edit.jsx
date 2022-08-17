@@ -9,138 +9,130 @@ import { useParams } from "react-router-dom";
 import { getCookie } from '../cookie';
 
 function Edit() {
-  //쿠키 가져옴
-  const token = getCookie("token");
-
   const navigate = useNavigate();
-
   const { postId } = useParams();
-  const editList = data.POSTS[postId];
-
-  console.log(editList);
-
-  // 변경된 가수, 노래명, 이미지, 게시물 내용을 저장할 곳 선언
-  const [editInputs, setEditInputs] = useState({
-    songTitle: editList.info.songTitle,
-    singer: editList.info.singer,
-    imageUrl: editList.imageUrl,
-    content: editList.content,
+  const [prevPost, setPrevPost] = useState();
+  const [currPost, setCurrPost] = useState({
+    songTitle: prevPost.songTitle,
+    singer: prevPost.singer,
+    imageUrl: prevPost.imageUrl,
+    content: prevPost.content
   });
 
-  const { content, imageUrl, songTitle, singer } = editInputs;
+  const token = getCookie("token");
 
-  const onChange = (e) => {
-    const { value, name } = e.target; // 우선 e.target 에서 name 과 value 를 추출
-    setEditInputs({
-      ...editInputs, // 기존의 input 객체를 복사한 뒤
-      [name]: value, // name 키를 가진 값을 value 로 설정
+  const fetchAxiosData = async () => {
+    try {
+      const axiosData = await axios.get(`http://gwonyeong.shop/post/${postId}`)
+      
+      // console.log(axiosData.data);
+
+      const result = axiosData.data.data;
+      setPrevPost(result)
+
+    } catch (err) {
+
+      console.log(err);
+      navigate('/error')
+      
+    }
+  };
+  fetchAxiosData();
+
+  console.log(prevPost);
+
+  const onChangeHandler = (e) => {
+    setCurrPost({
+      ...currPost,
+      [e.target.name]: e.target.value,
     });
   };
 
-  // edit 핸들러 설정
   const onEditHandler = async (event) => {
     event.preventDefault();
 
+    console.log(currPost, prevPost);
+
     // 채워지지 않은 칸이 있을 경우
-    if (
-      content === "" ||
-      imageUrl === "" ||
-      songTitle === "" ||
-      singer === ""
-    ) {
-      alert("빈칸이 있습니다 !");
-      return;
-    }
-
-    // // 게시물 수정 버그
-    // let count = 0;
-
-    // // 수정될 때마다 count++
-    // for (const x in editInputs) {
-    //   if (editInputs[x] !== editList[x]) {
-    //     console.log(editInputs[x], editList[x]);
-    //     count++;
-    //     alert("변경사항 있음");
-    //   }
+    // if (
+    //   content === "" ||
+    //   imageUrl === "" ||
+    //   songTitle === "" ||
+    //   singer === ""
+    // ) {
+    //   alert("빈칸이 있습니다 !");
+    //   return;
     // }
 
-    // if(count === 0) {
-    //   alert("변경된 사항이 없습니다.");
-    // }
-
-    const new_data = { data, editInputs };
-    console.log(new_data);
-
-    const response = RESPONSE.EDIT_CHECK;
-    console.log(response);
-    if (response.success) {
-      alert(response.msg);
-      navigate(`/post/${postId}`);
-    } else {
-      alert(response.msg);
-      navigate(`/post/${postId}`);
-    }
-
-    // patch 요청
-    const onEditHandler = async (event) => {
-      event.preventDefault();
-      try {
-         await axios
-        .patch("http://gwonyeong.shop/patch", editInputs, {
+    try {
+      await axios
+        .patch(`http://gwonyeong.shop/post/${postId}`, currPost, {
           headers: { authorization: `Bearer ${token}` },
-        }).then((res) => {
+        })
+        .then((res) => {
           console.log(res);
-          console.log(res.data);
+          const { success, msg } = res.data.data;
+
+          if (success) {
+
+            alert(msg);
+            navigate(`/post/${postId}`);
+
+          } else {
+
+            alert(msg);
+
+          }
         });
-      } catch (err) {
-        console.log(err);
-        navigate('/error')
-      } 
-     
-    };
+    } catch (err) {
 
-  return (
-    <Contents>
-      <form
-        onSubmit={(event) => {
-          onEditHandler(event)
-        }}
-      >
-        <h3>글 수정</h3>
+      console.log(err);
+      navigate("/error");
+      
+    }
 
-        <input
-          onChange={onChange}
-          value={imageUrl}
-          name="imageUrl"
-          placeholder="이미지 Url"
-        />
+    return (
+      <Contents>
+        <form
+          onSubmit={(event) => {
+            onEditHandler(event);
+          }}
+        >
+          <h3>글 수정</h3>
 
-        <input
-          onChange={onChange}
-          value={content}
-          name="content"
-          placeholder="게시물 내용"
-        />
+          <input
+            onChange={onChangeHandler}
+            value={prevPost.imageUrl}
+            name="imageUrl"
+            placeholder="이미지 Url"
+          />
 
-        <input
-          onChange={onChange}
-          value={songTitle}
-          name="songTitle"
-          placeholder="노래 이름"
-        />
+          <input
+            onChange={onChangeHandler}
+            value={prevPost.content}
+            name="content"
+            placeholder="게시물 내용"
+          />
 
-        <input
-          onChange={onChange}
-          value={singer}
-          name="singer"
-          placeholder="가수"
-        />
+          <input
+            onChange={onChangeHandler}
+            value={prevPost.songTitle}
+            name="songTitle"
+            placeholder="노래 이름"
+          />
 
-        <button>수정하기</button>
-      </form>
-    </Contents>
-  );
-}
+          <input
+            onChange={onChangeHandler}
+            value={prevPost.singer}
+            name="singer"
+            placeholder="가수"
+          />
+
+          <button>수정하기</button>
+        </form>
+      </Contents>
+    );
+  };
 }
 
 export default Edit;
