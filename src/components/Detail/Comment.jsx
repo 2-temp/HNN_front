@@ -32,16 +32,20 @@ function Comment (props) {
   
 
   //완료
-  const editCompleteButtonClickHandler = () => {
+  const editCompleteButtonClickHandler = async() => {
     setEditing(false)   
     const newComment = {comment: inputCotent};
-
-    // const response = await axios.post(`/comment/:postId/${list.commentId}`, newComment, {
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //     }
-    // });
-    
+     await axios.patch(`http://gwonyeong.shop/comment/${postId}/${list.commentId}`, newComment, {
+      headers: {
+        authorization: `Bearer ${token}`
+      }
+    }).then(res => {
+      console.log('hi');
+      console.log(res)
+      console.log(res.data)
+    }).catch(err => 
+      console.log(err)
+    )
     console.log(newComment)
   }
 
@@ -86,7 +90,7 @@ function Comment (props) {
 
           {editing && <button
             type="button"
-            onClick={()=> editCompleteButtonClickHandler()}
+            onClick={(ev)=> editCompleteButtonClickHandler(ev)}
           >
             완료
           </button>}
