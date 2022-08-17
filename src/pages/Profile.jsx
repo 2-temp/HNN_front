@@ -29,39 +29,24 @@ function Profile() {
   
   const [nicknameChecked, setNicknameChecked] = useState(false);
 
-  //이전 방식 안됌
-  // const [newProfile, setNewProfile] = useState({
-  //   password: '',
-  //   newPassword: '',
-  //   confirmNewPassword: '',
-  //   newNickname: userList.nickname,
-  //   newMBTI:MBTI1,MBTI2,MBTI3,MBTI4, 
-  //   newProfilePicture: '',
-  // });
-
-  // const { password, newPassword, confirmNewPassword, newNickname, newProfilePicture } = newProfile;
-
-
-
-//닉네임 확인
-const nicknameCheckHandler = async () => {
-
-  // const response = await axios.post(`/sign/checkNickname`, null, {
-  //   headers: { 
-  //     'Content-Type': 'application/json' 
-  //   }
-  // })
-  const response = RESPONSE.NICKNAME_CHECK;
-  
-  if(response.success){
-    alert(response.msg);
-    setNicknameChecked(true);
-  } else {
-    alert(response.msg);
+  // 닉네임 확인
+  const nicknameCheckButtonClickHandler = async () => {
+    const nicknameCheck = {nickname: newNickname.current.value};
+    console.log(nicknameCheck);
+    await axios.post('http://gwonyeong.shop/sign/checkNickname', nicknameCheck).then(res => {
+      console.log(res.data)
+      const {success, msg} = res.data;
+      if(success){
+        setNicknameChecked(true);
+      } else {
+        alert(msg);
+      }
+    })
   }
-}
 
+  // get요청 받아서 출력
   //수정된 정보 서버 보내기
+  
   const profileEditHandler = async (ev) => {
     ev.preventDefault();
     const submitValue = {
@@ -137,12 +122,12 @@ const nicknameCheckHandler = async () => {
               maxLength={20}
             />
             <button 
-            type="button"
-            onClick={(ev) => nicknameCheckHandler(ev)}
-            className={nicknameChecked?"enable":""}
-            >
-              닉네임 확인
-          </button>
+              type="button"
+              onClick={(ev) => nicknameCheckButtonClickHandler(ev)}
+              className={nicknameChecked?"enable":""}
+              >
+                닉네임 확인
+            </button>
             <input
               type="text"
               placeholder="새로운 프로필 사진"
@@ -201,32 +186,60 @@ margin-top: 10vh;
 padding: 0 20px;
 box-sizing: border-box;
 
+  form {
+  max-width: 600px;
+  margin: 0 auto;
 
-form {
-    max-width: 600px;
-    margin: 0 auto;
+  display: flex;
+  flex-flow: column;
+  gap: 16px;
+
+  text-align: center;
+
+  h3 {
+    font-size: 28px;
+  }
+    
+  input, button, select {
+    font-size: 16px;
+    padding: 6px 26px;
+    box-sizing: border-box;
+    border-radius: 20px;
+
+    border: none;
+    box-shadow: 0px 0px 5px #ddd, 3px 2px 2px #aaa;
+    border: 1px solid #eee;
+
+    transition: all .2s;
+  }
+
+  button {
+    font-size: 14px;
+  }
+
+  button:hover {
+    background-color: #ccc;
+    cursor: pointer;
+  }
+  
+  select {
+    text-align: center;
+    padding: 6px 5px;
+    margin: 10px 2px 0;
+  }
+ 
+  .my_mbti_box {
+    min-height: 100px;
 
     display: flex;
     flex-flow: column;
-    gap: 16px;
-
-    text-align: center;
-
-    h3 {
-      font-size: 28px;
-    }
+    gap: 10px;
     
-    input, button {
-      font-size: 18px;
-      padding: 6px 26px;
-      box-sizing: border-box;
-      border-radius: 20px;
-
-      border: none;
-      box-shadow: 2px 2px 5px #ddd;
-
-      transition: all .2s;
+    strong {
+      font-size: 30px;
     }
+  }
+
   .sumbit_button,
   .enable {
     pointer-events: none;
