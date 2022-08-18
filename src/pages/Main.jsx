@@ -8,6 +8,8 @@ import Article from "../components/Main/Article";
 import Pagination from "../components/Main/Pagination";
 import PageSet from "../components/Main/PageSet";
 
+import RESPONSE from '../RESPONSE'
+
 function Main(props) {
   const navigate = useNavigate();
   const { userLoggin } = props
@@ -17,26 +19,29 @@ function Main(props) {
   const [page, setPage] = useState(1); 
   const [limit, setLimit] = useState(10);
 
-
   useEffect(() => {
     setLoading(true)
 
-    const fetchAxiosData = async () => {
-      try {
-        const axiosData = await axios.get('http://gwonyeong.shop/post')
+    console.log(RESPONSE.POSTS);
+    setPosts(RESPONSE.POSTS)
+    // setPosts()
+    // setLoading()
+    // const fetchAxiosData = async () => {
+    //   try {
+    //     const axiosData = await axios.get('http://gwonyeong.shop/post')
         
-        const result = axiosData.data.data.Posts;
-        setPosts(result.reverse())
-        setLoading(false);
+    //     const result = axiosData.data.data.Posts;
+    //     setPosts(result.reverse())
+    //     setLoading(false);
 
-      } catch (err) {
+    //   } catch (err) {
 
-        console.log(err);
-        navigate('/error')
+    //     console.log(err);
+    //     navigate('/error')
         
-      }
-    };
-    fetchAxiosData();
+    //   }
+    // };
+    // fetchAxiosData();
 
     const token = getCookie('token');
   }, [])
