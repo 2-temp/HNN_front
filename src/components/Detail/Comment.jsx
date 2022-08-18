@@ -16,10 +16,8 @@ function Comment (props) {
   
   // 자기 설정 기본값
   const userData = useSelector(state => state.user.info.userId);
-  console.log(userData)
 
   const comemtId = list.userId
-  console.log(comemtId)
 
   let dateCreatedAt = new Date(list.createdAt).toLocaleDateString()
   dateCreatedAt = dateCreatedAt === "Invalid Date"?"":dateCreatedAt;

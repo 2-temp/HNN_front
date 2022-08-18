@@ -25,7 +25,7 @@ function Main(props) {
       try {
         const axiosData = await axios.get('http://gwonyeong.shop/post')
         
-        // console.log(axiosData.data);
+        console.log(axiosData.data);
 
         const result = axiosData.data.data;
         setPosts(result.reverse())
