@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
@@ -11,9 +11,13 @@ function Comment (props) {
 
   const { list, userLoggin } = props;
 
+  const [comentList, setComentList] = useState([list])
+  console.log(list)
+
   const {postId} = useParams();
   const userList = list.User
-  
+  const [loading, setLoading] = useState(true);
+
   // 자기 설정 기본값
   const userData = useSelector(state => state.user.info.userId);
 
@@ -24,11 +28,10 @@ function Comment (props) {
 
   const input_content = useRef();
   const [inputCotent, setInputContent] = useState(list.content);
-  const [editing, setEditing] = useState(false);
+  const [editing, setEditing] = useState(true);
   const writeByThisUser = true;
 
   const token = getCookie('token');
-
   //수정 버튼 
   const editButtonClickHandler = () => {
     if(userData !==comemtId) {
@@ -76,6 +79,7 @@ function Comment (props) {
       }).then(res => {
         console.log(res)
         console.log(res.data)
+        setComentList({...list, inputCotent})
       })
     } catch (err) {
       console.log(err);
@@ -100,7 +104,7 @@ function Comment (props) {
           {!editing && <button
             type="button"
             className={userLoggin?"":" display_unable"}
-            onClick={()=> editButtonClickHandler()}
+            onClick={(ev)=> editButtonClickHandler(ev)}
           >
             수정
           </button>}

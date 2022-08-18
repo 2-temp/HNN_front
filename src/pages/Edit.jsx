@@ -71,13 +71,15 @@ function Edit(){
 
     if(isChanged){
       try {
-        axios.patch(`http://gwonyeong.shop/post/${postId}`, currPost, {
+        axios.patch(`http://gwonyeong.shop/post/${postId}`, ({...currPost, postId:Number(postId)}), {
           headers: { authorization: `Bearer ${token}` },
         }).then((res) => {
           console.log(res);
-          const { success, msg } = res.data.data;
+          const { msg } = res.data;
+          const { statusText } = (res.statusText === "OK")
+          console.log(statusText)
       
-          if (success) {
+          if (statusText) {
       
             alert(msg);
             navigate(`/post/${postId}`);
@@ -97,8 +99,6 @@ function Edit(){
     }
 
   }
-
-  console.log(currPost, prevPost);
 
   return (
     <>
