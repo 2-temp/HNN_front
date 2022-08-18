@@ -29,9 +29,15 @@ export const userSlice = createSlice({
         signOutUser: (state, action) => {
             deleteCookie('token');
             state.loggin = false;
+        },
+        updateUser: (state, action) => {
+            state.info = {
+                ...state.info, 
+                profilePicture: action.payload.newPicture
+            }
         }
     }
 })
 
-export const { signInUser, signOutUser, checkUser } = userSlice.actions;
+export const { signInUser, signOutUser, checkUser, updateUser } = userSlice.actions;
 export default userSlice.reducer;

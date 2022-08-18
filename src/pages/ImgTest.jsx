@@ -2,9 +2,6 @@ function ImgTest() {
 
     const dfsdfdsfef = (e) => {
         e.preventDefault();
-
-        const data={}
-
         const formData = new FormData();
         formData.append('userfile', e.file[0])
     
