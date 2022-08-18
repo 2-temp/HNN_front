@@ -29,6 +29,8 @@ function Main(props) {
         setPosts(result.reverse())
         setLoading(false);
 
+        console.log(result);
+
       } catch (err) {
 
         console.log(err);

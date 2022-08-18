@@ -18,8 +18,6 @@ function Profile() {
   const token = getCookie('token');
   
   const fileInput = useRef();
-  const [file, setFile] = useState();
-  // const [, setFile] = useState();
   const [user, setUser] = useState({
     password: '',
     newPassword: '',
@@ -158,7 +156,6 @@ function Profile() {
           ref={fileInput}
           className={imageInputOff ? 'enable' : ""}
           onChange={(e) =>{
-            setFile(fileInput.current.files[0]);
             setImageEdited(true)
           }}
         />

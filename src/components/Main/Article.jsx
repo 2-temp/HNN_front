@@ -18,6 +18,7 @@ function Article(props) {
   dateCreatedAt = dateCreatedAt === "Invalid Date"?"":dateCreatedAt;
 
   const likeButtonClickHandler = (event) => {
+    alert();
     event.stopPropagation();
 
     if(!userLoggin) {
@@ -48,45 +49,60 @@ function Article(props) {
   }
   
   return (
-    <MyArticle
-      profilePicture={list.profilePicture?list.profilePicture:"img/defaultProfile.png"}
-      onClick={() => {
-        navigate(`/post/${list.postId}`);
-      }}
-    >
-      {!userMBTI && 
-        <div className="profile_picture"></div>}
-      {!userMBTI && <span className="mbti">
-        {list.MBTI}
-      </span>}
-      <span className="nickname">{list.nickname}</span>
-      <span className="title">
-        {list.info.songTitle.length>6?list.info.songTitle.slice(0, 6)+"...":list.info.songTitle}
-        /
-        {list.info.singer.length>6?list.info.singer.slice(0, 6)+"...":list.info.singer}
-      </span>
-      <span className="content">
-        {list.content.length>17?list.content.slice(0, 17)+"...":list.content}
-      </span>
-      <ul className="right">
-        <li>
-          {dateCreatedAt}
-        </li>
-        <li 
+    <>
+      <MyArticle
+        profilePicture={list.profilePicture?list.profilePicture:"img/defaultProfile.png"}
+      >
+        <div className="content_area"
+          onClick={() => {
+            navigate(`/post/${list.postId}`);
+          }}
+        >
+          <div className="flex_box">
+            {!userMBTI && 
+              <div className="profile_picture"></div>}
+            {!userMBTI && <span className="mbti">
+              {list.MBTI}
+            </span>}
+          </div>
+          <span className="nickname">{list.nickname}</span>
+          <span className="title">
+            {list.info.songTitle.length>6?list.info.songTitle.slice(0, 6)+"...":list.info.songTitle}
+            ◦
+            {list.info.singer.length>6?list.info.singer.slice(0, 6)+"...":list.info.singer}
+          </span>
+          <span className="content">
+            {list.content.length>15?list.content.slice(0, 15)+"...":list.content}
+          </span>
+          <div 
+            className={userLoggin?"icon_box display_unable":"icon_box display_unable"}
+            onClick={(event)=> { likeButtonClickHandler(event)}}  
+          >
+            {list.like? <FaHeart />:""}
+            {!list.like? <FaRegHeart />:""}
+          </div>
+        </div>
+
+        <ul className="right">
+          <li>
+            {dateCreatedAt}
+          </li>
+          <li 
+            className="like_btn"
+            onClick={(event)=> { likeButtonClickHandler(event)}} 
+          >
+            좋아요 <b>{likeNum}</b>
+          </li>
+        </ul>
+        <div 
           className="like_btn"
           onClick={(event)=> { likeButtonClickHandler(event)}} 
         >
           좋아요 <b>{likeNum}</b>
-        </li>
-      </ul>
-      <div 
-        className={userLoggin?"icon_box display_unable":"icon_box display_unable"}
-        onClick={(event)=> { likeButtonClickHandler(event)}}  
-      >
-        {list.like? <FaHeart />:""}
-        {!list.like? <FaRegHeart />:""}
-      </div>
-    </MyArticle>
+        </div>
+      </MyArticle>
+    
+    </>
   );
 }
 
@@ -94,18 +110,23 @@ export default Article;
 
 const MyArticle = styled.div`
 
-  min-height: 50px;
-  padding: 14px 20px;
-  box-shadow: 0 0 1px #555;
+  position: relative;
 
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
+  .content_area {
+    min-height: 50px;
+    padding: 14px 20px;
+    box-shadow: 0 0 1px #555;
+  
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  
+    cursor: pointer;
+    transition: all 0.2s;
 
-  cursor: pointer;
-  transition: all 0.2s;
+  }
 
   &:hover {
       background-color: #eee;
@@ -123,35 +144,42 @@ const MyArticle = styled.div`
 
     background: #ccc url(${(props)=> props.profilePicture}) no-repeat center / contain;
   }
-
+  
   .like_btn {
     pointer-events: none;
     padding: 2px 6px;
     border-radius: 20px;
     margin-top: -2px;
-
+    
     font-size: 11px;
-
+    
     color: #2d2d2d;
     border: 1px solid #9a9daa;
-
+    
     transition: all .2s;
-
+    
     &:hover {
       background-color: #9a9daa;
       color: #fff;
     }
   }
 
+  div.like_btn {
+    position: absolute;
+    right: 0;
+    /* top: ; */
+    z-index: 999999;
+  }
+  
   .display_unable {
     display: none;
   }
-
+  
   .icon_box {
     width: 20px;
     color: #ff9456;
   }
-
+  
   .right {
     flex: 1 1 auto;
     font-size: 12px;
@@ -161,10 +189,18 @@ const MyArticle = styled.div`
     gap: 10px;
   }
 
+  .flex_box {
+    display: flex;
+    gap: 8px;
+
+    align-items: center;
+  }
+
   .mbti {
     width: 80px;
-    font-size: 1.9em;
+    font-size: 1.7em;
     margin-top: -3px;
+    color: #333;
   }
 
   .nickname {
