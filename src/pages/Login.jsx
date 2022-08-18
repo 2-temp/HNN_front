@@ -48,8 +48,11 @@ function Login() {
       } else {
         let msg = response.msg
       
+        if(msg === undefined){
+          alert('로그인에 실패하였습니다.')
+        }
         alert(msg)
-        dispatch(signOutUser())
+        // dispatch(signOutUser())
       }
     });
     } catch (err) {

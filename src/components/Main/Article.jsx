@@ -61,9 +61,9 @@ function Article(props) {
       </span>}
       <span className="nickname">{list.nickname}</span>
       <span className="title">
-        {list.info.songTitle}
-        -
-        {list.info.singer}
+        {list.info.songTitle.length>6?list.info.songTitle.slice(0, 6)+"...":list.info.songTitle}
+        /
+        {list.info.singer.length>6?list.info.singer.slice(0, 6)+"...":list.info.singer}
       </span>
       <span className="content">
         {list.content.length>17?list.content.slice(0, 17)+"...":list.content}
@@ -162,7 +162,7 @@ const MyArticle = styled.div`
 
   .mbti {
     width: 80px;
-    font-size: 2em;
+    font-size: 1.9em;
     margin-top: -3px;
   }
 
