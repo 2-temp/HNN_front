@@ -49,6 +49,7 @@ function Article(props) {
     <>
       <MyArticle
         profilePicture={list.profilePicture?list.profilePicture:"img/defaultProfile.png"}
+        // imgURL={list.imgURL}
       >
         <div className="content_area"
           onClick={() => {
@@ -99,7 +100,8 @@ function Article(props) {
 export default Article;
 
 const MyArticle = styled.div`
-
+  background: #ccc url(${(props)=> props.imgURL});
+  background-image: linear-gradient(#222, transparent),url(${(props)=> props.imgURL});
   position: relative;
 
   .content_area {
