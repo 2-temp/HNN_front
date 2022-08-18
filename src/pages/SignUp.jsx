@@ -25,7 +25,9 @@ function SignUp(){
 
   // 이메일 확인
   const emailCheckButtonClickHandler = async () => {
-      const emailCheck = {email: email.current.value};
+    const emailCheck = {email: email.current.value};
+
+    if(email.current.value.indexOf('.') > -1){
       await axios.post('http://gwonyeong.shop/sign/checkEmail', emailCheck).then(res => {
         console.log(res)
         console.log(res.data)
@@ -33,27 +35,16 @@ function SignUp(){
         const {success, msg} = res.data;
         if(success){
           setEmailChecked(true);
+          alert(msg);
         } else {
           alert(msg);
         }
         console.log(emailCheck);
 
       })
-    // const response = RESPONSE.EMAIL_CHECK;
-    // console.log({email: email.current.value});
-    
-    // if(email.current.value.indexOf('.') > -1){
-
-    //   if(response.success){
-    //     alert(response.msg);
-    //     setEmailChecked(true);
-    //   } else {
-    //     alert(response.msg);
-    //   }
-
-    // } else {
-    //   alert('이메일 형식을 확인해주세요.')
-    // }
+    } else {
+      alert('이메일 형식을 확인해주세요.')
+    }
   };
   
   // 닉네임 확인
@@ -65,6 +56,7 @@ function SignUp(){
       const {success, msg} = res.data;
       if(success){
         setNicknameChecked(true);
+        alert(msg);
       } else {
         alert(msg);
       }
@@ -79,9 +71,9 @@ function SignUp(){
       email : email.current.value,
       nickname: nickname.current.value,
       password: password.current.value,
-      confirmPw: confirmPw.current.value
+      confirmPw: confirmPw.current.value,
+      MBTI: MBTI1+MBTI2+MBTI3+MBTI4
     }
-    console.log(submitValue.MBTI.length);
 
     if(submitValue.password != submitValue.confirmPw){
       alert('비밀번호가 일치하지 않습니다.');
@@ -90,6 +82,8 @@ function SignUp(){
       alert('올바른 MBTI가 아닙니다.');
       return null;
     }
+
+    console.log(submitValue);
 
     await axios.post('http://gwonyeong.shop/sign/up', submitValue).then(res => {
       const {success, msg} = res.data;
