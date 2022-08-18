@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { useState } from "react";
 import axios from "axios";
-import RESPONSE from "../RESPONSE";
 import { useNavigate } from "react-router-dom";
 import { getCookie } from '../cookie';
 
@@ -13,16 +12,16 @@ function Post() {
 
   const navigate = useNavigate();
 
-  //값들을 저장시켜 놓을 usestate 생성
+  // 값들을 저장시켜 놓을 usestate 생성
   const [inputs, setInputs] = useState({
-    title: "",
+    // title: "",
     content: "",
     imageUrl: "",
     songTitle: "",
     singer: "",
   });
 
-  const { title, content, imageUrl, songTitle, singer } = inputs;
+  const { content, imageUrl, songTitle, singer } = inputs;
 
   const onChange = (e) => {
     const { value, name } = e.target; // 우선 e.target 에서 name 과 value 를 추출
@@ -59,9 +58,6 @@ function Post() {
   //   // }
   // } 
 
-
-
-
   //post요청
     const onClickEditButtonHandler = async (event) => {
       event.preventDefault();
@@ -88,11 +84,12 @@ function Post() {
       <form onSubmit={(event) => { onClickEditButtonHandler(event) }}>
         <h3>글 작성</h3>
 
+        {/* <input onChange={onChange} minLength={1} value={title} name='title' placeholder="제목"/> */}
+        <input onChange={onChange} minLength={1} value={imageUrl} name='imageUrl' placeholder="이미지 URL"/>
+        <input onChange={onChange} minLength={1} value={songTitle} name='songTitle' placeholder="노래명"/>
         <input onChange={onChange} minLength={1} value={singer} name='singer' placeholder="가수명"/>
-        <input onChange={onChange} minLength={1} value={songTitle} name='songTitle' placeholder="곡 제목"/>
-        <input onChange={onChange} minLength={1} value={title} name='title' placeholder="제목"/>
-        <input onChange={onChange} minLength={1} value={imageUrl} name='imageUrl' placeholder="이미지 Url"/>
-        <input onChange={onChange} minLength={5} value={content} name='content' placeholder="게시물 내용"/>
+        <input onChange={onChange} minLength={5} value={content} name='content' placeholder="감상평"/>
+
         <button>작성하기</button>
       </form>
     </Contents>
