@@ -50,7 +50,7 @@ function Login() {
           alert('로그인에 실패하였습니다.')
         }
         alert(msg)
-        // dispatch(signOutUser())
+        dispatch(signOutUser())
       }
     });
     } catch (err) {
@@ -69,7 +69,7 @@ function Login() {
           type="email"
           placeholder="이메일을 입력하세요." 
           required
-          maxLength={20}
+          maxLength={30}
           onChange={(ev)=> {
             setUser({...user, email: ev.target.value})
           }}

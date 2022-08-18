@@ -67,14 +67,15 @@ function Edit(){
       if(currPost[x]!==prevPost[x]) isChanged=true;
     }
 
+    console.log({...currPost, postId:Number(postId)});
+
     if(isChanged){
       try {
-        axios.patch(`http://gwonyeong.shop/post/${postId}`, ({...currPost, postId:Number(postId)}), {
+        axios.patch(`http://gwonyeong.shop/post/${postId}`, ({...currPost, postId: Number(postId)}), {
           headers: { authorization: `Bearer ${token}` },
         }).then((res) => {
           const { msg } = res.data;
           const  statusText = (res.statusText === 'OK')
-      
           if (statusText) {
       
             alert(msg);
@@ -86,10 +87,10 @@ function Edit(){
       
           }
         });
-        } catch (err) {
-          console.log(err);
-          navigate("/error");
-        }
+      } catch (err) {
+        console.log(err);
+        navigate("/error");
+      }
     } else {
       alert('변경된 내용이 없습니다!');
     }
@@ -141,11 +142,11 @@ function Edit(){
           <form
             encType="multipart/form-data"
           >
-            <input
+            {/* <input
               value={currPost.imageUrl}
               name="imageUrl unable"
               placeholder="이미지 URL"
-            />
+            /> */}
             <input
               type="file"
               placeholder="새로운 게시물 사진"

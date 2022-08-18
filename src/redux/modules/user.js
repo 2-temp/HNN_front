@@ -16,7 +16,11 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         checkUser: (state, action) => {
-            if(getCookie('token') !== undefined) state.loggin=true;
+            if(getCookie('token') !== undefined){
+                state.loggin=true;
+            } else {
+                state.loggin=false;
+            }
         },
         signInUser: (state, action) => {
             const token = action.payload.token;

@@ -5,7 +5,9 @@ function Error(){
   const navigate = useNavigate();
 
   alert('에러가 발생했습니다.')
-  navigate('/')
+  setTimeout(()=>{
+    navigate('/')
+  }, 100)
 
   return(
       <Content>

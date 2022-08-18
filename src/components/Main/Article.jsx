@@ -18,7 +18,6 @@ function Article(props) {
   dateCreatedAt = dateCreatedAt === "Invalid Date"?"":dateCreatedAt;
 
   const likeButtonClickHandler = (event) => {
-    alert();
     event.stopPropagation();
 
     if(!userLoggin) {
@@ -72,6 +71,17 @@ function Article(props) {
           <span className="content">
             {list.content.length>15?list.content.slice(0, 15)+"...":list.content}
           </span>
+          <ul className="right">
+            <li>
+              {dateCreatedAt}
+            </li>
+            <li 
+              className="like_btn"
+              onClick={(event)=> { likeButtonClickHandler(event)}} 
+            >
+              좋아요 <b>{likeNum}</b>
+            </li>
+          </ul>
           <div 
             className={userLoggin?"icon_box display_unable":"icon_box display_unable"}
             onClick={(event)=> { likeButtonClickHandler(event)}}  
@@ -79,24 +89,6 @@ function Article(props) {
             {list.like? <FaHeart />:""}
             {!list.like? <FaRegHeart />:""}
           </div>
-        </div>
-
-        <ul className="right">
-          <li>
-            {dateCreatedAt}
-          </li>
-          <li 
-            className="like_btn"
-            onClick={(event)=> { likeButtonClickHandler(event)}} 
-          >
-            좋아요 <b>{likeNum}</b>
-          </li>
-        </ul>
-        <div 
-          className="like_btn"
-          onClick={(event)=> { likeButtonClickHandler(event)}} 
-        >
-          좋아요 <b>{likeNum}</b>
         </div>
       </MyArticle>
     
@@ -123,7 +115,6 @@ const MyArticle = styled.div`
   
     cursor: pointer;
     transition: all 0.2s;
-
   }
 
   &:hover {
@@ -144,7 +135,6 @@ const MyArticle = styled.div`
   }
   
   .like_btn {
-    /* pointer-events: none; */
     padding: 2px 6px;
     border-radius: 20px;
     margin-top: -2px;

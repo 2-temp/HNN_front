@@ -21,7 +21,7 @@ function Header(props){
                             흐느넴
                         </span>
                         <span className="hide_at_md">
-                            흔들리는 음악 속에서 너의 MBTI가 느껴진거야
+                            흔들리는 음악 속에서 너의 MBTI가 느껴진 거야
                         </span>
                     </Link>
                     <div className="right">
