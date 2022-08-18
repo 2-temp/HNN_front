@@ -2,12 +2,23 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
+import { getCookie } from '../../cookie';
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux/es/hooks/useSelector";
 
 function Comment (props) {
   const navigate = useNavigate();
 
-  const { list } = props;
+  const { list, userLoggin } = props;
+
+  const {postId} = useParams();
+  const userList = list.User
   
+  // 자기 설정 기본값
+  const userData = useSelector(state => state.user.info.userId);
+
+  const comemtId = list.userId
+
   let dateCreatedAt = new Date(list.createdAt).toLocaleDateString()
   dateCreatedAt = dateCreatedAt === "Invalid Date"?"":dateCreatedAt;
 
@@ -16,50 +27,79 @@ function Comment (props) {
   const [editing, setEditing] = useState(false);
   const writeByThisUser = true;
 
-  
+  const token = getCookie('token');
+
+  //수정 버튼 
   const editButtonClickHandler = () => {
+    if(userData !==comemtId) {
+      alert('본인의 댓글이 아닙니다!')
+      return;
+    }
     setEditing(true)
     input_content.current.focus();
   }
   
-  const editCompleteButtonClickHandler = () => {
+  //완료
+  const editCompleteButtonClickHandler = async() => {
     setEditing(false)   
-    const newComment = {comment: inputCotent};
-
-    // const response = await axios.post(`/comment/:postId/${list.commentId}`, newComment, {
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //     }
-    // });
-    
+    const newComment = {
+      content: inputCotent,
+      commentId: list.commentId
+    };
+    console.log(newComment);
+      await axios.patch(`http://gwonyeong.shop/comment/${postId}/${list.commentId}`, newComment, {
+      headers: {
+        authorization: `Bearer ${token}`
+      }
+    }).then(res => {
+      // console.log('hi');
+      console.log(res)
+      // console.log(res.data)
+    }).catch(err => 
+      console.log(err)
+    )
     console.log(newComment)
   }
 
-   // 댓글 삭제 버튼 이벤트 핸들러
-   const deleteButtonClickHandler = (commentId) => {
-    if (window.confirm('댓글을 정말 삭제할까요?')) {
-      alert('삭제 완료!');
-      axios.delete(`/post/${commentId}`); 
-      console.log('delete commentId');
-      navigate('/post/:postId');
-    };
+  //댓글 삭제 기능
+  const deleteButtonClickHandler= async (ev) => {
+    ev.preventDefault();
+    if(userData !==comemtId) {
+      alert('본인의 댓글이 아닙니다!')
+      return;
+    }
+    try {
+      await axios.delete(`http://gwonyeong.shop/comment/${postId}/${list.commentId}`, {
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      }).then(res => {
+        console.log(res)
+        console.log(res.data)
+      })
+    } catch (err) {
+      console.log(err);
+      navigate('/error')
+    }
   };
+
 
   return (
     <MyArticle>
       <div className="comment_head">
         <div className="left_box">
           <div className="profilePicture">
-            {list.MBTI}
+            {userList.MBTI}
           </div>
           <span className="nickname">
-            {list.nickname}
+            {userList.nickname}
           </span>
         </div>
         <div className="right_box">
 
           {!editing && <button
             type="button"
+            className={userLoggin?"":" display_unable"}
             onClick={()=> editButtonClickHandler()}
           >
             수정
@@ -67,7 +107,8 @@ function Comment (props) {
 
           {editing && <button
             type="button"
-            onClick={()=> editCompleteButtonClickHandler()}
+            className={userLoggin?"":" display_unable"}
+            onClick={(ev)=> editCompleteButtonClickHandler(ev)}
           >
             완료
           </button>}
@@ -75,7 +116,8 @@ function Comment (props) {
           
           <button
             type="button"
-            onClick={()=> deleteButtonClickHandler()}
+            className={userLoggin?"":" display_unable"}
+            onClick={(ev)=> deleteButtonClickHandler(ev)}
           >
             삭제
           </button>

@@ -10,7 +10,7 @@ import { FaRegHeart } from "react-icons/fa";
 
 function Article(props) {
   const navigate = useNavigate();
-  const { list, userMBTI="" } = props;
+  const { list, userMBTI="", userLoggin } = props;
 
   const [likeNum, setLikeNum] = useState(list.like);
 
@@ -19,6 +19,12 @@ function Article(props) {
 
   const likeButtonClickHandler = (event) => {
     event.stopPropagation();
+
+    if(!userLoggin) {
+      alert('로그인 후 이용해주세요!')
+      navigate('/sign/in')
+      return null;
+    }
 
     const token = getCookie('token');
     
@@ -66,12 +72,15 @@ function Article(props) {
         <li>
           {dateCreatedAt}
         </li>
-        <li>
+        <li 
+          className="like_btn"
+          onClick={(event)=> { likeButtonClickHandler(event)}} 
+        >
           좋아요 <b>{likeNum}</b>
         </li>
       </ul>
       <div 
-        className="icon_box"
+        className={userLoggin?"icon_box display_unable":"icon_box display_unable"}
         onClick={(event)=> { likeButtonClickHandler(event)}}  
       >
         {list.like? <FaHeart />:""}
@@ -86,7 +95,7 @@ export default Article;
 const MyArticle = styled.div`
 
   min-height: 50px;
-  padding: 10px 20px;
+  padding: 14px 20px;
   box-shadow: 0 0 1px #555;
 
   display: flex;
@@ -115,9 +124,31 @@ const MyArticle = styled.div`
     background: #ccc url(${(props)=> props.profilePicture}) no-repeat center / contain;
   }
 
+  .like_btn {
+    padding: 2px 6px;
+    border-radius: 20px;
+    margin-top: -2px;
+
+    font-size: 11px;
+
+    color: #2d2d2d;
+    border: 1px solid #9a9daa;
+
+    transition: all .2s;
+
+    &:hover {
+      background-color: #9a9daa;
+      color: #fff;
+    }
+  }
+
+  .display_unable {
+    display: none;
+  }
+
   .icon_box {
     width: 20px;
-    color: #e16720;
+    color: #ff9456;
   }
 
   .right {

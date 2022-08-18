@@ -9,10 +9,11 @@ import Article from "../components/Main/Article";
 import Pagination from "../components/Main/Pagination";
 import PageSet from "../components/Main/PageSet";
 
-function MyPage(){
+function MyPage(props){
   const navigate = useNavigate();
   //유저정보
   let userData = useSelector(state => state.user.info);
+  let {userLoggin} = props
 
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -23,7 +24,13 @@ function MyPage(){
     setLoading(true)
     const token = getCookie('token');
     
+    if(userData.MBTI==='MBTI'){
+      alert('다시 로그인 해주세요');
+      navigate('/sign/in')
+    }
+
     const fetchAxiosData = async () => {
+
       try {
         const axiosData = await axios.get(`http://gwonyeong.shop/sign/user/${userData.userId}`, {
           headers: {
@@ -32,7 +39,7 @@ function MyPage(){
         })
         
         const result = axiosData.data.data;
-        setPosts(result)
+        setPosts(result.reverse())
         setLoading(false);
         
       } catch (err) {
@@ -67,7 +74,7 @@ function MyPage(){
             </h3>
             <div className="button_box"
             onClick={()=>{
-              navigate(`/mypage/profile/0`);
+              navigate(`/mypage/profile/${userData.userId}`);
             }}>
               정보 수정하기
             </div>

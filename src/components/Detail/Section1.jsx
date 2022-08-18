@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useSelector } from "react-redux/es/exports";
-
 import axios from "axios";
-import { getCookie } from "../cookie";
-
+import { useSelector } from "react-redux/es/exports";
 import styled from "styled-components";
+import { getCookie } from "../../cookie";
 
-import Comment from "../components/Detail/Comment";
-
-const DetailPage = (props) => {
+const Section1 = (props) => {
   const navigate = useNavigate();
   const { postId } = useParams();
   const token = getCookie("token");
@@ -19,11 +15,7 @@ const DetailPage = (props) => {
   const [post, setPost] = useState([]);
   const [user, setUser] = useState({});
   const [comments, setComments] = useState([]);
-  const [currComment, setCurrComment] = useState({
-    content: "",
-  });
-
-  const [likeNum, setLikeNum] = useState();;
+  const [likeNum, setLikeNum] = useState();
 
   // 게시물, 댓글 목록 불러오기
   useEffect(() => {
@@ -132,36 +124,14 @@ const DetailPage = (props) => {
     }
   };
 
-  // POST 요청
-  const onClickAddCommentHandler = async (event) => {
-    event.preventDefault();
-
-    try {
-      await axios
-        .post(`http://gwonyeong.shop/comment/${postId}`, currComment, {
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
-        })
-        .then((res) => {
-          console.log(res);
-          console.log(res.data);
-        });
-    } catch (err) {
-      console.log(err);
-      navigate("/error");
-    }
-  };
-
   return (
-    <Wrap>
-      <StSection1
+    <StSection1
       // 유저 프로필 사진 불러오기
       profilePicture={
         user.profilePicture ? user.profilePicture : "img/defaultProfile.png"
-      } >
-
-<div className="head_info">
+      } 
+    >
+      <div className="head_info">
         {/* 유저 정보 불러오기 */}
         <div className="profile_box">
           <div className="profile_picture">
@@ -198,100 +168,11 @@ const DetailPage = (props) => {
           </button>
         </div>
       </div>
-      </StSection1>
-
-      <div className="detail_body">
-        <StSection2 albumCover={post.imageUrl}>
-          <p className="created_at">{post.createdAt}</p>
-          <div className="album_cover">
-            <p className="album_cover_title">
-              <span>{post.songTitle}</span> - <span>{post.singer}</span>
-            </p>
-            <p>{post.content}</p>
-          </div>
-        </StSection2>
-        
-        <StSection3>
-        <form
-          className={userLoggin ? "" : " display_unable"}
-          onSubmit={(event) => {
-            onClickAddCommentHandler(event);
-          }}
-        >
-          <input
-            onChange={(e) => setCurrComment({ content: e.target.value })}
-            minLength={5}
-            value={currComment.content}
-            name="content"
-            placeholder="댓글 내용"
-          />
-          <button>댓글 작성</button>
-        </form>
-
-        <h3 className="comments_title">댓글 목록</h3>
-        <div className="comments_box">
-          {comments.map((list, i) => {
-            return (
-              <Comment
-                userLoggin={userLoggin}
-                list={list}
-                i={i}
-                postId={postId}
-                key={i}
-              />
-            );
-          })}
-        </div>
-      </StSection3>
-      </div>
-    </Wrap>
+    </StSection1>
   );
-  };
+};
 
-export default DetailPage;
-
-const Wrap = styled.div`
-  min-height: calc(100vh - 70px);
-
-  button {
-    all: unset;
-    padding: 5px 10px;
-    margin-left: 5px;
-    margin-bottom: 8px;
-    margin-top: 2px;
-    
-    border: 1px solid #aaa;
-    border-radius: 20px;
-
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.2s;
-
-    &:hover {
-      background-color: #222;
-      color: #fff;
-    border: 1px solid #222;
-    }
-  }
-
-  .display_unable {
-    /* display: none; */
-    opacity: 0.3;
-    pointer-events: none;
-  }
-
-  .created_at {
-    font-size: 12px;
-    text-align: right;
-    padding-right: 10px;
-  }
-
-  .detail_body {
-    display: flex;
-    align-items: flex-start;
-  }
-`
-
+export default Section1;
 
 const StSection1 = styled.div`
   margin-top: 1em;
@@ -335,51 +216,3 @@ const StSection1 = styled.div`
     align-items: center;
   }
 `;
-
-const StSection2 = styled.div`
-  flex: 1 1 auto;
-  height: calc(100vh - 250px);
-  margin-top: 40px;
-
-  background-color: #eee;
-  position: relative;
-  
-  .album_cover {
-    text-align: center;
-    font-weight: 900;
-    font-size: 20px;
-    
-    position: absolute;
-    top: 45%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    color: #444;
-
-  }
-  .album_cover_title {
-    font-size: 1.2em;
-    padding-bottom: 16px;
-    border-bottom: 2px dotted #aaa;
-    color: #222;
-  }
-`
-
-const StSection3 = styled.div`
-  flex: 0 0 300px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  
-  font-size: .7em;
-
-  .comments_title {
-    width: 100%;
-    line-height: 40px;
-
-    margin: 0;
-    padding: 0 10px;
-    box-sizing: border-box;
-  }
-`

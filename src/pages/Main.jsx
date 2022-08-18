@@ -8,13 +8,15 @@ import Article from "../components/Main/Article";
 import Pagination from "../components/Main/Pagination";
 import PageSet from "../components/Main/PageSet";
 
-function Main() {
+function Main(props) {
   const navigate = useNavigate();
+  const { userLoggin } = props
 
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1); 
   const [limit, setLimit] = useState(10);
+
 
   useEffect(() => {
     setLoading(true)
@@ -23,10 +25,10 @@ function Main() {
       try {
         const axiosData = await axios.get('http://gwonyeong.shop/post')
         
-        // console.log(axiosData.data);
+        console.log(axiosData.data);
 
         const result = axiosData.data.data;
-        setPosts(result)
+        setPosts(result.reverse())
         setLoading(false);
 
       } catch (err) {
@@ -74,7 +76,11 @@ function Main() {
       
       <div className="posts_box">
         {!loading && current(posts).map((list, i) => {
-          return <Article list={list} key={i} /> 
+          return <Article 
+            list={list} 
+            key={i}
+            userLoggin={userLoggin} 
+          /> 
         })}
       </div>
 

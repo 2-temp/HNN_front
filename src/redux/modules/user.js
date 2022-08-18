@@ -4,7 +4,7 @@ import { setCookie, getCookie, deleteCookie } from '../../cookie';
 const initialState = {
     loggin: false,
     info: {
-        userId: 0,
+        userId: 999,
         nickname: "기본 닉네임",
         MBTI: "MBTI",
         profilePicture: "img/defaultProfile.png"
@@ -23,7 +23,7 @@ export const userSlice = createSlice({
             setCookie("token", token)
             
             state.info = action.payload.info;
-            console.log(state.info);
+            // console.log(state.info);
             state.loggin = true;
         },
         signOutUser: (state, action) => {
