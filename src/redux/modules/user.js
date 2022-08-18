@@ -30,14 +30,18 @@ export const userSlice = createSlice({
             deleteCookie('token');
             state.loggin = false;
         },
-        updateUser: (state, action) => {
-            state.info = {
-                ...state.info, 
-                profilePicture: action.payload.newPicture
-            }
+        updateUserImage: (state, action) => {
+            console.log(action.payload);
+
+            state.info.profilePicture = action.payload;
+        },
+        updateUserInfo: (state, action) => {
+            console.log(action.payload);
+
+            state.info = {...state.info, ...action.payload};
         }
     }
 })
 
-export const { signInUser, signOutUser, checkUser, updateUser } = userSlice.actions;
+export const { signInUser, signOutUser, checkUser, updateUserImage, updateUserInfo } = userSlice.actions;
 export default userSlice.reducer;

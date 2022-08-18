@@ -7,7 +7,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRef, useEffect } from "react";
 import { getCookie } from '../cookie';
-import { updateUser } from '../redux/modules/user'
+import { updateUserImage, updateUserInfo } from '../redux/modules/user'
 
 function Profile() {
   const dispatch = useDispatch();
@@ -19,6 +19,7 @@ function Profile() {
   
   const fileInput = useRef();
   const [file, setFile] = useState();
+  // const [, setFile] = useState();
   const [user, setUser] = useState({
     password: '',
     newPassword: '',
@@ -33,6 +34,7 @@ function Profile() {
   
   const [nicknameChecked, setNicknameChecked] = useState(false);
   const [imageEdited, setImageEdited] = useState(false);
+  const [imageInputOff, setImageInputOff] = useState(false);
 
   // 닉네임 확인
   const nicknameCheckButtonClickHandler = async (ev) => {
@@ -68,14 +70,21 @@ function Profile() {
         authorization: `Bearer ${token}`
       }
     }).then(res => {
-      console.log(res)
-      console.log(res.data)
+      const data = res.data;
+      const newPicture = data.profilePicture;
 
+      if(data.success){
+        alert('프로필 이미지가 수정되었습니다.')
 
-
-
-    }).catch(err => 
-      console.log(err)
+        dispatch(updateUserImage(newPicture))
+        setImageInputOff(true)
+      } else {
+        alert('이미지가 수정되지 않았습니다.')
+      }
+    }).catch(err => {
+        console.log(err)
+        navigate('/error')
+      }
     )
   }
 
@@ -91,7 +100,7 @@ function Profile() {
     let newMBTI=MBTI1+MBTI2+MBTI3+MBTI4;
 
     //예외처리
-    if(newMBTI.length === 0){
+    if(newMBTI.length === 0 || newMBTI === ""){
       submitValue = newSubmitValue
     } else {
       submitValue = {
@@ -114,9 +123,21 @@ function Profile() {
       }
     }).then(res => {
       console.log(res)
-      console.log(res.data)
+      const data = res.data;
+      if(data.success){
+        const newInfo = {
+          nickname: res.data.nickname,
+          MBTI: res.data.MBTI
+        }
+        dispatch(updateUserInfo(newInfo));
+      }
+      alert(`${res.data.nickname}님의 정보가 수정되었습니다.`)
+      navigate('/mypage')
+
     }).catch(err => 
+
       console.log(err)
+
     )
   }
 
@@ -135,6 +156,7 @@ function Profile() {
           minLength={6}
           maxLength={20}
           ref={fileInput}
+          className={imageInputOff ? 'enable' : ""}
           onChange={(e) =>{
             setFile(fileInput.current.files[0]);
             setImageEdited(true)
@@ -143,7 +165,7 @@ function Profile() {
         <button
           type="button"
           onClick={(ev) => imageEditButtonClickHandler(ev)}
-          className={imageEdited ? "" : "enable"}
+          className={!imageEdited || imageInputOff ? "enable" : ""}
         >
           프로필 이미지 수정
         </button>
