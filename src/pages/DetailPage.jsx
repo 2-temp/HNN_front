@@ -26,36 +26,36 @@ const DetailPage = (props) => {
   const [likeNum, setLikeNum] = useState();;
 
   // 게시물, 댓글 목록 불러오기
+  const fetchAxiosData = async () => {
+    try {
+      const axiosData = await axios.get(
+        `http://gwonyeong.shop/post/${postId}`
+      );
+
+      const res = axiosData.data.data;
+      const poster = res.poster;
+      const commenter = res.commenter;
+      const user = res.poster.User;
+
+      let dateCreatedAt = new Date(poster.createdAt).toLocaleDateString();
+
+      setUser(user);
+      setPost({
+      //   title: poster.title,
+        content: poster.content,
+        createdAt: dateCreatedAt,
+        imageUrl: poster.imageUrl,
+        singer: poster.singer,
+        songTitle: poster.songTitle,
+      });
+      setComments(commenter);
+      setLikeNum(res.like);
+    } catch (err) {
+      console.log(err);
+      // navigate('/error')
+    }
+  };
   useEffect(() => {
-    const fetchAxiosData = async () => {
-      try {
-        const axiosData = await axios.get(
-          `http://gwonyeong.shop/post/${postId}`
-        );
-
-        const res = axiosData.data.data;
-        const poster = res.poster;
-        const commenter = res.commenter;
-        const user = res.poster.User;
-
-        let dateCreatedAt = new Date(poster.createdAt).toLocaleDateString();
-
-        setUser(user);
-        setPost({
-        //   title: poster.title,
-          content: poster.content,
-          createdAt: dateCreatedAt,
-          imageUrl: poster.imageUrl,
-          singer: poster.singer,
-          songTitle: poster.songTitle,
-        });
-        setComments(commenter);
-        setLikeNum(res.like);
-      } catch (err) {
-        console.log(err);
-        // navigate('/error')
-      }
-    };
     fetchAxiosData();
   }, []);
 
@@ -81,8 +81,6 @@ const DetailPage = (props) => {
             }
           )
           .then((res) => {
-            console.log(res);
-            console.log(res.data);
             if (res.data.msg === "좋아요!") {
               alert("좋아요를 눌렀습니다!");
               setLikeNum(likeNum + 1);
@@ -144,8 +142,11 @@ const DetailPage = (props) => {
           },
         })
         .then((res) => {
-          console.log(res);
-          console.log(res.data);
+          if(res.statusText === "OK"){
+            fetchAxiosData();
+          } else {
+            alert('댓글 작성이 실패했습니다.')
+          }
         });
     } catch (err) {
       console.log(err);
@@ -201,7 +202,7 @@ const DetailPage = (props) => {
       </StSection1>
 
       <div className="detail_body">
-        <StSection2 albumCover={post.imageUrl}>
+        <StSection2 picture={post.imageUrl}>
           <p className="created_at">{post.createdAt}</p>
           <div className="album_cover">
             <p className="album_cover_title">
@@ -213,7 +214,7 @@ const DetailPage = (props) => {
         
         <StSection3>
         <form
-          className={userLoggin ? "" : " display_unable"}
+          className={userLoggin ? "submit_form" : "submit_form display_unable"}
           onSubmit={(event) => {
             onClickAddCommentHandler(event);
           }}
@@ -233,6 +234,9 @@ const DetailPage = (props) => {
           {comments.map((list, i) => {
             return (
               <Comment
+                fetchAxiosData = {fetchAxiosData}
+                setComments = { setComments }
+                comments = { comments }
                 userLoggin={userLoggin}
                 list={list}
                 i={i}
@@ -253,7 +257,7 @@ export default DetailPage;
 const Wrap = styled.div`
   min-height: calc(100vh - 70px);
 
-  button {
+  button, input {
     all: unset;
     padding: 5px 10px;
     margin-left: 5px;
@@ -270,7 +274,25 @@ const Wrap = styled.div`
     &:hover {
       background-color: #222;
       color: #fff;
-    border: 1px solid #222;
+      border: 1px solid #222;
+    }
+  }
+
+  .submit_form {
+    width: 90%;
+    padding-right: 1px;
+    
+    display: flex;
+    justify-content: flex-end;
+    input {
+      text-align: left;
+      flex: 1 1 auto;
+    }
+    button {
+      background-color: #222;
+      border: none;
+      color: #fff;
+      font-weight: 800;
     }
   }
 
@@ -281,14 +303,28 @@ const Wrap = styled.div`
   }
 
   .created_at {
-    font-size: 12px;
-    text-align: right;
-    padding-right: 10px;
+    font-size: 14px;
+    text-align: left;
+    padding-left: 20px;
+    font-weight: 700;
+
+    color: #fff;
   }
 
   .detail_body {
     display: flex;
     align-items: flex-start;
+  }
+
+  input {
+    &:hover {
+      background-color: #fff;
+      color: #222;
+      border: 1px solid #222;
+    }
+    &:focus {
+      background-color: #e1fffa;
+    }
   }
 `
 
@@ -333,37 +369,47 @@ const StSection1 = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+
+    font-size: 22px;
+    font-weight: 800;
   }
+
 `;
 
 const StSection2 = styled.div`
   flex: 1 1 auto;
   height: calc(100vh - 250px);
   margin-top: 40px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 
-  background-color: #eee;
+  background: #eee url(${(props)=> props.picture}) no-repeat center / cover;
   position: relative;
   
   .album_cover {
+    min-width: 70%;
     text-align: center;
     font-weight: 900;
     font-size: 20px;
+    padding: 10px 20px;
+    border-radius: 5px;
     
     position: absolute;
     top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
 
-    color: #444;
-
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.2);
+    background-image: linear-gradient(transparent, rgba(0, 0, 0, 0.4));
   }
   .album_cover_title {
     font-size: 1.2em;
     padding-bottom: 16px;
     border-bottom: 2px dotted #aaa;
-    color: #222;
+    color: #fff;
   }
-`
+  `
 
 const StSection3 = styled.div`
   flex: 0 0 300px;
@@ -379,7 +425,7 @@ const StSection3 = styled.div`
     line-height: 40px;
 
     margin: 0;
-    padding: 0 10px;
+    padding: 0 20px;
     box-sizing: border-box;
   }
 `

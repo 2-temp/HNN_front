@@ -145,11 +145,13 @@ const MyPagePost = styled.div`
   }
 
   .profile_picture {
-    width: 160px;
-    height: 160px;
+    width: 140px;
+    height: 140px;
     border-radius: 50%;
+  }
 
-    background: #eee url(${(props)=> props.profilePicture}) no-repeat center / contain;
+  .profile_picture {
+    background: #eee url(${(props)=> props.profilePicture}) no-repeat center / contain !important;
   }
   
   .section_title {
@@ -180,5 +182,10 @@ const MyPagePost = styled.div`
     button.active {
       border-bottom: 2px solid #222;
     }
+  }
+
+  .like_btn {
+    border: none;
+    pointer-events: none;
   }
 `

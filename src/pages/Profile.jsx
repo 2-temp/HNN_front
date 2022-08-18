@@ -1,14 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
 import { useNavigate, useParams } from "react-router-dom";
 import { useRef, useEffect } from "react";
 import { getCookie } from '../cookie';
+import { updateUserImage, updateUserInfo } from '../redux/modules/user'
 
 function Profile() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   let userData = useSelector(state => state.user.info);
   const userId = userData.userId;
@@ -16,7 +18,6 @@ function Profile() {
   const token = getCookie('token');
   
   const fileInput = useRef();
-  const [file, setFile] = useState();
   const [user, setUser] = useState({
     password: '',
     newPassword: '',
@@ -30,6 +31,8 @@ function Profile() {
   const [MBTI4, setMBTI4] = useState();
   
   const [nicknameChecked, setNicknameChecked] = useState(false);
+  const [imageEdited, setImageEdited] = useState(false);
+  const [imageInputOff, setImageInputOff] = useState(false);
 
   // 닉네임 확인
   const nicknameCheckButtonClickHandler = async (ev) => {
@@ -38,7 +41,6 @@ function Profile() {
 
     await axios.post('http://gwonyeong.shop/sign/checkNickname', nicknameCheck).then(res => {
 
-      console.log(res.data)
       const {success, msg} = res.data;
 
       if(success){
@@ -54,16 +56,54 @@ function Profile() {
     })
   }
 
+  //프로필 이미지 수정
+  const imageEditButtonClickHandler = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('userfile', fileInput.current.files[0])
+
+    await axios.patch(`http://gwonyeong.shop/sign/user/profilePic/${userId}`, formData, {
+      headers: {
+        authorization: `Bearer ${token}`
+      }
+    }).then(res => {
+      const data = res.data;
+      const newPicture = data.profilePicture;
+
+      if(data.success){
+        alert('프로필 이미지가 수정되었습니다.')
+
+        dispatch(updateUserImage(newPicture))
+        setImageInputOff(true)
+      } else {
+        alert('이미지가 수정되지 않았습니다.')
+      }
+    }).catch(err => {
+        console.log(err)
+        navigate('/error')
+      }
+    )
+  }
+
   //수정된 정보 서버 보내기
-  
   const profileEditHandler = async (ev) => {
     ev.preventDefault();
     
-    const submitValue = {
+    let submitValue;
+    let newSubmitValue = {
       userId: userData.userId, 
       ...user,
-      newMBTI: MBTI1+MBTI2+MBTI3+MBTI4,
-      userfile: fileInput.current.files[0]
+    }
+    let newMBTI=MBTI1+MBTI2+MBTI3+MBTI4;
+
+    //예외처리
+    if(newMBTI.length === 0 || newMBTI === ""){
+      submitValue = newSubmitValue
+    } else {
+      submitValue = {
+        ...newSubmitValue, 
+        newMBTI: newMBTI
+      }
     }
 
     if (submitValue.newPassword !== submitValue.confirmNewPassword) {
@@ -74,31 +114,64 @@ function Profile() {
       return null;
     }
     
-    console.log(submitValue);
-
     await axios.patch(`http://gwonyeong.shop/sign/user/${userId}`, submitValue ,{
       headers: {
         authorization: `Bearer ${token}`
       }
     }).then(res => {
-      console.log(res)
-      console.log(res.data)
+      const data = res.data;
+      if(data.success){
+        const newInfo = {
+          nickname: res.data.nickname,
+          MBTI: res.data.MBTI
+        }
+        dispatch(updateUserInfo(newInfo));
+      }
+      alert(`${res.data.nickname}님의 정보가 수정되었습니다.`)
+      navigate('/mypage')
+
     }).catch(err => 
+
       console.log(err)
+
     )
   }
 
   return (
     <Contents>
+      <h4>정보 수정하기</h4>
+      <p>안녕하세요. {userData.nickname}님</p>
+      
       <form
         encType="multipart/form-data"
+      >
+        <input
+          type="file"
+          placeholder="새로운 프로필 사진"
+          name="userfile"
+          minLength={6}
+          maxLength={20}
+          ref={fileInput}
+          className={imageInputOff ? 'enable' : ""}
+          onChange={(e) =>{
+            setImageEdited(true)
+          }}
+        />
+        <button
+          type="button"
+          onClick={(ev) => imageEditButtonClickHandler(ev)}
+          className={!imageEdited || imageInputOff ? "enable" : ""}
+        >
+          프로필 이미지 수정
+        </button>
+      </form>
+
+      <form
         onSubmit={(ev) => {
           profileEditHandler(ev);
         }}
       >
-        <h4>정보 수정하기</h4>
-        <p>안녕하세요. {userData.nickname}님</p>
-
+        
         <input
           type="password"
           placeholder="현재 비밀번호"
@@ -156,17 +229,6 @@ function Profile() {
         >
           닉네임 확인
         </button>
-        <input
-          type="file"
-          placeholder="새로운 프로필 사진"
-          name="userfile"
-          minLength={6}
-          maxLength={20}
-          ref={fileInput}
-          onChange={(e) =>{
-            setFile(fileInput.current.files[0])
-          }}
-        />
         <div className="my_mbti_box">
           <div>
             <span>MBTI </span>
@@ -210,9 +272,15 @@ margin-top: 10vh;
 padding: 0 20px;
 box-sizing: border-box;
 
+text-align: center;
+
+  h4 {
+    font-size: 22px;
+  }
+
   form {
   max-width: 600px;
-  margin: 0 auto;
+  margin: 15px auto;
 
   display: flex;
   flex-flow: column;

@@ -4,8 +4,6 @@ import axios from "axios";
 
 import styled from "styled-components";
 
-import RESPONSE from "../RESPONSE";
-
 function SignUp(){
   const navigate = useNavigate();
   
@@ -29,9 +27,7 @@ function SignUp(){
 
     if(email.current.value.indexOf('.') > -1){
       await axios.post('http://gwonyeong.shop/sign/checkEmail', emailCheck).then(res => {
-        console.log(res)
-        console.log(res.data)
-
+  
         const {success, msg} = res.data;
         if(success){
           setEmailChecked(true);
@@ -39,7 +35,6 @@ function SignUp(){
         } else {
           alert(msg);
         }
-        console.log(emailCheck);
 
       })
     } else {
@@ -50,9 +45,7 @@ function SignUp(){
   // 닉네임 확인
   const nicknameCheckButtonClickHandler = async () => {
     const nicknameCheck = {nickname: nickname.current.value};
-    console.log(nicknameCheck);
     await axios.post('http://gwonyeong.shop/sign/checkNickname', nicknameCheck).then(res => {
-      console.log(res.data)
       const {success, msg} = res.data;
       if(success){
         setNicknameChecked(true);
@@ -82,9 +75,7 @@ function SignUp(){
       alert('올바른 MBTI가 아닙니다.');
       return null;
     }
-
-    console.log(submitValue);
-
+    
     await axios.post('http://gwonyeong.shop/sign/up', submitValue).then(res => {
       const {success, msg} = res.data;
 
@@ -111,10 +102,13 @@ function SignUp(){
         <h3 className="section_title">회원가입</h3>
         <div className="instruction_box">
           <span className={instWrong?"wrong":""}>
-            {instWrong?"❌":"✔"} 비밀번호는 특수문자 포함 6자 이상, 20자 미만 
+            {instWrong?"❌":"✔"} 비밀번호는 영문자, 숫자 및 특수문자 포함 6자 이상, 20자 미만 
           </span>
           <span className={instWrong?"wrong":""}>
             {instWrong?"❌":"✔"} 닉네임은 특수문자 없이 2자 이상, 20자 미만 
+          </span>
+          <span className="wrong">
+            ❌ 비밀번호는 이메일 아이디를 포함할 수 없습니다.
           </span>
           {/* <span className={"wrong"}>
             {instWrong?"❌":"✔"} 닉네임은 특수문자 없이 
@@ -282,11 +276,13 @@ const Contents = styled.div`
     display: flex;
     flex-flow: column;
     gap: 5px;
-    font-size: 10px;
-    color: green;
-
+    font-size: 13px;
+    font-weight: 700;
+    color: #1db61d;
+    margin-bottom: 2px;
+    
     .wrong {
-      color: red;
+      color: #ed7070;
     }
   }
 

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
@@ -8,63 +8,62 @@ import { useSelector } from "react-redux/es/hooks/useSelector";
 
 function Comment (props) {
   const navigate = useNavigate();
-
-  const { list, userLoggin } = props;
-
-  const {postId} = useParams();
-  const userList = list.User
+  const { postId } = useParams();
+  const { list, userLoggin, setComments, comments, fetchAxiosData } = props;
   
-  // 자기 설정 기본값
-  const userData = useSelector(state => state.user.info.userId);
+  const input_content = useRef();
+  const [inputContent, setInputContent] = useState(list.content);
+  const [editing, setEditing] = useState(false);
 
-  const comemtId = list.userId
+  const token = getCookie('token');
+  const userInfo = list.User 
+  const currUserId = useSelector(state => state.user.info.userId);
+  const commentUserId = list.userId
 
   let dateCreatedAt = new Date(list.createdAt).toLocaleDateString()
   dateCreatedAt = dateCreatedAt === "Invalid Date"?"":dateCreatedAt;
 
-  const input_content = useRef();
-  const [inputCotent, setInputContent] = useState(list.content);
-  const [editing, setEditing] = useState(false);
-  const writeByThisUser = true;
-
-  const token = getCookie('token');
-
-  //수정 버튼 
+  //댓글 수정 활성화
   const editButtonClickHandler = () => {
-    if(userData !==comemtId) {
+    if(currUserId !== commentUserId) {
       alert('본인의 댓글이 아닙니다!')
-      return;
+    return;
     }
     setEditing(true)
     input_content.current.focus();
   }
   
-  //완료
+  //댓글 수정 완료
   const editCompleteButtonClickHandler = async() => {
     setEditing(false)   
     const newComment = {
-      content: inputCotent,
+      content: inputContent,
       commentId: list.commentId
     };
-    console.log(newComment);
-      await axios.patch(`http://gwonyeong.shop/comment/${postId}/${list.commentId}`, newComment, {
+    await axios.patch(`http://gwonyeong.shop/comment/${postId}/${list.commentId}`, newComment, {
       headers: {
         authorization: `Bearer ${token}`
       }
     }).then(res => {
-      // console.log('hi');
-      console.log(res)
-      // console.log(res.data)
+      if(res.statusText === "OK"){
+
+        alert('댓글 작성이 완료되었습니다.')
+
+      } else {
+        alert('댓글 작성이 실패하였습니다.')
+      }
     }).catch(err => 
-      console.log(err)
+      {
+        console.log(err)
+        navigate('/error')
+      }
     )
-    console.log(newComment)
   }
 
   //댓글 삭제 기능
   const deleteButtonClickHandler= async (ev) => {
     ev.preventDefault();
-    if(userData !==comemtId) {
+    if(currUserId !== commentUserId) {
       alert('본인의 댓글이 아닙니다!')
       return;
     }
@@ -74,8 +73,7 @@ function Comment (props) {
           authorization: `Bearer ${token}`
         }
       }).then(res => {
-        console.log(res)
-        console.log(res.data)
+        fetchAxiosData();
       })
     } catch (err) {
       console.log(err);
@@ -89,10 +87,10 @@ function Comment (props) {
       <div className="comment_head">
         <div className="left_box">
           <div className="profilePicture">
-            {userList.MBTI}
+            {userInfo.MBTI}
           </div>
           <span className="nickname">
-            {userList.nickname}
+            {userInfo.nickname}
           </span>
         </div>
         <div className="right_box">
@@ -100,7 +98,7 @@ function Comment (props) {
           {!editing && <button
             type="button"
             className={userLoggin?"":" display_unable"}
-            onClick={()=> editButtonClickHandler()}
+            onClick={(ev)=> editButtonClickHandler(ev)}
           >
             수정
           </button>}
@@ -127,7 +125,7 @@ function Comment (props) {
       <p className="content">
         <textarea 
           className={editing ? "input_content" : "input_content unable"} 
-          value={inputCotent}
+          value={inputContent}
           onChange={(e)=> setInputContent(e.target.value) }
           ref={input_content}
         />

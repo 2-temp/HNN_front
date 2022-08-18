@@ -16,7 +16,11 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         checkUser: (state, action) => {
-            if(getCookie('token') !== undefined) state.loggin=true;
+            if(getCookie('token') !== undefined){
+                state.loggin=true;
+            } else {
+                state.loggin=false;
+            }
         },
         signInUser: (state, action) => {
             const token = action.payload.token;
@@ -29,9 +33,18 @@ export const userSlice = createSlice({
         signOutUser: (state, action) => {
             deleteCookie('token');
             state.loggin = false;
+        },
+        updateUserImage: (state, action) => {
+            console.log(action.payload);
+
+            state.info.profilePicture = action.payload;
+        },
+        updateUserInfo: (state, action) => {
+
+            state.info = {...state.info, ...action.payload};
         }
     }
 })
 
-export const { signInUser, signOutUser, checkUser } = userSlice.actions;
+export const { signInUser, signOutUser, checkUser, updateUserImage, updateUserInfo } = userSlice.actions;
 export default userSlice.reducer;

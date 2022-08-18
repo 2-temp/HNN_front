@@ -6,8 +6,6 @@ import axios from "axios";
 import styled from "styled-components";
 import { signInUser, signOutUser } from '../redux/modules/user'
 
-import RESPONSE from "../RESPONSE";
-
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -48,6 +46,9 @@ function Login() {
       } else {
         let msg = response.msg
       
+        if(msg === undefined){
+          alert('로그인에 실패하였습니다.')
+        }
         alert(msg)
         dispatch(signOutUser())
       }
@@ -56,25 +57,7 @@ function Login() {
       console.log(err);
       navigate('/error')
     }
-   
   
-
-  // 예시 코드
-  // const fetchAxiosData = async () => {
-  //   await axios.post('http://gwonyeong.shop/sign/in', {
-  //     email: 'minsun@gmail.com', 
-  //     password: 'Asd2222!'
-  //   }).then(response => {
-  //     if(response.data.success){
-  //       console.log('로그인 성공')
-  //       console.log(response);
-  //       console.log(response.cookie);
-  //     } else {
-  //       console.log(response.data.msg)
-  //     }
-  //   })
-  // };
-  // fetchAxiosData();
   }
 
   return (
@@ -86,7 +69,7 @@ function Login() {
           type="email"
           placeholder="이메일을 입력하세요." 
           required
-          maxLength={20}
+          maxLength={30}
           onChange={(ev)=> {
             setUser({...user, email: ev.target.value})
           }}
