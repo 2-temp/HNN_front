@@ -20,8 +20,8 @@ function Login() {
   const submitHandler = async (ev) => {
     ev.preventDefault();
     try {
-       if(user.email.indexOf('.') < 0){
-      alert('이메일 형식을 확인하세요.')
+      if(user.email.indexOf('.') < 0){
+        alert('이메일 형식을 확인하세요.')
       return null;
     }
 

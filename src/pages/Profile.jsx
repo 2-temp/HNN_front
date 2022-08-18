@@ -19,7 +19,8 @@ function Profile() {
     password: '',
     newPassword: '',
     confirmNewPassword: '',
-    newNickname: ''
+    newNickname: '',
+    userfile: ''
   });
   // newProfilePicture: ''
   
@@ -57,12 +58,27 @@ function Profile() {
   
   const profileEditHandler = async (ev) => {
     ev.preventDefault();
+    
     const submitValue = {
       userId: userData.userId, 
       ...user,
       newMBTI: MBTI1+MBTI2+MBTI3+MBTI4
     }
+    
+    const formData = new FormData();
+    
+    formData.append('userId', userData.userId)
+    formData.append('userfile', ev.file[0])
+    formData.append('newMBTI', MBTI1+MBTI2+MBTI3+MBTI4)
+    
+    console.log(submitValue);
+    console.log('hi');
 
+    formData.append('password', user.password)
+    formData.append('newPassword', user.newPassword)
+    formData.append('confirmNewPassword', user.confirmNewPassword)
+    formData.append('newNickname', user.newNickname)
+    
     if (submitValue.newPassword !== submitValue.confirmNewPassword) {
       alert('비밀번호가 일치하지 않습니다.');
       return;
@@ -87,6 +103,7 @@ function Profile() {
   return (
     <Contents>
       <form
+        encType="multipart/form-data"
         onSubmit={(ev) => {
           profileEditHandler(ev);
         }}
@@ -152,7 +169,6 @@ function Profile() {
           닉네임 확인
         </button>
         <input
-          disabled
           type="file"
           placeholder="새로운 프로필 사진"
           minLength={6}
