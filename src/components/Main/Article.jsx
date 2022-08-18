@@ -125,6 +125,7 @@ const MyArticle = styled.div`
   }
 
   .like_btn {
+    pointer-events: none;
     padding: 2px 6px;
     border-radius: 20px;
     margin-top: -2px;

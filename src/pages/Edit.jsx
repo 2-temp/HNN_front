@@ -76,7 +76,7 @@ function Edit(){
         }).then((res) => {
           console.log(res);
           const { msg } = res.data;
-          const { statusText } = (res.statusText === "OK")
+          const  statusText = (res.statusText === 'OK')
           console.log(statusText)
       
           if (statusText) {
