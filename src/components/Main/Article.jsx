@@ -22,6 +22,7 @@ function Article(props) {
 
     if(!userLoggin) {
       alert('로그인 후 이용해주세요!')
+      navigate('/sign/in')
       return null;
     }
 

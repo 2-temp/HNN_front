@@ -102,55 +102,57 @@ function Edit(){
 
   return (
     <>
-      {loaded && <Contents>
-        <form
-          onSubmit={(event) => {
-            onEditHandler(event);
-          }}
-        >
-          <h3>글 수정</h3>
+      {loaded && (
+        <Contents>
+          <form
+            onSubmit={(event) => {
+              onEditHandler(event);
+            }}
+          >
+            <h3>글 수정</h3>
 
-          <button
-          type="button"
-          onClick={()=>{
-            fetchAxiosData()
-          }}>
-            이전 글 불러오기
-          </button>
+            <button
+              type="button"
+              onClick={() => {
+                fetchAxiosData();
+              }}
+            >
+              이전 글 불러오기
+            </button>
 
-          <input
-            onChange={onChangeHandler}
-            value={currPost.imageUrl}
-            name="imageUrl"
-            placeholder="이미지 Url"
-          />
+            <input
+              onChange={onChangeHandler}
+              value={currPost.imageUrl}
+              name="imageUrl"
+              placeholder="이미지 URL"
+            />
 
-          <input
-            onChange={onChangeHandler}
-            value={currPost.content}
-            name="content"
-            placeholder="게시물 내용"
-          />
+            <input
+              onChange={onChangeHandler}
+              value={currPost.songTitle}
+              name="songTitle"
+              placeholder="노래명"
+            />
 
-          <input
-            onChange={onChangeHandler}
-            value={currPost.songTitle}
-            name="songTitle"
-            placeholder="노래 이름"
-          />
+            <input
+              onChange={onChangeHandler}
+              value={currPost.singer}
+              name="singer"
+              placeholder="가수명"
+            />
 
-          <input
-            onChange={onChangeHandler}
-            value={currPost.singer}
-            name="singer"
-            placeholder="가수"
-          />
+            <input
+              onChange={onChangeHandler}
+              value={currPost.content}
+              name="content"
+              placeholder="감상평"
+            />
 
-          <button>수정하기</button>
-        </form>
-      </Contents>}
+            <button>수정하기</button>
+          </form>
+        </Contents>
+      )}
     </>
-    
   );
 }
 
