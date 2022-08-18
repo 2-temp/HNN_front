@@ -36,9 +36,7 @@ function Article(props) {
           authorization: `Bearer ${token}`
         }
       }).then(res => {
-        console.log(`http://gwonyeong.shop/post/${list.postId}`);
         axios.get(`http://gwonyeong.shop/post/${list.postId}`).then(r => {
-          console.log(r.data.data.like)
           setLikeNum(r.data.data.like)
         })
       }).catch(err => {
@@ -146,7 +144,7 @@ const MyArticle = styled.div`
   }
   
   .like_btn {
-    pointer-events: none;
+    /* pointer-events: none; */
     padding: 2px 6px;
     border-radius: 20px;
     margin-top: -2px;

@@ -5,16 +5,9 @@ function ImgTest() {
         const formData = new FormData();
         formData.append('userfile', e.file[0])
     
-        console.log(formData);
-    
-
-        // console.log(e.target.title.value);
         const file = e.target.image.files;
         const title = e.target.title.value;
-        // console.log({file:file, title:title})
         
-        
-        console.log(formData);
     }
 
   return (

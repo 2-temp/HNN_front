@@ -40,7 +40,6 @@ function Comment (props) {
       content: inputContent,
       commentId: list.commentId
     };
-    console.log(newComment);
     await axios.patch(`http://gwonyeong.shop/comment/${postId}/${list.commentId}`, newComment, {
       headers: {
         authorization: `Bearer ${token}`
@@ -49,7 +48,6 @@ function Comment (props) {
       if(res.statusText === "OK"){
 
         alert('댓글 작성이 완료되었습니다.')
-        console.log(res.data)
 
       } else {
         alert('댓글 작성이 실패하였습니다.')

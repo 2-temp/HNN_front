@@ -29,8 +29,6 @@ function Main(props) {
         setPosts(result.reverse())
         setLoading(false);
 
-        console.log(result);
-
       } catch (err) {
 
         console.log(err);
@@ -41,19 +39,6 @@ function Main(props) {
     fetchAxiosData();
 
     const token = getCookie('token');
-    
-    // post요청
-    // const postAxiosData = async () => {
-    //   await axios.post('http://gwonyeong.shop/post', "요청할 값", {
-    //     headers: {
-    //       authorization: `Bearer ${token}`
-    //     }
-    //   }).then(res => {
-    //     console.log(res)
-    //     console.log(res.data)
-    //   })
-    // };
-    // postAxiosData();
   }, [])
 
   const indexLast = page * limit; // 1 * 10 / 2 * 10

@@ -4,8 +4,6 @@ import axios from "axios";
 
 import styled from "styled-components";
 
-import RESPONSE from "../RESPONSE";
-
 function SignUp(){
   const navigate = useNavigate();
   
@@ -29,9 +27,7 @@ function SignUp(){
 
     if(email.current.value.indexOf('.') > -1){
       await axios.post('http://gwonyeong.shop/sign/checkEmail', emailCheck).then(res => {
-        console.log(res)
-        console.log(res.data)
-
+  
         const {success, msg} = res.data;
         if(success){
           setEmailChecked(true);
@@ -39,7 +35,6 @@ function SignUp(){
         } else {
           alert(msg);
         }
-        console.log(emailCheck);
 
       })
     } else {
@@ -50,9 +45,7 @@ function SignUp(){
   // 닉네임 확인
   const nicknameCheckButtonClickHandler = async () => {
     const nicknameCheck = {nickname: nickname.current.value};
-    console.log(nicknameCheck);
     await axios.post('http://gwonyeong.shop/sign/checkNickname', nicknameCheck).then(res => {
-      console.log(res.data)
       const {success, msg} = res.data;
       if(success){
         setNicknameChecked(true);
@@ -82,9 +75,7 @@ function SignUp(){
       alert('올바른 MBTI가 아닙니다.');
       return null;
     }
-
-    console.log(submitValue);
-
+    
     await axios.post('http://gwonyeong.shop/sign/up', submitValue).then(res => {
       const {success, msg} = res.data;
 

@@ -35,16 +35,12 @@ function Post() {
   const onClickPostButtonHandler = async (event) => {
     event.preventDefault();
 
-    console.log(inputs);
-
     try{
       await axios.post('http://gwonyeong.shop/post', inputs, {
       headers: {
         authorization: `Bearer ${token}`
       }
     }).then(res => {
-      console.log(res)
-      console.log(res.data)
       navigate('/')
     })
     } catch(err) {
@@ -65,7 +61,6 @@ function Post() {
       }
     }).then(res => {
       const data = res.data;
-      console.log(data);
       
       if(data.success){
         alert('이미지가 등록되었습니다.')

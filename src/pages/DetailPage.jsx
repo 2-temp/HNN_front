@@ -81,8 +81,6 @@ const DetailPage = (props) => {
             }
           )
           .then((res) => {
-            console.log(res);
-            console.log(res.data);
             if (res.data.msg === "좋아요!") {
               alert("좋아요를 눌렀습니다!");
               setLikeNum(likeNum + 1);

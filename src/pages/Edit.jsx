@@ -28,7 +28,6 @@ function Edit(){
 
   const fetchAxiosData = async () => {
     try {
-      console.log(postId);
       const axiosData = await axios.get(`http://gwonyeong.shop/post/${postId}`)
       
       const result = axiosData.data.data.poster;
@@ -62,7 +61,6 @@ function Edit(){
   
   const onEditHandler = (event) => {
     event.preventDefault();
-    console.log(currPost, prevPost);
 
     let isChanged=false;
     for (const x in currPost){
@@ -74,10 +72,8 @@ function Edit(){
         axios.patch(`http://gwonyeong.shop/post/${postId}`, ({...currPost, postId:Number(postId)}), {
           headers: { authorization: `Bearer ${token}` },
         }).then((res) => {
-          console.log(res);
           const { msg } = res.data;
           const  statusText = (res.statusText === 'OK')
-          console.log(statusText)
       
           if (statusText) {
       
@@ -111,7 +107,6 @@ function Edit(){
       }
     }).then(res => {
       const data = res.data;
-      console.log(data);
 
       if(data.success){
 

@@ -27,9 +27,7 @@ const Section3 = (props) => {
             authorization: `Bearer ${token}`,
           },
         })
-        .then((res) => {
-          console.log(res);
-          console.log(res.data);
+        .then((res) => {;
         });
     } catch (err) {
       console.log(err);

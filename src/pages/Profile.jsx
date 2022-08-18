@@ -41,7 +41,6 @@ function Profile() {
 
     await axios.post('http://gwonyeong.shop/sign/checkNickname', nicknameCheck).then(res => {
 
-      console.log(res.data)
       const {success, msg} = res.data;
 
       if(success){
@@ -120,7 +119,6 @@ function Profile() {
         authorization: `Bearer ${token}`
       }
     }).then(res => {
-      console.log(res)
       const data = res.data;
       if(data.success){
         const newInfo = {

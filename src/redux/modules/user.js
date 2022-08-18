@@ -36,7 +36,6 @@ export const userSlice = createSlice({
             state.info.profilePicture = action.payload;
         },
         updateUserInfo: (state, action) => {
-            console.log(action.payload);
 
             state.info = {...state.info, ...action.payload};
         }
