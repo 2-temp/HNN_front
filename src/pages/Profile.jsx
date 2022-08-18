@@ -15,14 +15,14 @@ function Profile() {
   
   const token = getCookie('token');
   
+  const fileInput = useRef();
+  const [file, setFile] = useState();
   const [user, setUser] = useState({
     password: '',
     newPassword: '',
     confirmNewPassword: '',
-    newNickname: '',
-    userfile: ''
+    newNickname: ''
   });
-  // newProfilePicture: ''
   
   const [MBTI1, setMBTI1] = useState();
   const [MBTI2, setMBTI2] = useState();
@@ -62,23 +62,10 @@ function Profile() {
     const submitValue = {
       userId: userData.userId, 
       ...user,
-      newMBTI: MBTI1+MBTI2+MBTI3+MBTI4
+      newMBTI: MBTI1+MBTI2+MBTI3+MBTI4,
+      userfile: fileInput.current.files[0]
     }
-    
-    const formData = new FormData();
-    
-    formData.append('userId', userData.userId)
-    formData.append('userfile', ev.file[0])
-    formData.append('newMBTI', MBTI1+MBTI2+MBTI3+MBTI4)
-    
-    console.log(submitValue);
-    console.log('hi');
 
-    formData.append('password', user.password)
-    formData.append('newPassword', user.newPassword)
-    formData.append('confirmNewPassword', user.confirmNewPassword)
-    formData.append('newNickname', user.newNickname)
-    
     if (submitValue.newPassword !== submitValue.confirmNewPassword) {
       alert('비밀번호가 일치하지 않습니다.');
       return;
@@ -87,12 +74,13 @@ function Profile() {
       return null;
     }
     
+    console.log(submitValue);
+
     await axios.patch(`http://gwonyeong.shop/sign/user/${userId}`, submitValue ,{
       headers: {
         authorization: `Bearer ${token}`
       }
     }).then(res => {
-      console.log('hi');
       console.log(res)
       console.log(res.data)
     }).catch(err => 
@@ -171,14 +159,13 @@ function Profile() {
         <input
           type="file"
           placeholder="새로운 프로필 사진"
+          name="userfile"
           minLength={6}
           maxLength={20}
-          onChange={(e) =>
-            setUser({
-              ...user,
-              newProfilePicture: e.target.value,
-            })
-          }
+          ref={fileInput}
+          onChange={(e) =>{
+            setFile(fileInput.current.files[0])
+          }}
         />
         <div className="my_mbti_box">
           <div>

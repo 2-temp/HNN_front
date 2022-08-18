@@ -28,7 +28,7 @@ function Main(props) {
         // console.log(axiosData.data);
 
         const result = axiosData.data.data;
-        setPosts(result)
+        setPosts(result.reverse())
         setLoading(false);
 
       } catch (err) {

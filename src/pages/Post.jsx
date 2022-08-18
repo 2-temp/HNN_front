@@ -15,9 +15,10 @@ function Post() {
     imageUrl: "",
     songTitle: "",
     singer: "",
+    title: ''
   });
 
-  const { content, imageUrl, songTitle, singer } = inputs;
+  const { content, imageUrl, songTitle, singer, title } = inputs;
 
   const onChange = (e) => {
     const { value, name } = e.target;
@@ -51,10 +52,12 @@ function Post() {
 
   return (
     <Contents>
-      <form onSubmit={(event) => { onClickPostButtonHandler(event) }}>
+      <form
+        onSubmit={(event) => { onClickPostButtonHandler(event) }}
+      >
         <h3>글 작성</h3>
 
-        {/* <input onChange={onChange} minLength={1} value={title} name='title' placeholder="제목"/> */}
+        <input onChange={onChange} minLength={1} value={title} name='title' placeholder="제목"/>
         <input onChange={onChange} minLength={1} value={imageUrl} name='imageUrl' placeholder="이미지 URL"/>
         <input onChange={onChange} minLength={1} value={songTitle} name='songTitle' placeholder="노래명"/>
         <input onChange={onChange} minLength={1} value={singer} name='singer' placeholder="가수명"/>

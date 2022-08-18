@@ -23,7 +23,7 @@ export const userSlice = createSlice({
             setCookie("token", token)
             
             state.info = action.payload.info;
-            console.log(state.info);
+            // console.log(state.info);
             state.loggin = true;
         },
         signOutUser: (state, action) => {

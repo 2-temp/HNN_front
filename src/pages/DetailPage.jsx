@@ -23,7 +23,7 @@ const DetailPage = (props) => {
     content: "",
   });
 
-  const [likeNum, setLikeNum] = useState();
+  const [likeNum, setLikeNum] = useState();;
 
   // 게시물, 댓글 목록 불러오기
   useEffect(() => {

@@ -32,7 +32,7 @@ function MyPage(){
         })
         
         const result = axiosData.data.data;
-        setPosts(result)
+        setPosts(result.reverse())
         setLoading(false);
         
       } catch (err) {
