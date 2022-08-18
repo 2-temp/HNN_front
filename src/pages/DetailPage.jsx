@@ -26,36 +26,36 @@ const DetailPage = (props) => {
   const [likeNum, setLikeNum] = useState();;
 
   // 게시물, 댓글 목록 불러오기
+  const fetchAxiosData = async () => {
+    try {
+      const axiosData = await axios.get(
+        `http://gwonyeong.shop/post/${postId}`
+      );
+
+      const res = axiosData.data.data;
+      const poster = res.poster;
+      const commenter = res.commenter;
+      const user = res.poster.User;
+
+      let dateCreatedAt = new Date(poster.createdAt).toLocaleDateString();
+
+      setUser(user);
+      setPost({
+      //   title: poster.title,
+        content: poster.content,
+        createdAt: dateCreatedAt,
+        imageUrl: poster.imageUrl,
+        singer: poster.singer,
+        songTitle: poster.songTitle,
+      });
+      setComments(commenter);
+      setLikeNum(res.like);
+    } catch (err) {
+      console.log(err);
+      // navigate('/error')
+    }
+  };
   useEffect(() => {
-    const fetchAxiosData = async () => {
-      try {
-        const axiosData = await axios.get(
-          `http://gwonyeong.shop/post/${postId}`
-        );
-
-        const res = axiosData.data.data;
-        const poster = res.poster;
-        const commenter = res.commenter;
-        const user = res.poster.User;
-
-        let dateCreatedAt = new Date(poster.createdAt).toLocaleDateString();
-
-        setUser(user);
-        setPost({
-        //   title: poster.title,
-          content: poster.content,
-          createdAt: dateCreatedAt,
-          imageUrl: poster.imageUrl,
-          singer: poster.singer,
-          songTitle: poster.songTitle,
-        });
-        setComments(commenter);
-        setLikeNum(res.like);
-      } catch (err) {
-        console.log(err);
-        // navigate('/error')
-      }
-    };
     fetchAxiosData();
   }, []);
 
@@ -144,8 +144,11 @@ const DetailPage = (props) => {
           },
         })
         .then((res) => {
-          console.log(res);
-          console.log(res.data);
+          if(res.statusText === "OK"){
+            fetchAxiosData();
+          } else {
+            alert('댓글 작성이 실패했습니다.')
+          }
         });
     } catch (err) {
       console.log(err);
@@ -233,6 +236,9 @@ const DetailPage = (props) => {
           {comments.map((list, i) => {
             return (
               <Comment
+                fetchAxiosData = {fetchAxiosData}
+                setComments = { setComments }
+                comments = { comments }
                 userLoggin={userLoggin}
                 list={list}
                 i={i}

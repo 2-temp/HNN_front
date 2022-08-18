@@ -54,12 +54,7 @@ function Edit(){
       [e.target.name]: e.target.value,
     });
   };
-
-  const compareChanges = () => {
-
-
-  }
-
+  
   const onEditHandler = (event) => {
     event.preventDefault();
     console.log(currPost, prevPost);
